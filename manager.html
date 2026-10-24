@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager - MyCrib Collection</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-4">
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow">
+<h1 class="text-2xl font-bold mb-4">🏠 List Your Hostel</h1>
+
+<input id="name" placeholder="Hostel Name e.g. White Hostel" class="w-full border p-3 rounded mb-3">
+<input id="location" placeholder="Location e.g. Ayensu" class="w-full border p-3 rounded mb-3">
+<input id="price" type="number" placeholder="Price e.g. 2500" class="w-full border p-3 rounded mb-3">
+<input id="phone" placeholder="WhatsApp e.g. 0551234567" class="w-full border p-3 rounded mb-3">
+
+<label class="block font-bold mt-4 mb-2">Hostel Images (Max 5)</label>
+<input id="images" type="file" multiple accept="image/*" class="w-full border p-3 rounded mb-3">
+
+<label class="flex items-center gap-2 mb-4">
+<input id="featured" type="checkbox"> <span>Make Featured (GHS 50 via Paystack)</span>
+</label>
+
+<button onclick="submitHostel()" id="submitBtn" class="w-full bg-black text-white p-4 rounded-xl font-bold">Upload Hostel</button>
+<p id="status" class="mt-3 text-center text-sm"></p>
+</div>
+
+<script>
+const IMGBB_API_KEY = "6efed4c9279fad6f79caf349626d5880";
+
+async function uploadToImgBB(file) {
+  const form = new FormData();
+  form.append("image", file);
+  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: form });
+  const json = await res.json();
+  if(!json.success) throw new Error("Image upload failed");
+  return json.data.url;
+}
+
+async function submitHostel() {
+  const btn = document.getElementById('submitBtn');
+  const status = document.getElementById('status');
+  const name = document.getElementById('name').value.trim();
+  const location = document.getElementById('location').value.trim();
+  const price = document.getElementById('price').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const files = document.getElementById('images').files;
+  const isFeatured = document.getElementById('featured').checked;
+
+  if(!name || !location || !price || !phone || files.length==0) {
+    alert("Fill all fields + add at least 1 image");
+    return;
+  }
+
+  // Featured Paystack Lock
+  if(isFeatured) {
+    const pay = confirm("Featured costs GHS 50. You will pay via Paystack, then we approve you manually. Continue?");
+    if(pay) window.open("https://paystack.com/pay/mcc-featured-50", "_blank");
+  }
+
+  btn.disabled = true;
+  btn.innerText = "Uploading images to cloud...";
+  status.innerText = "Uploading 1 of " + files.length + "... please wait, don't close";
+
+  try {
+    const urls = [];
+    for(let i=0; i<files.length && i<5; i++) {
+      status.innerText = `Uploading image ${i+1} of ${files.length}...`;
+      const url = await uploadToImgBB(files[i]);
+      urls.push(url);
+    }
+
+    const hostel = {
+      id: Date.now(),
+      name, location, price: Number(price), phone,
+      images: urls, // ONLY URLs, no base64 -> never crashes
+      featured: isFeatured ? "pending_payment" : false,
+      status: "pending",
+      date: new Date().toISOString()
+    };
+
+    // Save permanently (localStorage for now, Firebase later)
+    const existing = JSON.parse(localStorage.getItem('mcc_live_hostels') || '[]');
+    existing.push(hostel);
+    localStorage.setItem('mcc_live_hostels', JSON.stringify(existing));
+
+    // Also save for admin approval
+    const pending = JSON.parse(localStorage.getItem('mcc_pending_hostels') || '[]');
+    pending.push(hostel);
+    localStorage.setItem('mcc_pending_hostels', JSON.stringify(pending));
+
+    status.innerText = "✅ Success! Hostel uploaded. We will approve in 2 hours.";
+    btn.innerText = "Uploaded ✅";
+    setTimeout(()=>{ window.location.href = "index.html"; }, 2000);
+
+  } catch(e) {
+    console.error(e);
+    alert("Upload failed: " + e.message + ". Check internet.");
+    btn.disabled = false;
+    btn.innerText = "Upload Hostel";
+  }
+}
+</script>
+</body>
+</html>

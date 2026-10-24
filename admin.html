@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCC CEO Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>*{box-sizing:border-box;font-family:'Poppins',sans-serif}body{background:#0f172a;color:white;margin:0;padding:15px}
+.card{background:white;color:#0f172a;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+input{width:100%;padding:13px;border-radius:10px;border:1px solid #ddd;margin:8px 0}button{padding:10px 16px;border:none;border-radius:20px;font-weight:800;cursor:pointer}
+.login{max-width:380px;margin:80px auto;background:white;color:black;padding:28px;border-radius:18px;text-align:center}
+.badge{background:#f59e0b;color:white;padding:3px 8px;border-radius:10px;font-size:10px}
+</style></head><body>
+<div id="loginBox" class="login">
+<h2 style="margin:0">👑 MCC CEO</h2><p style="font-size:12px;color:#64748b">Secure Dashboard</p>
+<input type="password" id="pw" placeholder="Enter Password"><button onclick="login()" style="background:#0f172a;color:white;width:100%;margin-top:8px">Login</button>
+<p id="err" style="color:red;font-size:12px"></p><p style="font-size:11px;margin-top:12px">Default: MyCrib2025</p>
+</div>
+<div id="dash" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><h1 style="margin:0">👑 MCC CEO</h1>
+<div><a href="index.html" style="background:white;color:black;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:12px">🏠 View Site</a>
+<button onclick="logout()" style="background:#1e293b;color:white">Logout</button></div></div>
+
+<div style="display:flex;gap:10px;margin:15px 0;flex-wrap:wrap">
+<div class="card" style="flex:1"><h2 id="pCount" style="margin:0">0</h2><small>⏳ Pending</small></div>
+<div class="card" style="flex:1"><h2 id="lCount" style="margin:0">0</h2><small>✅ Live</small></div>
+<div class="card" style="flex:1"><h2 id="leadCount" style="margin:0">0</h2><small>💬 Leads</small></div>
+<div class="card" style="flex:1;background:#f59e0b;color:white"><h2 id="revCount" style="margin:0">GHS 0</h2><small>💰 Revenue</small></div>
+</div>
+
+<div class="card"><h3>📈 Revenue Simulator</h3><canvas id="revChart" height="150"></canvas></div>
+
+<h3>⏳ Pending Approval (From Managers)</h3><div id="pending"></div>
+<h3>✅ Live Hostels (On Homepage)</h3><input type="text" id="searchLive" placeholder="🔍 Search live hostels..." onkeyup="render()"><div id="live"></div>
+<h3>💬 WhatsApp Leads (MCC Codes)</h3><div id="leads"></div>
+</div>
+
+<script>
+const PASS="MyCrib2025";
+const SHEET_URL="https://script.google.com/macros/s/AKfycbxMfSOiVah1G7zJMpvXnD6hLhpkYVYxh_2JUMf_B4brNtA_DPTONITF-mEUm2JwAKgx/exec";
+function login(){if(document.getElementById('pw').value===PASS){localStorage.setItem('mcc_auth','yes');show()}else{document.getElementById('err').innerText='Wrong password';}}
+function logout(){localStorage.removeItem('mcc_auth');location.reload()}
+function show(){document.getElementById('loginBox').style.display='none';document.getElementById('dash').style.display='block';render()}
+function render(){
+ let pending=JSON.parse(localStorage.getItem('mcc_pending_hostels')||'[]');
+ let live=JSON.parse(localStorage.getItem('mcc_live_hostels')||'[]');
+ let leads=JSON.parse(localStorage.getItem('mcc_leads')||'[]');
+ let search=document.getElementById('searchLive').value.toLowerCase();
+ document.getElementById('pCount').innerText=pending.length;
+ document.getElementById('lCount').innerText=live.length;
+ document.getElementById('leadCount').innerText=leads.length;
+ document.getElementById('revCount').innerText='GHS '+(live.filter(x=>x.isFeatured).length*50 + leads.length*10);
+
+ document.getElementById('pending').innerHTML=pending.length?pending.map((h,i)=>`<div class="card"><b>${h.name}</b> <span class="badge">${h.location}</span><br><small>${h.phone} | GHS ${h.price} | ${h.managerEmail||''}</small><br><img src="${h.images&&h.images[0]?h.images[0]:''}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;margin:8px 0"><br><button onclick="approve(${i})" style="background:#25D366;color:white">✅ Approve</button> <button onclick="reject(${i})" style="background:#ef4444;color:white">❌ Reject</button></div>`).join(''):'<p style="opacity:0.6">No pending hostels</p>';
+
+ let filteredLive = live.filter(h=> (h.name+h.location).toLowerCase().includes(search));
+ document.getElementById('live').innerHTML=filteredLive.map((h)=>{
+   let realIdx=live.findIndex(x=>x.id===h.id);
+   return `<div class="card">${h.isFeatured?'<span class="badge">💎 FEATURED</span> ':''}<b>${h.name}</b> - ${h.location} - GHS ${h.price}<br><small>${h.phone}</small><div style="margin-top:8px"><button onclick="toggleFeat(${realIdx})" style="background:${h.isFeatured?'#0f172a':'#f59e0b'};color:white">${h.isFeatured?'Unfeature':'💎 Feature'}</button> <button onclick="delLive(${realIdx})" style="background:#ef4444;color:white">Delete</button></div></div>`
+ }).join('')||'<p>No live hostels</p>';
+
+ document.getElementById('leads').innerHTML=leads.length?[...leads].reverse().map(l=>`<div class="card" style="padding:10px"><b>${l.code}</b> | ${l.hostel} | ${l.location||''} | ${l.date}</div>`).join(''):'<p>No leads yet</p>';
+
+ let ctx=document.getElementById('revChart'); let existing=Chart.getChart(ctx); if(existing) existing.destroy();
+ new Chart(ctx,{type:'bar',data:{labels:['Featured (GHS 50 x count)','Leads (GHS 10 x count)'],datasets:[{label:'GHS',data:[live.filter(x=>x.isFeatured).length*50, leads.length*10],backgroundColor:['#f59e0b','#25D366']}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+}
+function approve(i){let p=JSON.parse(localStorage.getItem('mcc_pending_hostels')||'[]');let l=JSON.parse(localStorage.getItem('mcc_live_hostels')||'[]');let h=p.splice(i,1)[0];h.isFeatured=false; if(!h.id) h.id=Date.now(); l.push(h); localStorage.setItem('mcc_pending_hostels',JSON.stringify(p)); localStorage.setItem('mcc_live_hostels',JSON.stringify(l)); render(); alert('✅ '+h.name+' now LIVE!')}
+function reject(i){let p=JSON.parse(localStorage.getItem('mcc_pending_hostels')||'[]');p.splice(i,1);localStorage.setItem('mcc_pending_hostels',JSON.stringify(p));render()}
+function delLive(i){if(!confirm('Delete this hostel permanently?'))return;let l=JSON.parse(localStorage.getItem('mcc_live_hostels')||'[]');l.splice(i,1);localStorage.setItem('mcc_live_hostels',JSON.stringify(l));render()}
+function toggleFeat(i){let l=JSON.parse(localStorage.getItem('mcc_live_hostels')||'[]');l[i].isFeatured=!l[i].isFeatured;localStorage.setItem('mcc_live_hostels',JSON.stringify(l));render()}
+if(localStorage.getItem('mcc_auth')==='yes')show();
+</script></body></html>

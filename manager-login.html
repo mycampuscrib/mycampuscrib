@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manager Login - MCC</title><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;font-family:Poppins}body{background:#f8fafc;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:15px}.box{background:white;padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:380px;width:100%}input{width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;margin:7px 0}button{width:100%;padding:12px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:10px}</style></head><body>
+<div class="box"><h2>🔐 Manager Login</h2><input id="email" type="email" placeholder="Email"><input id="pass" type="password" placeholder="Password"><button onclick="login()">Login</button><p style="font-size:12px;text-align:center;margin-top:12px">No account? <a href="manager-signup.html">Signup</a> | <a href="index.html">Home</a></p><p id="msg" style="font-size:12px;color:red"></p></div>
+<script>
+function login(){
+ let email=document.getElementById('email').value.trim().toLowerCase(), pass=document.getElementById('pass').value;
+ let managers=JSON.parse(localStorage.getItem('mcc_managers')||'[]');
+ let m=managers.find(x=>x.email===email && x.password===pass);
+ if(!m){document.getElementById('msg').innerText='Wrong email or password';return}
+ localStorage.setItem('mcc_current_manager',JSON.stringify({name:m.name,email:m.email,phone:m.phone,hostelName:m.hostelName,location:m.location}));
+ window.location.href='manager-dashboard.html';
+}
+</script></body></html>

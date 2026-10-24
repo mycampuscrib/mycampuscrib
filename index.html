@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyCampusCrib - MCC Luxury</title>
+<link rel="icon" href="mcc-logo.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#020617">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#f8fafc}
+nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;width:100%;z-index:9999;border-bottom:2px solid #d4af37}
+.logo{display:flex;gap:10px;align-items:center;font-weight:800}
+.logo img{width:40px;height:40px;border-radius:10px;border:1.5px solid #d4af37}
+.logo span{color:#d4af37}
+.welcome{background:linear-gradient(135deg,rgba(2,6,23,0.95),rgba(15,23,42,0.9)),url('mcc-logo.png');background-size:380px;background-position:center;background-repeat:no-repeat;background-color:#020617;color:white;padding:130px 4% 80px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.welcome-logo{width:120px;height:120px;border-radius:22px;border:3px solid #d4af37;box-shadow:0 8px 30px rgba(212,175,55,0.5);background:white;padding:4px;margin-bottom:16px}
+.welcome h1{font-size:42px;font-weight:800} .welcome h1 span{color:#d4af37}
+.btn{padding:13px 24px;border-radius:50px;border:none;font-weight:800;cursor:pointer;margin:6px}
+.btn-gold{background:linear-gradient(135deg,#d4af37,#a88611);color:black}
+.btn-white{background:white;color:#0f172a}
+.btn-install{background:linear-gradient(135deg,#25D366,#128C7E);color:white;animation: pulseBtn 1.5s infinite}
+@keyframes pulseBtn{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+#installBanner{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#020617;color:white;padding:14px 20px;border-radius:14px;border:1.5px solid #d4af37;z-index:99999;display:none;box-shadow:0 10px 30px rgba(0,0,0,0.4);width:90%;max-width:400px;text-align:center}
+.search-wrap{max-width:1000px;margin:-30px auto 0;padding:0 12px;position:relative;z-index:10}
+.search-card{background:white;border-radius:20px;padding:16px;box-shadow:0 15px 40px rgba(0,0,0,0.12)}
+.search{width:70%;padding:12px;border:1.5px solid #e2e8f0;border-radius:12px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px;align-items:center}
+.filter-row select,.filter-row input{padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:10px}
+.section{padding:40px 4%;max-width:1300px;margin:0 auto}
+#map{height:600px;border-radius:18px;display:none;border:2px solid rgba(212,175,55,0.3)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
+.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,0.07);border:1px solid #e2e8f0}
+.card img{width:100%;height:180px;object-fit:cover}
+.price-marker{background:white;color:#0f172a;padding:6px 10px;border-radius:20px;font-weight:800;font-size:11px;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid #0f172a}
+.nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<nav>
+<div class="logo"><img src="mcc-logo.png">MyCampus<span>Crib</span></div>
+<div class="nav-links">
+<button onclick="toggleView('map')" style="padding:8px 14px;border-radius:20px;border:none;background:rgba(255,255,255,0.1);color:white;font-size:11px;cursor:pointer">🗺️ Map</button>
+<a href="manager-login.html" style="padding:8px 14px;border-radius:20px;background:#d4af37;color:black;font-weight:800;font-size:11px;text-decoration:none">Manager Login</a>
+<a href="manager-signup.html" style="padding:8px 14px;border-radius:20px;background:white;color:#0f172a;font-weight:800;font-size:11px;text-decoration:none">+ List Hostel</a>
+<a href="ceo-dashboard.html" style="padding:8px 14px;border-radius:20px;background:rgba(212,175,55,0.2);border:1px solid #d4af37;color:#d4af37;font-weight:800;font-size:11px;text-decoration:none">CEO</a>
+</div>
+</nav>
+
+<div class="welcome">
+<img src="mcc-logo.png" class="welcome-logo">
+<h1><span>MCC</span> Luxury Hostels</h1>
+<p style="margin:10px 0 6px;opacity:0.9">MCC Logo • Real Google Map • All Locations: Amamoma, Kwaprow, Ayensu, Apeosika, Science</p>
+<div id="typing" style="color:#fde68a;font-weight:700;height:28px;margin:8px 0">Real Google Maps 🗺️</div>
+<div style="margin-top:18px;display:flex;flex-wrap:wrap;justify-content:center">
+<button class="btn btn-gold" onclick="document.getElementById('hostels').scrollIntoView({behavior:'smooth'})">Explore Hostels</button>
+<button class="btn btn-white" onclick="toggleView('map')">🗺️ Real Google Map</button>
+<button class="btn btn-install" id="installBtnMain" onclick="installApp()">📱 Download MCC App</button>
+</div>
+<p style="font-size:11px;opacity:0.7;margin-top:10px">Install with MCC logo as app icon!</p>
+</div>
+
+<div class="search-wrap"><div class="search-card">
+<div style="display:flex;gap:8px"><input id="search" class="search" placeholder="Search e.g. Apeosika under 3000..." onkeyup="applyFilters()"><button onclick="applyFilters()" style="padding:12px 18px;background:#0f172a;color:white;border:none;border-radius:12px;font-weight:800">Search</button></div>
+<div class="filter-row">📍<select id="locFilter" onchange="applyFilters()"><option value="">All Locations</option><option>Amamoma</option><option>Kwaprow</option><option>Ayensu</option><option>Apeosika</option><option>Science</option><option>University Hall</option><option>Old Site</option><option>New Site</option></select>💰<input type="number" id="minPrice" placeholder="Min" oninput="applyFilters()">-<input type="number" id="maxPrice" placeholder="Max" oninput="applyFilters()"><button onclick="locateUser()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">📍 My Location</button><button onclick="toggleSat()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">🛰️ Satellite</button></div>
+</div></div>
+
+<div id="hostels" class="section">
+<div style="text-align:center"><h2 style="font-size:26px;font-weight:800">MCC Edition - All Locations</h2></div>
+<div style="display:flex;gap:8px;justify-content:center;margin:16px 0"><button onclick="toggleView('grid')" style="padding:9px 18px;border-radius:20px;border:1px solid #e2e8f0;background:#0f172a;color:white;font-weight:700">Grid</button><button onclick="toggleView('map')" style="padding:9px 18px;border-radius:20px;border:1px solid #e2e8f0;background:white;font-weight:700">Map</button></div>
+<div id="map"></div><div id="hostelGrid" class="grid"></div>
+</div>
+
+<div id="installBanner">
+<div style="font-weight:800;margin-bottom:8px">📱 Install MCC App</div>
+<div style="font-size:12px;opacity:0.9;margin-bottom:12px">Get MCC logo as app icon!</div>
+<button onclick="installApp()" style="padding:10px 18px;background:linear-gradient(135deg,#d4af37,#a88611);border:none;border-radius:20px;font-weight:800;margin-right:8px">Install Now</button>
+<button onclick="document.getElementById('installBanner').style.display='none'" style="padding:10px 18px;background:rgba(255,255,255,0.1);border:none;border-radius:20px;color:white">Later</button>
+</div>
+
+<script>
+const phrases=["Real Google Maps 🗺️","Apeosika & Science Added 📍","MCC Luxury Background 💎","Manager Login Ready 🔑","PWA Install Ready 📱"];let pi=0,ci=0,del=false;const tEl=document.getElementById('typing');function loop(){const cur=phrases[pi];if(del){tEl.textContent=cur.substring(0,ci-1);ci--}else{tEl.textContent=cur.substring(0,ci+1);ci++}let s=del?40:80;if(!del&&ci===cur.length){s=2000;del=true}else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;s=500}setTimeout(loop,s)}loop();
+const defaultHostels=[
+{id:1001,name:"White Hostel",location:"Amamoma",phone:"0240000000",price:"3500",lat:5.1195,lng:-1.287,images:["https://images.unsplash.com/photo-1555854877-bab0e564b8d5"],isFeatured:true},
+{id:1002,name:"Sterner Hostel",location:"Amamoma",phone:"0240000001",price:"3000",lat:5.121,lng:-1.285,images:["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"]},
+{id:1003,name:"Apeosika Executive",location:"Apeosika",phone:"0240000002",price:"2800",lat:5.125,lng:-1.282,images:["https://images.unsplash.com/photo-1560448204-603b3fc33ddc"],isFeatured:true},
+{id:1004,name:"Science Hostel City",location:"Science",phone:"0240000003",price:"2500",lat:5.115,lng:-1.29,images:["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"]},
+{id:1005,name:"Kwaprow Luxury",location:"Kwaprow",phone:"0240000004",price:"3200",lat:5.122,lng:-1.288,images:["https://images.unsplash.com/photo-1555854877-bab0e564b8d5"]},
+{id:1006,name:"Ayensu Diamond",location:"Ayensu",phone:"0240000005",price:"2700",lat:5.118,lng:-1.295,images:["https://images.unsplash.com/photo-1560448204-603b3fc33ddc"]}
+];
+let allHostels=defaultHostels,filteredList=[...allHostels],map,markers=[],streetLayer,satLayer,isSat=false;
+function renderHostels(list){document.getElementById('hostelGrid').innerHTML=list.map(h=>`<div class="card"><img src="${h.images[0]}"><div style="padding:14px"><h3>${h.name}</h3><p style="font-size:11px;color:#64748b">📍 ${h.location}</p><div style="font-weight:800;color:#059669;margin:6px 0">GHS ${h.price}/year</div><button onclick="contactWA('${h.name}','${h.phone}')" style="width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">💬 WhatsApp</button><button onclick="getDirections(${h.lat},${h.lng})" style="width:100%;padding:10px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">🧭 Google Maps</button></div></div>`).join('');if(map)updateMapMarkers(list)}
+function initMap(){if(map)return;streetLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20});satLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{maxZoom:20});map=L.map('map',{layers:[streetLayer]}).setView([5.119,-1.287],14);updateMapMarkers(filteredList)}
+function toggleSat(){if(!map)return;isSat=!isSat;if(isSat){map.removeLayer(streetLayer);map.addLayer(satLayer)}else{map.removeLayer(satLayer);map.addLayer(streetLayer)}}
+function updateMapMarkers(list){if(!map)return;markers.forEach(m=>map.removeLayer(m));markers=[];list.forEach(h=>{const icon=L.divIcon({className:'',html:`<div class="price-marker">GHS ${h.price}</div>`,iconSize:[80,28],iconAnchor:[40,14]});const m=L.marker([h.lat,h.lng],{icon}).addTo(map);m.bindPopup(`<b>${h.name}</b><br>${h.location}<br>GHS ${h.price}`);markers.push(m)})}
+function toggleView(v){if(v==='map'){document.getElementById('map').style.display='block';document.getElementById('hostelGrid').style.display='none';initMap();setTimeout(()=>map.invalidateSize(),200)}else{document.getElementById('map').style.display='none';document.getElementById('hostelGrid').style.display='grid'}}
+function applyFilters(){const q=document.getElementById('search').value.toLowerCase();const min=parseInt(document.getElementById('minPrice').value)||0;const max=parseInt(document.getElementById('maxPrice').value)||999999;const locF=document.getElementById('locFilter').value;filteredList=allHostels.filter(h=>{let m=(h.name+h.location).toLowerCase().includes(q)||q.length<2;let p=parseInt(h.price)||0;return m&&p>=min&&p<=max&&(!locF||h.location===locF)});renderHostels(filteredList)}
+function locateUser(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(pos=>{const {latitude,longitude}=pos.coords;if(!map)initMap();L.marker([latitude,longitude]).addTo(map);map.setView([latitude,longitude],15)})}
+function getDirections(lat,lng){window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,'_blank')}
+function contactWA(name,phone){let c=phone.replace(/[^0-9]/g,'');if(c.startsWith('0'))c='233'+c.substring(1);window.open(`https://wa.me/${c}?text=Hello ${name} on MCC`,'_blank')}
+renderHostels(filteredList);
+</script>
+<script>
+let deferredPrompt=null;
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').then(r=>console.log('MCC SW Ready')).catch(e=>console.log(e))})}
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').style.display='block';});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(res=>{if(res.outcome==='accepted'){document.getElementById('installBanner').style.display='none'}deferredPrompt=null})}else{alert('To install MCC App:\\nLaptop: Click install icon in address bar (top right)\\nPhone: Chrome menu > Add to Home Screen');document.getElementById('installBanner').style.display='block';}}
+setTimeout(()=>{document.getElementById('installBanner').style.display='block';},3000);
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manager Dashboard - MCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Poppins}body{background:#f8fafc;color:#0f172a}
+nav{background:#0f172a;color:white;padding:14px 4%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:20px}.logo span{color:#25D366}.nav a{color:white;text-decoration:none;margin-left:8px;font-size:12px;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,0.1)}
+.wrap{max-width:1200px;margin:0 auto;padding:18px 4%}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
+.stat{background:white;border-radius:14px;padding:16px;box-shadow:0 3px 10px rgba(0,0,0,0.05)}.stat h3{font-size:11px;color:#64748b}.num{font-size:22px;font-weight:800;margin-top:4px}
+.box{background:white;border-radius:14px;padding:18px;box-shadow:0 3px 10px rgba(0,0,0,0.05);margin:14px 0}
+.btn{padding:10px 16px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:12px}
+</style></head><body>
+<nav><div class="logo">🏠 MyCampus<span>Crib</span> Manager</div><div class="nav"><a href="index.html">Home</a><a href="#" onclick="logout()">Logout</a></div></nav>
+<div class="wrap">
+<h1>📊 Dashboard</h1><p style="font-size:12px;color:#64748b">Welcome <span id="mName"></span></p>
+<div class="stats">
+<div class="stat"><h3>👁️ Views</h3><div class="num" id="views">0</div></div>
+<div class="stat"><h3>💬 Leads</h3><div class="num" id="leads">0</div></div>
+<div class="stat"><h3>❤️ Saves</h3><div class="num" id="saves">0</div></div>
+<div class="stat"><h3>Status</h3><div class="num" id="status" style="font-size:14px">Pending</div></div>
+</div>
+<div class="box"><h3>📈 Views Last 7 Days</h3><canvas id="chart" height="140"></canvas></div>
+<div class="box"><h3>🏠 My Hostel</h3><div id="myHostelInfo"></div><div style="margin-top:10px"><a href="manager.html" class="btn" style="background:#0f172a;color:white;text-decoration:none">✏️ Edit / Re-submit</a></div></div>
+<div class="box"><h3>💬 My Leads (MCC Codes)</h3><div id="leadList" style="font-size:12px"></div></div>
+</div>
+<script>
+let cur=JSON.parse(localStorage.getItem('mcc_current_manager')||'null'); if(!cur){alert('Login first'); location.href='manager-login.html';}
+document.getElementById('mName').textContent=cur.name;
+function getMyHostel(){
+ let live=JSON.parse(localStorage.getItem('mcc_live_hostels')||'[]'); let pend=JSON.parse(localStorage.getItem('mcc_pending_hostels')||'[]');
+ let h=live.find(x=>x.managerEmail===cur.email) || pend.find(x=>x.managerEmail===cur.email);
+ return {hostel:h, isLive:!!live.find(x=>x.managerEmail===cur.email)};
+}
+let {hostel, isLive}=getMyHostel();
+if(!hostel){document.getElementById('myHostelInfo').innerHTML='<p style="color:#94a3b8">You have not listed hostel yet. <a href="manager.html">List now</a></p>';}
+else{
+ document.getElementById('myHostelInfo').innerHTML=`<b>${hostel.name}</b> - ${hostel.location} - GHS ${hostel.price}<br><small>${hostel.phone}</small> ${hostel.isFeatured?'<span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-size:10px">💎 FEATURED</span>':''}<br><div style="margin-top:8px">${(hostel.images||[]).slice(0,3).map(src=>`<img src="${src}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;margin-right:5px">`).join('')}</div>`;
+ document.getElementById('status').innerText=isLive? (hostel.isFeatured?'💎 FEATURED LIVE':'✅ LIVE') : '⏳ PENDING APPROVAL';
+ document.getElementById('status').style.color=isLive?'#059669':'#d97706';
+}
+let leads=JSON.parse(localStorage.getItem('mcc_leads')||'[]').filter(l=>hostel && l.hostel===hostel.name);
+document.getElementById('leads').innerText=leads.length;
+document.getElementById('views').innerText= hostel ? (Math.floor(Math.random()*200)+50) : 0;
+document.getElementById('saves').innerText= hostel ? (Math.floor(Math.random()*20)+2) : 0;
+document.getElementById('leadList').innerHTML=leads.length? [...leads].reverse().map(l=>`<div style="padding:8px;border:1px solid #f1f5f9;border-radius:8px;margin:5px 0"><b>${l.code}</b> - ${l.date}</div>`).join(''):'No leads yet';
+let ctx=document.getElementById('chart'); new Chart(ctx,{type:'line',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Views',data:[12,19,8,25,22,30,hostel?45:5],borderColor:'#0f172a',tension:0.4,fill:false}]},options:{plugins:{legend:{display:false}}}});
+function logout(){localStorage.removeItem('mcc_current_manager'); location.href='manager-login.html';}
+</script></body></html>
