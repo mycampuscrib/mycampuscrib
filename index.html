@@ -121,8 +121,7 @@ if (hostels.length === 0) {
   console.log('No hostels posted yet');
 }
 
-];
-let allHostels=defaultHostels,filteredList=[...allHostels],map,markers=[],streetLayer,satLayer,isSat=false;
+let allHostels=Hostels,filteredList=Hostels,map,markers=[],streetLayer,satLayer,isSat=false;
 function renderHostels(list){document.getElementById('hostelGrid').innerHTML=list.map(h=>`<div class="card"><img src="${h.images[0]}"><div style="padding:14px"><h3>${h.name}</h3><p style="font-size:11px;color:#64748b">📍 ${h.location}</p><div style="font-weight:800;color:#059669;margin:6px 0">GHS ${h.price}/year</div><button onclick="contactWA('${h.name}','${h.phone}')" style="width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">💬 WhatsApp</button><button onclick="getDirections(${h.lat},${h.lng})" style="width:100%;padding:10px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">🧭 Google Maps</button></div></div>`).join('');if(map)updateMapMarkers(list)}
 function initMap(){if(map)return;streetLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20});satLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{maxZoom:20});map=L.map('map',{layers:[streetLayer]}).setView([5.119,-1.287],14);updateMapMarkers(filteredList)}
 function toggleSat(){if(!map)return;isSat=!isSat;if(isSat){map.removeLayer(streetLayer);map.addLayer(satLayer)}else{map.removeLayer(satLayer);map.addLayer(streetLayer)}}
