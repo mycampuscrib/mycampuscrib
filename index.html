@@ -38,6 +38,9 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 .card img{width:100%;height:180px;object-fit:cover}
 .price-marker{background:white;color:#0f172a;padding:6px 10px;border-radius:20px;font-weight:800;font-size:11px;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid #0f172a}
 .nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.install-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100000;align-items:center;justify-content:center;padding:20px}
+.install-modal.show{display:flex}
+.modal-box{background:white;border-radius:20px;padding:24px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
 </style>
 </head>
 <body>
@@ -82,6 +85,32 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 <button onclick="document.getElementById('installBanner').style.display='none'" style="padding:10px 18px;background:rgba(255,255,255,0.1);border:none;border-radius:20px;color:white">Later</button>
 </div>
 
+<!-- NEW FIXED INSTALL MODAL -->
+<div id="installModal" class="install-modal" onclick="if(event.target==this) closeInstallModal()">
+<div class="modal-box">
+<h3 style="margin-bottom:8px">📲 Install MyCampusCrib</h3>
+<p style="font-size:13px;color:#64748b;margin-bottom:14px">Install MCC for quick access</p>
+<div style="background:#f8fafc;border-radius:14px;padding:16px;line-height:1.7;font-size:14px">
+<b>💻 Laptop / Desktop:</b><br>
+1. Look for install icon in address bar top right<br>
+2. Click it → Install<br>
+3. Or Chrome menu → Install MyCampusCrib<br><br>
+<b>📱 iPhone (Safari):</b><br>
+1. Tap Share button at bottom<br>
+2. Tap Add to Home Screen<br>
+3. Tap Add top right<br><br>
+<b>🤖 Android (Chrome):</b><br>
+1. Tap 3 dots menu top right<br>
+2. Tap Install app / Add to Home screen<br>
+3. Tap Install
+</div>
+<div style="margin-top:16px;display:flex;gap:10px">
+<button class="btn btn-gold" style="flex:1" onclick="closeInstallModal()">Got it!</button>
+<button class="btn btn-white" style="flex:1;border:1.5px solid #e2e8f0" onclick="closeInstallModal()">Close</button>
+</div>
+</div>
+</div>
+
 <script>
 const phrases=["Real Google Maps 🗺️","Apeosika & Science Added 📍","MCC Luxury Background 💎","Manager Login Ready 🔑","PWA Install Ready 📱"];let pi=0,ci=0,del=false;const tEl=document.getElementById('typing');function loop(){const cur=phrases[pi];if(del){tEl.textContent=cur.substring(0,ci-1);ci--}else{tEl.textContent=cur.substring(0,ci+1);ci++}let s=del?40:80;if(!del&&ci===cur.length){s=2000;del=true}else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;s=500}setTimeout(loop,s)}loop();
 const defaultHostels=[
@@ -108,7 +137,19 @@ renderHostels(filteredList);
 let deferredPrompt=null;
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').then(r=>console.log('MCC SW Ready')).catch(e=>console.log(e))})}
 window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').style.display='block';});
-function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(res=>{if(res.outcome==='accepted'){document.getElementById('installBanner').style.display='none'}deferredPrompt=null})}else{alert('To install MCC App:\\nLaptop: Click install icon in address bar (top right)\\nPhone: Chrome menu > Add to Home Screen');document.getElementById('installBanner').style.display='block';}}
+function showInstallModal(){document.getElementById('installModal').classList.add('show');}
+function closeInstallModal(){document.getElementById('installModal').classList.remove('show');}
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(res=>{
+      if(res.outcome==='accepted'){document.getElementById('installBanner').style.display='none'}
+      deferredPrompt=null;
+    })
+  } else {
+    showInstallModal();
+  }
+}
 setTimeout(()=>{document.getElementById('installBanner').style.display='block';},3000);
 </script>
 </body>
