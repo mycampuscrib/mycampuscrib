@@ -113,13 +113,14 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 
 <script>
 const phrases=["Real Google Maps 🗺️","Apeosika & Science Added 📍","MCC Luxury Background 💎","Manager Login Ready 🔑","PWA Install Ready 📱"];let pi=0,ci=0,del=false;const tEl=document.getElementById('typing');function loop(){const cur=phrases[pi];if(del){tEl.textContent=cur.substring(0,ci-1);ci--}else{tEl.textContent=cur.substring(0,ci+1);ci++}let s=del?40:80;if(!del&&ci===cur.length){s=2000;del=true}else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;s=500}setTimeout(loop,s)}loop();
-const defaultHostels=[
-{id:1001,name:"White Hostel",location:"Amamoma",phone:"0240000000",price:"3500",lat:5.1195,lng:-1.287,images:["https://images.unsplash.com/photo-1555854877-bab0e564b8d5"],isFeatured:true},
-{id:1002,name:"Sterner Hostel",location:"Amamoma",phone:"0240000001",price:"3000",lat:5.121,lng:-1.285,images:["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"]},
-{id:1003,name:"Apeosika Executive",location:"Apeosika",phone:"0240000002",price:"2800",lat:5.125,lng:-1.282,images:["https://images.unsplash.com/photo-1560448204-603b3fc33ddc"],isFeatured:true},
-{id:1004,name:"Science Hostel City",location:"Science",phone:"0240000003",price:"2500",lat:5.115,lng:-1.29,images:["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"]},
-{id:1005,name:"Kwaprow Luxury",location:"Kwaprow",phone:"0240000004",price:"3200",lat:5.122,lng:-1.288,images:["https://images.unsplash.com/photo-1555854877-bab0e564b8d5"]},
-{id:1006,name:"Ayensu Diamond",location:"Ayensu",phone:"0240000005",price:"2700",lat:5.118,lng:-1.295,images:["https://images.unsplash.com/photo-1560448204-603b3fc33ddc"]}
+// Load real hostels posted by managers
+let hostels = JSON.parse(localStorage.getItem('hostels') || '[]');
+
+// If no hostels yet, show empty message
+if (hostels.length === 0) {
+  console.log('No hostels posted yet');
+}
+
 ];
 let allHostels=defaultHostels,filteredList=[...allHostels],map,markers=[],streetLayer,satLayer,isSat=false;
 function renderHostels(list){document.getElementById('hostelGrid').innerHTML=list.map(h=>`<div class="card"><img src="${h.images[0]}"><div style="padding:14px"><h3>${h.name}</h3><p style="font-size:11px;color:#64748b">📍 ${h.location}</p><div style="font-weight:800;color:#059669;margin:6px 0">GHS ${h.price}/year</div><button onclick="contactWA('${h.name}','${h.phone}')" style="width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">💬 WhatsApp</button><button onclick="getDirections(${h.lat},${h.lng})" style="width:100%;padding:10px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">🧭 Google Maps</button></div></div>`).join('');if(map)updateMapMarkers(list)}
