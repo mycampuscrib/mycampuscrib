@@ -1,69 +1,54 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manager Signup - MCC</title><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;font-family:Poppins}body{background:#f8fafc;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:15px}.box{background:white;padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:420px;width:100%}input,select{width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;margin:7px 0}button{width:100%;padding:12px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:10px}button:disabled{opacity:0.6}</style></head><body>
-<div class="box"><h2>🏠 Manager Signup</h2><p style="font-size:12px;color:#64748b">Create account to list your hostel</p>
-<input id="name" placeholder="Full Name"><input id="email" type="email" placeholder="Email"><input id="phone" placeholder="WhatsApp Number e.g. 024..."><input id="hName" placeholder="Hostel Name"><select id="loc"><option value="">Select Location</option><option>Amamoma</option><option>Kwaprow</option><option>Ayensu</option><option>Apeosika</option><option>Science</option><option>School Bus Road</option><option>University Hall</option><option>Old Site</option><option>New Site</option></select><input id="pass" type="password" placeholder="Password (min 6)"><button onclick="signup()" id="btn">Create Account</button><p style="font-size:12px;text-align:center;margin-top:12px">Already have? <a href="manager-login.html">Login</a> | <a href="index.html">Home</a></p><p id="msg" style="font-size:12px;color:red"></p></div>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Manager Signup - MyCampusCrib</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="font-family:sans-serif; padding:20px; max-width:400px; margin:auto;">
+<h2>Create Manager Account</h2>
+<input id="email" type="email" placeholder="Email" style="width:100%;padding:12px;margin:8px 0;"><br>
+<input id="password" type="password" placeholder="Password (6+ chars)" style="width:100%;padding:12px;margin:8px 0;"><br>
+<input id="hostelName" type="text" placeholder="Hostel Name" style="width:100%;padding:12px;margin:8px 0;"><br>
+<button id="signupBtn" style="width:100%;padding:14px;background:#000;color:#fff;border:none;">Create Account</button>
+<p id="msg"></p>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { auth, db } from "./firebase.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3...REPLACE WITH YOURS FROM firebase.js",
-  authDomain: "mycampuscrib.firebaseapp.com",
-  projectId: "mycampuscrib",
-  storageBucket: "mycampuscrib.appspot.com",
-  messagingSenderId: "123...",
-  appId: "1:123..."
-};
+const btn = document.getElementById('signupBtn');
+const msg = document.getElementById('msg');
 
-let app, auth, db;
-try{
-  const mod = await import("./firebase.js");
-  if(mod.app){ app=mod.app; auth=mod.auth; db=mod.db; }
-  else throw new Error();
-}catch(e){
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-}
-
-window.signup = async function(){
- let name=document.getElementById('name').value.trim(), email=document.getElementById('email').value.trim().toLowerCase(), phone=document.getElementById('phone').value.trim(), hostelName=document.getElementById('hName').value.trim(), location=document.getElementById('loc').value, pass=document.getElementById('pass').value;
- const msgEl = document.getElementById('msg');
- const btn = document.getElementById('btn');
- if(!name||!email||!phone||!hostelName||!location||!pass){msgEl.innerText='Fill all fields';return}
- if(pass.length<6){msgEl.innerText='Password min 6 chars';return}
- 
- btn.disabled=true; btn.innerText='Creating...'; msgEl.innerText='';
-
- try{
-   const cred = await createUserWithEmailAndPassword(auth, email, pass);
-   const uid = cred.user.uid;
-   
-   // Save manager to Firestore (real)
-   await setDoc(doc(db, "managers", uid), {
-     name, email, phone, hostelName, location, uid,
-     createdAt: serverTimestamp(),
-     role: "manager"
-   });
-
-   // Keep local backup for old code
-   let managers=JSON.parse(localStorage.getItem('mcc_managers')||'[]');
-   if(!managers.find(m=>m.email===email)){
-     managers.push({name,email,phone,hostelName,location,uid,created:Date.now()});
-     localStorage.setItem('mcc_managers',JSON.stringify(managers));
-   }
-   localStorage.setItem('mcc_current_manager',JSON.stringify({name,email,phone,hostelName,location,uid}));
-
-   msgEl.style.color='green';
-   msgEl.innerText='✅ Account created! Redirecting...';
-   setTimeout(()=>{ window.location.href='manager.html'; }, 1000);
- }catch(e){
-   console.error(e);
-   msgEl.style.color='red';
-   if(e.code==='auth/email-already-in-use'){ msgEl.innerText='Email already exists, please login'; }
-   else { msgEl.innerText = e.message; }
-   btn.disabled=false; btn.innerText='Create Account';
- }
-}
-</script></body></html>
+btn.addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const hostelName = document.getElementById('hostelName').value.trim();
+  
+  if(!email || !password || !hostelName){
+    msg.textContent = "Fill all fields";
+    return;
+  }
+  
+  msg.textContent = "Creating...";
+  btn.disabled = true;
+  
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "managers", cred.user.uid), {
+      email: email,
+      hostelName: hostelName,
+      createdAt: new Date(),
+      role: "manager"
+    });
+    msg.textContent = "Account created! Redirecting...";
+    setTimeout(()=> location.href = "manager-login.html", 1000);
+  } catch(err){
+    msg.textContent = err.message;
+    btn.disabled = false;
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>
