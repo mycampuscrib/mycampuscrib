@@ -11,12 +11,27 @@
 <h1 class="text-2xl font-bold mb-4">🏠 List Your Hostel</h1>
 
 <input id="name" placeholder="Hostel Name e.g. White Hostel" class="w-full border p-3 rounded mb-3">
-<input id="location" placeholder="Location e.g. Ayensu" class="w-full border p-3 rounded mb-3">
+<select id="location" class="w-full border p-3 rounded mb-3">
+<option value="">Select Location</option>
+<option>Amamoma</option>
+<option>Kwaprow</option>
+<option>Ayensu</option>
+<option>Apeosika</option>
+<option>Science</option>
+<option>School Bus Road</option>
+<option>University Hall</option>
+<option>Old Site</option>
+<option>New Site</option>
+</select>
 <input id="price" type="number" placeholder="Price e.g. 2500" class="w-full border p-3 rounded mb-3">
 <input id="phone" placeholder="WhatsApp e.g. 0551234567" class="w-full border p-3 rounded mb-3">
 
-<label class="block font-bold mt-4 mb-2">Hostel Images (Max 5)</label>
+<label class="block font-bold mt-4 mb-2">Hostel Images (Max 5) - Cloud Upload</label>
 <input id="images" type="file" multiple accept="image/*" class="w-full border p-3 rounded mb-3">
+
+<label class="block font-bold mt-4 mb-2">🎥 Video Tour (Optional - Max 50MB)</label>
+<input id="video" type="file" accept="video/*" class="w-full border p-3 rounded mb-3">
+<p class="text-[11px] text-gray-500 mb-3">Show room tour - this will show in index.html as video</p>
 
 <label class="flex items-center gap-2 mb-4">
 <input id="featured" type="checkbox"> <span>Make Featured (GHS 50 via Paystack)</span>
@@ -26,7 +41,43 @@
 <p id="status" class="mt-3 text-center text-sm"></p>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB3...replace with yours",
+  authDomain: "mycampuscrib.firebaseapp.com",
+  projectId: "mycampuscrib",
+  storageBucket: "mycampuscrib.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc"
+};
+
+// Try to get from your firebase.js
+let app, auth, db, storage;
+try {
+  const mod = await import("./firebase.js");
+  if(mod.app){ app=mod.app; auth=mod.auth; db=mod.db; storage=mod.storage; }
+  else throw new Error();
+} catch(e){
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
+}
+
+let currentUser = null;
+onAuthStateChanged(auth, (user)=>{
+  currentUser = user;
+  if(!user){
+    let cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
+    if(!cur){ /* allow guest for now but warn */ console.log("No auth, using local manager"); }
+  }
+});
+
 const IMGBB_API_KEY = "6efed4c9279fad6f79caf349626d5880";
 
 async function uploadToImgBB(file) {
@@ -38,7 +89,7 @@ async function uploadToImgBB(file) {
   return json.data.url;
 }
 
-async function submitHostel() {
+window.submitHostel = async function() {
   const btn = document.getElementById('submitBtn');
   const status = document.getElementById('status');
   const name = document.getElementById('name').value.trim();
@@ -46,6 +97,7 @@ async function submitHostel() {
   const price = document.getElementById('price').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const files = document.getElementById('images').files;
+  const videoFile = document.getElementById('video').files[0];
   const isFeatured = document.getElementById('featured').checked;
 
   if(!name || !location || !price || !phone || files.length==0) {
@@ -53,17 +105,16 @@ async function submitHostel() {
     return;
   }
 
-  // Featured Paystack Lock
   if(isFeatured) {
-    const pay = confirm("Featured costs GHS 50. You will pay via Paystack, then we approve you manually. Continue?");
+    const pay = confirm("Featured costs GHS 50. You will pay via Paystack, then we approve manually. Continue?");
     if(pay) window.open("https://paystack.com/pay/mcc-featured-50", "_blank");
   }
 
   btn.disabled = true;
-  btn.innerText = "Uploading images to cloud...";
-  status.innerText = "Uploading 1 of " + files.length + "... please wait, don't close";
-
+  btn.innerText = "Uploading images...";
+  
   try {
+    status.innerText = `Uploading 1 of ${files.length} images... Don't close`;
     const urls = [];
     for(let i=0; i<files.length && i<5; i++) {
       status.innerText = `Uploading image ${i+1} of ${files.length}...`;
@@ -71,34 +122,53 @@ async function submitHostel() {
       urls.push(url);
     }
 
-    const hostel = {
-      id: Date.now(),
+    let videoUrl = "";
+    if(videoFile){
+      if(videoFile.size > 50*1024*1024){ alert("Video too big, max 50MB"); throw new Error("Video too big"); }
+      btn.innerText = "Uploading video tour...";
+      status.innerText = "Uploading video... this may take 30s";
+      const storageRef = ref(storage, `hostelVideos/${Date.now()}_${videoFile.name}`);
+      await uploadBytes(storageRef, videoFile);
+      videoUrl = await getDownloadURL(storageRef);
+    }
+
+    const hostelData = {
       name, location, price: Number(price), phone,
-      images: urls, // ONLY URLs, no base64 -> never crashes
+      images: urls,
+      videoUrl: videoUrl,
+      video: videoUrl,
+      isFeatured: isFeatured ? true : false,
       featured: isFeatured ? "pending_payment" : false,
       status: "pending",
+      managerId: currentUser ? currentUser.uid : (JSON.parse(localStorage.getItem('mcc_current_manager')||'{}').uid || "guest"),
+      managerEmail: currentUser ? currentUser.email : (JSON.parse(localStorage.getItem('mcc_current_manager')||'{}').email || phone),
+      lat: location==="School Bus Road" ? 5.121 : location==="Apeosika" ? 5.115 : 5.119,
+      lng: location==="School Bus Road" ? -1.285 : location==="Apeosika" ? -1.29 : -1.287,
+      views: 0,
+      saves: 0,
+      createdAt: serverTimestamp(),
       date: new Date().toISOString()
     };
 
-    // Save permanently (localStorage for now, Firebase later)
-    const existing = JSON.parse(localStorage.getItem('mcc_live_hostels') || '[]');
-    existing.push(hostel);
-    localStorage.setItem('mcc_live_hostels', JSON.stringify(existing));
+    // SAVE TO FIREBASE (real)
+    btn.innerText = "Saving to database...";
+    await addDoc(collection(db, "hostels"), hostelData);
 
-    // Also save for admin approval
-    const pending = JSON.parse(localStorage.getItem('mcc_pending_hostels') || '[]');
-    pending.push(hostel);
-    localStorage.setItem('mcc_pending_hostels', JSON.stringify(pending));
+    // ALSO keep local backup for instant view
+    const existing = JSON.parse(localStorage.getItem('hostels') || '[]');
+    existing.push({...hostelData, id: Date.now()});
+    localStorage.setItem('hostels', JSON.stringify(existing));
 
-    status.innerText = "✅ Success! Hostel uploaded. We will approve in 2 hours.";
+    status.innerText = "✅ Success! Hostel + video uploaded. Waiting CEO approval.";
     btn.innerText = "Uploaded ✅";
-    setTimeout(()=>{ window.location.href = "index.html"; }, 2000);
+    setTimeout(()=>{ window.location.href = "manager-dashboard.html"; }, 1500);
 
   } catch(e) {
     console.error(e);
-    alert("Upload failed: " + e.message + ". Check internet.");
+    alert("Upload failed: " + e.message);
     btn.disabled = false;
     btn.innerText = "Upload Hostel";
+    status.innerText = "Failed: "+e.message;
   }
 }
 </script>

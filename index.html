@@ -36,11 +36,13 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
 .card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,0.07);border:1px solid #e2e8f0}
 .card img{width:100%;height:180px;object-fit:cover}
+.card video{width:100%;height:180px;object-fit:cover;background:#000}
 .price-marker{background:white;color:#0f172a;padding:6px 10px;border-radius:20px;font-weight:800;font-size:11px;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid #0f172a}
 .nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .install-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100000;align-items:center;justify-content:center;padding:20px}
 .install-modal.show{display:flex}
 .modal-box{background:white;border-radius:20px;padding:24px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.empty{text-align:center;padding:50px 20px;background:white;border-radius:16px;border:2px dashed #e2e8f0;margin-top:20px}
 </style>
 </head>
 <body>
@@ -57,7 +59,7 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 <div class="welcome">
 <img src="mcc-logo.png" class="welcome-logo">
 <h1><span>MCC</span> Luxury Hostels</h1>
-<p style="margin:10px 0 6px;opacity:0.9">MCC Logo • Real Google Map • All Locations: Amamoma, Kwaprow, Ayensu, Apeosika, Science</p>
+<p style="margin:10px 0 6px;opacity:0.9">MCC Luxury • Real Google Map • All Locations: Amamoma, Kwaprow, Ayensu, Apeosika, Science, School Bus Road</p>
 <div id="typing" style="color:#fde68a;font-weight:700;height:28px;margin:8px 0">Real Google Maps 🗺️</div>
 <div style="margin-top:18px;display:flex;flex-wrap:wrap;justify-content:center">
 <button class="btn btn-gold" onclick="document.getElementById('hostels').scrollIntoView({behavior:'smooth'})">Explore Hostels</button>
@@ -68,14 +70,26 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 </div>
 
 <div class="search-wrap"><div class="search-card">
-<div style="display:flex;gap:8px"><input id="search" class="search" placeholder="Search e.g. Apeosika under 3000..." onkeyup="applyFilters()"><button onclick="applyFilters()" style="padding:12px 18px;background:#0f172a;color:white;border:none;border-radius:12px;font-weight:800">Search</button></div>
-<div class="filter-row">📍<select id="locFilter" onchange="applyFilters()"><option value="">All Locations</option><option>Amamoma</option><option>Kwaprow</option><option>Ayensu</option><option>Apeosika</option><option>Science</option><option>University Hall</option><option>Old Site</option><option>New Site</option></select>💰<input type="number" id="minPrice" placeholder="Min" oninput="applyFilters()">-<input type="number" id="maxPrice" placeholder="Max" oninput="applyFilters()"><button onclick="locateUser()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">📍 My Location</button><button onclick="toggleSat()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">🛰️ Satellite</button></div>
+<div style="display:flex;gap:8px"><input id="search" class="search" placeholder="Search e.g. School Bus Road under 3000..." onkeyup="applyFilters()"><button onclick="applyFilters()" style="padding:12px 18px;background:#0f172a;color:white;border:none;border-radius:12px;font-weight:800">Search</button></div>
+<div class="filter-row">📍<select id="locFilter" onchange="applyFilters()">
+<option value="">All Locations</option>
+<option>Amamoma</option>
+<option>Kwaprow</option>
+<option>Ayensu</option>
+<option>Apeosika</option>
+<option>Science</option>
+<option>School Bus Road</option>
+<option>University Hall</option>
+<option>Old Site</option>
+<option>New Site</option>
+</select>💰<input type="number" id="minPrice" placeholder="Min" oninput="applyFilters()">-<input type="number" id="maxPrice" placeholder="Max" oninput="applyFilters()"><button onclick="locateUser()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">📍 My Location</button><button onclick="toggleSat()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">🛰️ Satellite</button></div>
 </div></div>
 
 <div id="hostels" class="section">
-<div style="text-align:center"><h2 style="font-size:26px;font-weight:800">MCC Edition - All Locations</h2></div>
+<div style="text-align:center"><h2 style="font-size:26px;font-weight:800">MCC Edition - All Locations</h2><p id="countText" style="font-size:12px;color:#64748b;margin-top:6px">Loading real hostels...</p></div>
 <div style="display:flex;gap:8px;justify-content:center;margin:16px 0"><button onclick="toggleView('grid')" style="padding:9px 18px;border-radius:20px;border:1px solid #e2e8f0;background:#0f172a;color:white;font-weight:700">Grid</button><button onclick="toggleView('map')" style="padding:9px 18px;border-radius:20px;border:1px solid #e2e8f0;background:white;font-weight:700">Map</button></div>
 <div id="map"></div><div id="hostelGrid" class="grid"></div>
+<div id="emptyMsg" class="empty" style="display:none"><h3>No hostels yet 😔</h3><p style="font-size:13px;color:#64748b;margin-top:8px">No manager has posted yet. Be the first to list on MCC!<br>Manager account → List Hostel → Add pictures & video tour</p><a href="manager-signup.html" style="display:inline-block;margin-top:12px;padding:10px 18px;background:#d4af37;color:black;border-radius:20px;font-weight:800;text-decoration:none">+ List Your Hostel</a></div>
 </div>
 
 <div id="installBanner">
@@ -85,71 +99,99 @@ nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:
 <button onclick="document.getElementById('installBanner').style.display='none'" style="padding:10px 18px;background:rgba(255,255,255,0.1);border:none;border-radius:20px;color:white">Later</button>
 </div>
 
-<!-- NEW FIXED INSTALL MODAL -->
 <div id="installModal" class="install-modal" onclick="if(event.target==this) closeInstallModal()">
 <div class="modal-box">
 <h3 style="margin-bottom:8px">📲 Install MyCampusCrib</h3>
 <p style="font-size:13px;color:#64748b;margin-bottom:14px">Install MCC for quick access</p>
 <div style="background:#f8fafc;border-radius:14px;padding:16px;line-height:1.7;font-size:14px">
-<b>💻 Laptop / Desktop:</b><br>
-1. Look for install icon in address bar top right<br>
-2. Click it → Install<br>
-3. Or Chrome menu → Install MyCampusCrib<br><br>
-<b>📱 iPhone (Safari):</b><br>
-1. Tap Share button at bottom<br>
-2. Tap Add to Home Screen<br>
-3. Tap Add top right<br><br>
-<b>🤖 Android (Chrome):</b><br>
-1. Tap 3 dots menu top right<br>
-2. Tap Install app / Add to Home screen<br>
-3. Tap Install
+<b>💻 Laptop / Desktop:</b><br>1. Look for install icon in address bar top right<br>2. Click it → Install<br>3. Or Chrome menu → Install MyCampusCrib<br><br><b>📱 iPhone (Safari):</b><br>1. Tap Share button at bottom<br>2. Tap Add to Home Screen<br>3. Tap Add top right<br><br><b>🤖 Android (Chrome):</b><br>1. Tap 3 dots menu top right<br>2. Tap Install app / Add to Home screen<br>3. Tap Install
 </div>
-<div style="margin-top:16px;display:flex;gap:10px">
-<button class="btn btn-gold" style="flex:1" onclick="closeInstallModal()">Got it!</button>
-<button class="btn btn-white" style="flex:1;border:1.5px solid #e2e8f0" onclick="closeInstallModal()">Close</button>
-</div>
+<div style="margin-top:16px;display:flex;gap:10px"><button class="btn btn-gold" style="flex:1" onclick="closeInstallModal()">Got it!</button><button class="btn btn-white" style="flex:1;border:1.5px solid #e2e8f0" onclick="closeInstallModal()">Close</button></div>
 </div>
 </div>
 
 <script>
-const phrases=["Real Google Maps 🗺️","Apeosika & Science Added 📍","MCC Luxury Background 💎","Manager Login Ready 🔑","PWA Install Ready 📱"];let pi=0,ci=0,del=false;const tEl=document.getElementById('typing');function loop(){const cur=phrases[pi];if(del){tEl.textContent=cur.substring(0,ci-1);ci--}else{tEl.textContent=cur.substring(0,ci+1);ci++}let s=del?40:80;if(!del&&ci===cur.length){s=2000;del=true}else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;s=500}setTimeout(loop,s)}loop();
-// Load real hostels posted by managers
-let hostels = JSON.parse(localStorage.getItem('hostels') || '[]');
+const phrases=["Real Google Maps 🗺️","Apeosika, Science & School Bus Road Added 📍","Manager Videos Enabled 🎥","MCC Luxury 💎","WhatsApp Booking Ready 💬"];let pi=0,ci=0,del=false;const tEl=document.getElementById('typing');function loop(){const cur=phrases[pi];if(del){tEl.textContent=cur.substring(0,ci-1);ci--}else{tEl.textContent=cur.substring(0,ci+1);ci++}let s=del?40:80;if(!del&&ci===cur.length){s=2000;del=true}else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;s=500}setTimeout(loop,s)}loop();
+</script>
 
-// If no hostels yet, show empty message
-if (hostels.length === 0) {
-  console.log('No hostels posted yet');
+<script type="module">
+// FIXED LOGIC - NO DEFAULT HOSTELS
+let allHostels = []; 
+let filteredList = [];
+let map, markers=[], streetLayer, satLayer, isSat=false;
+
+function renderHostels(list){
+  const grid = document.getElementById('hostelGrid');
+  const empty = document.getElementById('emptyMsg');
+  const countText = document.getElementById('countText');
+  countText.textContent = list.length ? `${list.length} hostels found • Real manager listings` : 'No hostels yet';
+  if(list.length === 0){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    if(map) updateMapMarkers([]);
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = list.map(h=>{
+    const img = h.images?.[0] || h.image || 'mcc-logo.png';
+    const video = h.videoUrl || h.video || '';
+    const lat = h.lat || 5.119;
+    const lng = h.lng || -1.287;
+    const price = h.price || '0';
+    const location = h.location || 'UCC';
+    const name = (h.name || 'Hostel').replace(/'/g,"\\'");
+    const phone = h.phone || h.managerPhone || '0';
+    return `<div class="card">
+      ${video ? `<video src="${video}" controls muted playsinline poster="${img}"></video>` : `<img src="${img}" loading="lazy" onerror="this.src='mcc-logo.png'">`}
+      <div style="padding:14px">
+        <h3 style="font-size:15px">${h.name}</h3>
+        <p style="font-size:11px;color:#64748b">📍 ${location}</p>
+        <div style="font-weight:800;color:#059669;margin:6px 0">GHS ${price}/year</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+          <button onclick="contactWA('${name}','${phone}')" style="flex:1;padding:10px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:800;font-size:12px">💬 WhatsApp</button>
+          <button onclick="getDirections(${lat},${lng})" style="padding:10px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;font-size:12px">🧭 Map</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  if(map) updateMapMarkers(list);
 }
 
-let allHostels=Hostels,filteredList=Hostels,map,markers=[],streetLayer,satLayer,isSat=false;
-function renderHostels(list){document.getElementById('hostelGrid').innerHTML=list.map(h=>`<div class="card"><img src="${h.images[0]}"><div style="padding:14px"><h3>${h.name}</h3><p style="font-size:11px;color:#64748b">📍 ${h.location}</p><div style="font-weight:800;color:#059669;margin:6px 0">GHS ${h.price}/year</div><button onclick="contactWA('${h.name}','${h.phone}')" style="width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">💬 WhatsApp</button><button onclick="getDirections(${h.lat},${h.lng})" style="width:100%;padding:10px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;margin-top:6px">🧭 Google Maps</button></div></div>`).join('');if(map)updateMapMarkers(list)}
-function initMap(){if(map)return;streetLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20});satLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{maxZoom:20});map=L.map('map',{layers:[streetLayer]}).setView([5.119,-1.287],14);updateMapMarkers(filteredList)}
-function toggleSat(){if(!map)return;isSat=!isSat;if(isSat){map.removeLayer(streetLayer);map.addLayer(satLayer)}else{map.removeLayer(satLayer);map.addLayer(streetLayer)}}
-function updateMapMarkers(list){if(!map)return;markers.forEach(m=>map.removeLayer(m));markers=[];list.forEach(h=>{const icon=L.divIcon({className:'',html:`<div class="price-marker">GHS ${h.price}</div>`,iconSize:[80,28],iconAnchor:[40,14]});const m=L.marker([h.lat,h.lng],{icon}).addTo(map);m.bindPopup(`<b>${h.name}</b><br>${h.location}<br>GHS ${h.price}`);markers.push(m)})}
-function toggleView(v){if(v==='map'){document.getElementById('map').style.display='block';document.getElementById('hostelGrid').style.display='none';initMap();setTimeout(()=>map.invalidateSize(),200)}else{document.getElementById('map').style.display='none';document.getElementById('hostelGrid').style.display='grid'}}
-function applyFilters(){const q=document.getElementById('search').value.toLowerCase();const min=parseInt(document.getElementById('minPrice').value)||0;const max=parseInt(document.getElementById('maxPrice').value)||999999;const locF=document.getElementById('locFilter').value;filteredList=allHostels.filter(h=>{let m=(h.name+h.location).toLowerCase().includes(q)||q.length<2;let p=parseInt(h.price)||0;return m&&p>=min&&p<=max&&(!locF||h.location===locF)});renderHostels(filteredList)}
-function locateUser(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(pos=>{const {latitude,longitude}=pos.coords;if(!map)initMap();L.marker([latitude,longitude]).addTo(map);map.setView([latitude,longitude],15)})}
-function getDirections(lat,lng){window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,'_blank')}
-function contactWA(name,phone){let c=phone.replace(/[^0-9]/g,'');if(c.startsWith('0'))c='233'+c.substring(1);window.open(`https://wa.me/${c}?text=Hello ${name} on MCC`,'_blank')}
-renderHostels(filteredList);
+window.initMap = function(){ if(map) return; streetLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20}); satLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{maxZoom:20}); map=L.map('map',{layers:[streetLayer]}).setView([5.119,-1.287],14); updateMapMarkers(filteredList); }
+window.toggleSat = function(){ if(!map) return; isSat=!isSat; if(isSat){map.removeLayer(streetLayer);map.addLayer(satLayer)}else{map.removeLayer(satLayer);map.addLayer(streetLayer)} }
+window.updateMapMarkers = function(list){ if(!map) return; markers.forEach(m=>map.removeLayer(m));markers=[]; list.forEach(h=>{ const lat=h.lat||5.119; const lng=h.lng||-1.287; const icon=L.divIcon({className:'',html:`<div class="price-marker">GHS ${h.price}</div>`,iconSize:[80,28],iconAnchor:[40,14]}); const m=L.marker([lat,lng],{icon}).addTo(map); m.bindPopup(`<b>${h.name}</b><br>${h.location}<br>GHS ${h.price}<br>${h.videoUrl?'🎥 Video tour':''}`); markers.push(m) }); }
+window.toggleView = function(v){ if(v==='map'){document.getElementById('map').style.display='block';document.getElementById('hostelGrid').style.display='none';window.initMap();setTimeout(()=>map.invalidateSize(),200)}else{document.getElementById('map').style.display='none';document.getElementById('hostelGrid').style.display='grid'} }
+window.applyFilters = function(){ const q=document.getElementById('search').value.toLowerCase(); const min=parseInt(document.getElementById('minPrice').value)||0; const max=parseInt(document.getElementById('maxPrice').value)||999999; const locF=document.getElementById('locFilter').value; filteredList=allHostels.filter(h=>{ let text=((h.name||'')+(h.location||'')).toLowerCase(); let m=text.includes(q)||q.length<2; let p=parseInt(h.price)||0; return m&&p>=min&&p<=max&&(!locF||h.location===locF) }); renderHostels(filteredList); }
+window.locateUser = function(){ if(!navigator.geolocation) return; navigator.geolocation.getCurrentPosition(pos=>{ const {latitude,longitude}=pos.coords; if(!map) window.initMap(); L.marker([latitude,longitude]).addTo(map); map.setView([latitude,longitude],15) }) }
+window.getDirections = function(lat,lng){ window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,'_blank') }
+window.contactWA = function(name,phone){ let c=phone.replace(/[^0-9]/g,''); if(c.startsWith('0')) c='233'+c.substring(1); const urlParams=new URLSearchParams(window.location.search); const ref=urlParams.get('ref')||'direct'; const msg=`Hello, I saw ${name} on MyCampusCrib (MCC Luxury). Is it still available? My referral: ${ref}`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(msg)}`,'_blank') }
+
+async function loadHostels(){
+  let local=[]; try{ local=JSON.parse(localStorage.getItem('hostels')||'[]'); }catch(e){ local=[]; }
+  local=local.filter(h=>h&&h.name&&!h.isDefault);
+  allHostels=[...local];
+  try{
+    const mod=await import('./firebase.js');
+    if(mod.db){
+      const { collection, getDocs, query, where } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const q=query(collection(mod.db,"hostels"),where("status","==","approved"));
+      const snap=await getDocs(q);
+      const fb=[]; snap.forEach(d=>fb.push({id:d.id,...d.data()}));
+      const ids=new Set(allHostels.map(h=>h.id)); fb.forEach(h=>{ if(!ids.has(h.id)) allHostels.push(h) });
+    }
+  }catch(e){ console.log('Firebase skip',e.message) }
+  filteredList=[...allHostels]; renderHostels(filteredList);
+}
+loadHostels();
 </script>
+
 <script>
 let deferredPrompt=null;
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').then(r=>console.log('MCC SW Ready')).catch(e=>console.log(e))})}
 window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').style.display='block';});
 function showInstallModal(){document.getElementById('installModal').classList.add('show');}
 function closeInstallModal(){document.getElementById('installModal').classList.remove('show');}
-function installApp(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(res=>{
-      if(res.outcome==='accepted'){document.getElementById('installBanner').style.display='none'}
-      deferredPrompt=null;
-    })
-  } else {
-    showInstallModal();
-  }
-}
+function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(res=>{ if(res.outcome==='accepted'){document.getElementById('installBanner').style.display='none'} deferredPrompt=null; }) } else { showInstallModal(); } }
 setTimeout(()=>{document.getElementById('installBanner').style.display='block';},3000);
 </script>
 </body>
