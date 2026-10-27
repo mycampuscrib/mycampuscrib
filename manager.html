@@ -10,7 +10,7 @@
 <body class="bg-[#f8fafc] font-[Poppins] p-4">
 <div class="max-w-2xl mx-auto bg-white rounded-[20px] p-6 shadow-xl mt-4">
 <div class="flex items-center justify-between mb-6">
-<h1 class="font-bold">Add New Hostel - FREE MODE</h1>
+<h1 class="font-bold text-sm">Add Hostel - Secure Mode (Admin Approval)</h1>
 <a href="manager-dashboard.html" class="text-xs bg-slate-100 px-3 py-2 rounded-full">Dashboard</a>
 </div>
 
@@ -26,13 +26,16 @@
 <option value="4 in 1">4 in 1</option>
 </select>
 <textarea id="desc" placeholder="Description..." class="w-full p-3 border rounded-xl mb-3 text-sm h-20"></textarea>
-<input id="managerPhone" placeholder="Your WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
 
-<label class="text-xs font-bold mb-1 block">Hostel Images (max 3, will be compressed)</label>
+<label class="text-xs font-bold">Your WhatsApp Number (with country code e.g. 233500000000)</label>
+<input id="managerPhone" placeholder="233XXXXXXXXX" class="w-full p-3 border rounded-xl mb-3 text-sm">
+
+<label class="text-xs font-bold mb-1 block">Hostel Images (4 images max - compressed to fit free plan)</label>
 <input id="images" type="file" multiple accept="image/*" class="w-full p-2 border rounded-xl mb-4 text-xs">
 
-<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload LIVE - Free Mode</button>
+<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload for Approval</button>
 <p id="msg" class="text-xs text-center mt-3"></p>
+<p class="text-[10px] text-center mt-2 text-slate-400">After upload, go to admin.html to Approve → then it will show on index.html</p>
 </div>
 
 <script type="module">
@@ -46,12 +49,12 @@ function compressToBase64(file){
       const img = new Image();
       img.onload = ()=>{
         const canvas = document.createElement('canvas');
-        const MAX = 500; // small to fit Firestore
+        const MAX = 400; // smaller to allow 4 images in Firestore (1MB limit)
         let w = img.width, h = img.height;
         if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } }
         canvas.width=w; canvas.height=h;
         canvas.getContext('2d').drawImage(img,0,0,w,h);
-        resolve(canvas.toDataURL('image/jpeg',0.5));
+        resolve(canvas.toDataURL('image/jpeg',0.4)); // more compressed for 4 images
       };
       img.onerror = reject;
       img.src = e.target.result;
@@ -66,16 +69,23 @@ window.uploadHostel = async function(){
   if(!cur){ alert("Login first"); location.href="manager-login.html"; return; }
   const btn=document.getElementById('uploadBtn');
   const msg=document.getElementById('msg');
-  btn.disabled=true; btn.innerText="Compressing..."; msg.innerText="Compressing images...";
+  btn.disabled=true; btn.innerText="Compressing..."; msg.innerText="Compressing 4 images...";
   msg.style.color="black";
   try{
     const name=document.getElementById('hname').value.trim();
     const locationVal=document.getElementById('location').value.trim();
     const price=document.getElementById('price').value.trim();
+    let phoneRaw=document.getElementById('managerPhone').value.trim()||cur.phone||"";
+    // Fix WhatsApp number: remove spaces, +, make sure it works with wa.me
+    let cleanPhone = phoneRaw.replace(/\D/g,'');
+    if(cleanPhone.startsWith('0')) cleanPhone = '233'+cleanPhone.substring(1);
+    if(!cleanPhone.startsWith('233') && cleanPhone.length==10) cleanPhone = '233'+cleanPhone.substring(1);
+    
     if(!name||!locationVal||!price) throw new Error("Fill name, location, price");
+    if(!cleanPhone) throw new Error("Enter WhatsApp number");
     const files=document.getElementById('images').files;
     if(files.length===0) throw new Error("Select at least 1 image");
-    if(files.length>3) throw new Error("Select max 3 images for free mode");
+    if(files.length>4) throw new Error("Max 4 images allowed");
     
     let imageUrls=[];
     for(let i=0;i<files.length;i++){
@@ -84,25 +94,26 @@ window.uploadHostel = async function(){
       imageUrls.push(base64);
     }
     
-    msg.innerText="Saving LIVE to Firestore...";
+    msg.innerText="Saving for admin approval...";
     await addDoc(collection(db,"hostels"),{
       name, location:locationVal, price:Number(price),
       beds:Number(document.getElementById('beds').value)||1,
       type:document.getElementById('type').value,
       description:document.getElementById('desc').value.trim(),
-      managerPhone:document.getElementById('managerPhone').value.trim()||cur.phone,
+      managerPhone:cleanPhone, // now clean for wa.me
       managerEmail:cur.email, managerName:cur.name,
       images:imageUrls, videoUrl:"",
-      status:"approved", views:0, inquiries:0,
+      status:"pending", // <-- SECURE: needs your approval
+      views:0, inquiries:0,
       createdAt:serverTimestamp()
     });
-    msg.style.color="green"; msg.innerText="✅ LIVE! Theo Hostel is now visible!";
+    msg.style.color="green"; msg.innerText="✅ Sent for Approval! Go to admin.html to approve it.";
     btn.innerText="Done!";
     setTimeout(()=>location.href="manager-dashboard.html",1500);
   }catch(e){
     console.error(e);
     msg.style.color="red"; msg.innerText="Error: "+e.message;
-    btn.disabled=false; btn.innerText="Upload LIVE - Free Mode";
+    btn.disabled=false; btn.innerText="Upload for Approval";
   }
 }
 </script>
