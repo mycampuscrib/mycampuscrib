@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyCampusCrib - World Best Luxury Hostels</title>
 <meta name="theme-color" content="#0f172a">
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTXlDYW1wdXNDcmliIEx1eHVyeSIsInNob3J0X25hbWUiOiJNQ0MgTHV4dXJ5Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNGRkZCRjUiLCJ0aGVtZV9jb2xvciI6IiMwZjE3MmEiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly92aWEucGxhY2Vob2xkZXIuY29tLzE5MiIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -152,7 +154,6 @@ const btns = [document.getElementById('installBtn'), document.getElementById('in
 
 window.addEventListener('beforeinstallprompt', (e)=>{
   e.preventDefault(); deferredPrompt=e;
-  // make all install buttons pulse even more
   btns.forEach(b=>{ if(b) b.classList.add('install-pulse'); });
 });
 
@@ -167,14 +168,12 @@ function triggerInstall(){
       deferredPrompt=null;
     });
   } else {
-    // Fallback for browsers where prompt not available - show instructions
     alert("To install App:\n\nOn Android Chrome: Click ⋮ menu top right → 'Install app' or 'Add to Home Screen'\n\nOn iPhone Safari: Click Share button → 'Add to Home Screen'\n\nThis will install MCC Luxury as real app!");
   }
 }
 
 btns.forEach(b=>{ if(b) b.addEventListener('click', triggerInstall); });
 
-// Register SW
 if('serviceWorker' in navigator){
   const swCode=`self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})`;
   const blob=new Blob([swCode],{type:'text/javascript'});
@@ -182,7 +181,6 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register(swUrl).catch(()=>{});
 }
 
-// Auto hide floating after 15 sec if not clicked
 setTimeout(()=>{ const el=document.getElementById('floatingInstall'); if(el) el.style.opacity='0.9'; }, 8000);
 </script>
 </body>
