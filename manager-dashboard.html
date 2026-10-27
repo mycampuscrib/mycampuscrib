@@ -1,115 +1,103 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manager Dashboard - MCC</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Poppins}body{background:#f8fafc;color:#0f172a}
-nav{background:#0f172a;color:white;padding:14px 4%;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:800;font-size:20px}.logo span{color:#25D366}.nav a{color:white;text-decoration:none;margin-left:8px;font-size:12px;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,0.1)}
-.wrap{max-width:1200px;margin:0 auto;padding:18px 4%}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
-.stat{background:white;border-radius:14px;padding:16px;box-shadow:0 3px 10px rgba(0,0,0,0.05)}.stat h3{font-size:11px;color:#64748b}.num{font-size:22px;font-weight:800;margin-top:4px}
-.box{background:white;border-radius:14px;padding:18px;box-shadow:0 3px 10px rgba(0,0,0,0.05);margin:14px 0}
-.btn{padding:10px 16px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:12px}
-</style></head><body>
-<nav><div class="logo">🏠 MyCampus<span>Crib</span> Manager</div><div class="nav"><a href="index.html">Home</a><a href="#" onclick="logout()">Logout</a></div></nav>
-<div class="wrap">
-<h1>📊 Dashboard</h1><p style="font-size:12px;color:#64748b">Welcome <span id="mName">Loading...</span></p>
-<div class="stats">
-<div class="stat"><h3>👁️ Views</h3><div class="num" id="views">0</div></div>
-<div class="stat"><h3>💬 Leads</h3><div class="num" id="leads">0</div></div>
-<div class="stat"><h3>❤️ Saves</h3><div class="num" id="saves">0</div></div>
-<div class="stat"><h3>Status</h3><div class="num" id="status" style="font-size:14px">Loading...</div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCC - Manager Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#f8fafc] font-[Poppins] p-4">
+<div class="max-w-4xl mx-auto">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<img src="logo.png" class="w-10 h-10 rounded-full bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/40?text=MCC'">
+<div>
+<h1 class="font-bold text-sm" id="mName">Manager</h1>
+<p class="text-[10px] text-slate-500" id="mEmail"></p>
 </div>
-<div class="box"><h3>📈 Views Last 7 Days</h3><canvas id="chart" height="140"></canvas></div>
-<div class="box"><h3>🏠 My Hostel</h3><div id="myHostelInfo">Loading your hostel...</div><div style="margin-top:10px"><a href="manager.html" class="btn" style="background:#0f172a;color:white;text-decoration:none">✏️ Edit / Add Video</a></div></div>
-<div class="box"><h3>💬 My Leads (MCC Codes)</h3><div id="leadList" style="font-size:12px">Loading...</div></div>
+</div>
+<button onclick="logout()" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-full">Logout</button>
+</div>
+
+<!-- CODES BOX -->
+<div class="bg-[#0f172a] text-white rounded-[18px] p-4 mb-4">
+<p class="text-[10px] opacity-70">YOUR REFERRAL CODE (manager/student tracking)</p>
+<h2 class="font-bold text-xl tracking-widest" id="refCode">MCC-XXXX</h2>
+<p class="text-[10px] mt-2 opacity-60">Share this code — when student uses it to chat, you get lead</p>
+</div>
+
+<div class="grid grid-cols-2 gap-3 mb-4">
+<a href="manager.html" class="bg-[#c9a86a] text-white text-center p-3 rounded-xl font-bold text-sm">+ Add Hostel</a>
+<button onclick="loadHostels()" class="bg-white border p-3 rounded-xl font-bold text-sm">Refresh</button>
+</div>
+
+<div class="bg-white rounded-[18px] p-4 shadow-sm mb-4">
+<h3 class="font-bold text-sm mb-2">Leads / Inquiry Codes (Student → You)</h3>
+<div id="leads" class="text-xs space-y-2"><p class="text-slate-400">Loading leads...</p></div>
+</div>
+
+<div class="bg-white rounded-[18px] p-4 shadow-sm">
+<h3 class="font-bold text-sm mb-2">My Hostels (LIVE)</h3>
+<div id="myHostels" class="grid grid-cols-1 md:grid-cols-2 gap-3"><p class="text-xs text-slate-400">Loading...</p></div>
+</div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getFirebaseConfig } from "./firebase.js";
+import { db } from "./firebase.js";
+import { collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Load config from your firebase.js if it exports, else use default
-let firebaseConfig;
-try { firebaseConfig = getFirebaseConfig(); } catch(e) {
-  firebaseConfig = {
-    apiKey: "AIzaSyD...",
-    authDomain: "mycampuscrib.firebaseapp.com",
-    projectId: "mycampuscrib"
-  };
-}
-const app = initializeApp(firebaseConfig, "dashboard");
-const auth = getAuth(app);
-const db = getFirestore(app);
+const cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
+if(!cur){ location.href="manager-login.html"; }
+document.getElementById('mName').innerText=cur.name;
+document.getElementById('mEmail').innerText=cur.email;
+document.getElementById('refCode').innerText=cur.referralCode||"MCC-XXXX";
 
-const mName = document.getElementById('mName');
-const myHostelInfo = document.getElementById('myHostelInfo');
-const statusEl = document.getElementById('status');
-const viewsEl = document.getElementById('views');
-const leadsEl = document.getElementById('leads');
-const savesEl = document.getElementById('saves');
-const leadList = document.getElementById('leadList');
+window.logout = ()=>{ localStorage.removeItem('mcc_current_manager'); location.href="manager-login.html"; }
 
-onAuthStateChanged(auth, async (user)=>{
-  if(!user){ 
-    // fallback to old localStorage login for now
-    let cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
-    if(!cur){ alert('Login first'); location.href='manager-login.html'; return; }
-    mName.textContent = cur.name || cur.email;
-    loadLocalHostel(cur);
-    return;
-  }
-  mName.textContent = user.email;
+window.loadHostels = async()=>{
+  const box=document.getElementById('myHostels');
+  box.innerHTML="<p class='text-xs text-slate-400'>Loading...</p>";
   try{
-    const q = query(collection(db, "hostels"), where("managerId","==",user.uid));
-    const snap = await getDocs(q);
-    if(snap.empty){
-      // also check old field managerEmail
-      const q2 = query(collection(db, "hostels"), where("managerEmail","==",user.email));
-      const snap2 = await getDocs(q2);
-      if(snap2.empty){
-        myHostelInfo.innerHTML = '<p style="color:#94a3b8">You have not listed hostel yet. <a href="manager.html">List now + add video</a></p>';
-        statusEl.innerText = 'No hostel';
-        return;
-      } else {
-        renderHostel(snap2.docs[0].data());
-      }
-    } else {
-      renderHostel(snap.docs[0].data());
-    }
-  }catch(e){
-    console.error(e);
-    myHostelInfo.innerHTML = 'Error loading: '+e.message;
+    const q=query(collection(db,"hostels"), where("managerEmail","==",cur.email));
+    const snap=await getDocs(q);
+    if(snap.empty){ box.innerHTML="<p class='text-xs text-slate-400'>No hostels yet. Add one.</p>"; return; }
+    box.innerHTML="";
+    snap.forEach(d=>{
+      const h=d.data();
+      box.innerHTML+=`<div class="border rounded-xl p-3">
+      <img src="${h.images?.[0]||''}" class="w-full h-32 object-cover rounded-lg mb-2">
+      <p class="font-bold text-sm">${h.name}</p>
+      <p class="text-[11px] text-slate-500">${h.location} - GH₵${h.price}</p>
+      <p class="text-[10px] text-green-600 mt-1">LIVE for students ✅</p>
+      </div>`;
+    });
+  }catch(e){ box.innerHTML=`<p class='text-xs text-red-500'>${e.message}</p>`; }
+}
+
+async function loadLeads(){
+  const box=document.getElementById('leads');
+  try{
+    const q=query(collection(db,"inquiries"), where("managerEmail","==",cur.email), orderBy("createdAt","desc"));
+    const snap=await getDocs(q);
+    if(snap.empty){ box.innerHTML="<p class='text-slate-400'>No inquiries yet. When student clicks WhatsApp, code appears here.</p>"; return; }
+    box.innerHTML="";
+    snap.forEach(d=>{
+      const i=d.data();
+      box.innerHTML+=`<div class="flex justify-between bg-slate-50 p-2 rounded-lg">
+      <div><p class="font-bold">${i.code}</p><p class="text-[10px]">${i.hostelName} - ${new Date(i.createdAt?.seconds*1000).toLocaleDateString()}</p></div>
+      <span class="text-[10px] bg-white px-2 py-1 rounded-full h-fit">${i.status||'new'}</span></div>`;
+    });
+  }catch(e){ box.innerHTML=`<p class='text-red-400'>Need index - showing without sort</p>`; 
+    // fallback without orderBy
+    try{
+      const snap2=await getDocs(query(collection(db,"inquiries"), where("managerEmail","==",cur.email)));
+      box.innerHTML=""; snap2.forEach(d=>{ const i=d.data(); box.innerHTML+=`<div class="bg-slate-50 p-2 rounded-lg text-[11px]"><b>${i.code}</b> - ${i.hostelName}</div>`; });
+    }catch{}
   }
-});
-
-function renderHostel(hostel){
-  const video = hostel.videoUrl || hostel.video || '';
-  const images = hostel.images || [hostel.image || 'mcc-logo.png'];
-  myHostelInfo.innerHTML = `<b>${hostel.name}</b> - ${hostel.location} - GHS ${hostel.price}<br><small>${hostel.phone||''}</small> ${hostel.isFeatured?'<span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-size:10px">💎 FEATURED</span>':''}
-  <br><div style="margin-top:8px">${images.slice(0,3).map(src=>`<img src="${src}" style="width:70px;height:50px;object-fit:cover;border-radius:8px;margin-right:5px">`).join('')}
-  ${video?`<video src="${video}" controls style="width:120px;height:70px;border-radius:8px;background:#000"></video>`:''}</div>
-  <p style="font-size:11px;color:#64748b;margin-top:6px">${video?'🎥 Video tour added':'No video yet - click Edit to add video tour'}</p>`;
-  statusEl.innerText = hostel.status === 'approved' ? (hostel.isFeatured?'💎 FEATURED LIVE':'✅ LIVE') : '⏳ PENDING APPROVAL';
-  statusEl.style.color = hostel.status === 'approved'?'#059669':'#d97706';
-  viewsEl.innerText = hostel.views || Math.floor(Math.random()*200)+50;
-  leadsEl.innerText = '0'; // will load from leads collection later
-  savesEl.innerText = hostel.saves || Math.floor(Math.random()*20)+2;
-  leadList.innerHTML = 'Leads from WhatsApp referrals will show here. Your hostel is now visible in index.html if approved.';
-  new Chart(document.getElementById('chart'),{type:'line',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Views',data:[12,19,8,25,22,30,hostel.views||45],borderColor:'#0f172a',tension:0.4,fill:false}]},options:{plugins:{legend:{display:false}}}});
 }
 
-function loadLocalHostel(cur){
-  let live=JSON.parse(localStorage.getItem('mcc_live_hostels')||'[]'); let pend=JSON.parse(localStorage.getItem('mcc_pending_hostels')||'[]');
-  let h=live.find(x=>x.managerEmail===cur.email) || pend.find(x=>x.managerEmail===cur.email);
-  if(!h){ myHostelInfo.innerHTML='<p style="color:#94a3b8">You have not listed hostel yet. <a href="manager.html">List now</a></p>'; return; }
-  renderHostel(h);
-}
-
-window.logout = async ()=>{
-  try{ await signOut(auth); }catch(e){}
-  localStorage.removeItem('mcc_current_manager');
-  location.href='manager-login.html';
-}
+loadHostels(); loadLeads();
 </script>
-</body></html>
+</body>
+</html>

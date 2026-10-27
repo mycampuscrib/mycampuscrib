@@ -1,12 +1,43 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manager Login - MCC</title><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;font-family:Poppins}body{background:#f8fafc;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:15px}.box{background:white;padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:380px;width:100%}input{width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;margin:7px 0}button{width:100%;padding:12px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:10px}</style></head><body>
-<div class="box"><h2>🔐 Manager Login</h2><input id="email" type="email" placeholder="Email"><input id="pass" type="password" placeholder="Password"><button onclick="login()">Login</button><p style="font-size:12px;text-align:center;margin-top:12px">No account? <a href="manager-signup.html">Signup</a> | <a href="index.html">Home</a></p><p id="msg" style="font-size:12px;color:red"></p></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCC - Manager Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#f8fafc] font-[Poppins] flex items-center justify-center min-h-screen p-4">
+<div class="bg-white w-full max-w-md rounded-[20px] p-6 shadow-xl">
+<div class="flex items-center gap-3 mb-6">
+<img src="logo.png" alt="MCC Logo" class="w-12 h-12 rounded-full object-cover bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/48?text=MCC'">
+<h1 class="font-[Playfair_Display] font-bold text-xl">MyCampusCrib<span class="text-[#c9a86a]">.Luxury</span></h1>
+</div>
+
+<h2 class="font-bold text-lg mb-1">Manager Login</h2>
+<p class="text-xs text-slate-500 mb-4">Access your dashboard</p>
+
+<input id="email" placeholder="Email" type="email" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="password" placeholder="Password" type="password" class="w-full p-3 border rounded-xl mb-4 text-sm">
+
+<button onclick="login()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold text-sm">Login</button>
+<p id="msg" class="text-xs text-center mt-3"></p>
+<a href="manager-signup.html" class="block text-center text-xs mt-4 text-slate-500">No account? Sign up</a>
+<a href="index.html" class="block text-center text-xs mt-2 text-slate-400">← Back to Home</a>
+</div>
+
 <script>
 function login(){
- let email=document.getElementById('email').value.trim().toLowerCase(), pass=document.getElementById('pass').value;
- let managers=JSON.parse(localStorage.getItem('mcc_managers')||'[]');
- let m=managers.find(x=>x.email===email && x.password===pass);
- if(!m){document.getElementById('msg').innerText='Wrong email or password';return}
- localStorage.setItem('mcc_current_manager',JSON.stringify({name:m.name,email:m.email,phone:m.phone,hostelName:m.hostelName,location:m.location}));
- window.location.href='manager-dashboard.html';
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value.trim();
+  const msg = document.getElementById('msg');
+  const managers = JSON.parse(localStorage.getItem('mcc_managers')||'[]');
+  const found = managers.find(m=>m.email===email && m.password===password);
+  if(!found){ msg.style.color="red"; msg.innerText="Wrong email or password"; return; }
+  localStorage.setItem('mcc_current_manager', JSON.stringify(found));
+  msg.style.color="green"; msg.innerText="Login success, opening dashboard...";
+  setTimeout(()=> location.href="manager-dashboard.html", 800);
 }
-</script></body></html>
+</script>
+</body>
+</html>

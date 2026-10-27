@@ -1,174 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manager - MyCrib Collection</title>
+<title>MCC - Add Hostel</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 p-4">
-<div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow">
-<h1 class="text-2xl font-bold mb-4">🏠 List Your Hostel</h1>
+<body class="bg-[#f8fafc] font-[Poppins] p-4">
+<div class="max-w-2xl mx-auto bg-white rounded-[20px] p-6 shadow-xl mt-4">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<img src="logo.png" class="w-10 h-10 rounded-full bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/40?text=MCC'">
+<h1 class="font-bold">Add New Hostel</h1>
+</div>
+<a href="manager-dashboard.html" class="text-xs bg-slate-100 px-3 py-2 rounded-full">Dashboard</a>
+</div>
 
-<input id="name" placeholder="Hostel Name e.g. White Hostel" class="w-full border p-3 rounded mb-3">
-<select id="location" class="w-full border p-3 rounded mb-3">
-<option value="">Select Location</option>
-<option>Amamoma</option>
-<option>Kwaprow</option>
-<option>Ayensu</option>
-<option>Apeosika</option>
-<option>Science</option>
-<option>School Bus Road</option>
-<option>University Hall</option>
-<option>Old Site</option>
-<option>New Site</option>
+<input id="hname" placeholder="Hostel Name - e.g. Luxury Lodge" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="location" placeholder="Location - e.g. Amamoma" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="price" placeholder="Price per year - e.g. 3500" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="beds" placeholder="Beds available" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<select id="type" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<option value="Single Room">Single Room</option>
+<option value="Self Contain">Self Contain</option>
+<option value="2 in 1">2 in 1</option>
+<option value="3 in 1">3 in 1</option>
+<option value="4 in 1">4 in 1</option>
 </select>
-<input id="price" type="number" placeholder="Price e.g. 2500" class="w-full border p-3 rounded mb-3">
-<input id="phone" placeholder="WhatsApp e.g. 0551234567" class="w-full border p-3 rounded mb-3">
+<textarea id="desc" placeholder="Description, facilities..." class="w-full p-3 border rounded-xl mb-3 text-sm h-20"></textarea>
+<input id="managerPhone" placeholder="Your WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
 
-<label class="block font-bold mt-4 mb-2">Hostel Images (Max 5) - Cloud Upload</label>
-<input id="images" type="file" multiple accept="image/*" class="w-full border p-3 rounded mb-3">
+<label class="text-xs font-bold mb-1 block">Hostel Images (max 5)</label>
+<input id="images" type="file" multiple accept="image/*" class="w-full p-2 border rounded-xl mb-3 text-xs">
 
-<label class="block font-bold mt-4 mb-2">🎥 Video Tour (Optional - Max 50MB)</label>
-<input id="video" type="file" accept="video/*" class="w-full border p-3 rounded mb-3">
-<p class="text-[11px] text-gray-500 mb-3">Show room tour - this will show in index.html as video</p>
+<label class="text-xs font-bold mb-1 block">Hostel Video (optional, max 30sec)</label>
+<input id="video" type="file" accept="video/*" class="w-full p-2 border rounded-xl mb-4 text-xs">
 
-<label class="flex items-center gap-2 mb-4">
-<input id="featured" type="checkbox"> <span>Make Featured (GHS 50 via Paystack)</span>
-</label>
-
-<button onclick="submitHostel()" id="submitBtn" class="w-full bg-black text-white p-4 rounded-xl font-bold">Upload Hostel</button>
-<p id="status" class="mt-3 text-center text-sm"></p>
+<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload LIVE for Students</button>
+<p id="msg" class="text-xs text-center mt-3"></p>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { db, storage } from "./firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3...replace with yours",
-  authDomain: "mycampuscrib.firebaseapp.com",
-  projectId: "mycampuscrib",
-  storageBucket: "mycampuscrib.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abc"
-};
+const IMGBB_KEY = "7b28df43b6de3fa529a0cfec2f2d261e"; // your key
 
-// Try to get from your firebase.js
-let app, auth, db, storage;
-try {
-  const mod = await import("./firebase.js");
-  if(mod.app){ app=mod.app; auth=mod.auth; db=mod.db; storage=mod.storage; }
-  else throw new Error();
-} catch(e){
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  storage = getStorage(app);
+async function uploadToImgBB(file){
+  const form = new FormData(); form.append("image", file);
+  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:"POST", body:form});
+  const data = await res.json();
+  if(!data.success) throw new Error("Image upload failed");
+  return data.data.url;
 }
 
-let currentUser = null;
-onAuthStateChanged(auth, (user)=>{
-  currentUser = user;
-  if(!user){
-    let cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
-    if(!cur){ /* allow guest for now but warn */ console.log("No auth, using local manager"); }
-  }
-});
-
-const IMGBB_API_KEY = "6efed4c9279fad6f79caf349626d5880";
-
-async function uploadToImgBB(file) {
-  const form = new FormData();
-  form.append("image", file);
-  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: form });
-  const json = await res.json();
-  if(!json.success) throw new Error("Image upload failed");
-  return json.data.url;
-}
-
-window.submitHostel = async function() {
-  const btn = document.getElementById('submitBtn');
-  const status = document.getElementById('status');
-  const name = document.getElementById('name').value.trim();
-  const location = document.getElementById('location').value.trim();
-  const price = document.getElementById('price').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const files = document.getElementById('images').files;
-  const videoFile = document.getElementById('video').files[0];
-  const isFeatured = document.getElementById('featured').checked;
-
-  if(!name || !location || !price || !phone || files.length==0) {
-    alert("Fill all fields + add at least 1 image");
-    return;
-  }
-
-  if(isFeatured) {
-    const pay = confirm("Featured costs GHS 50. You will pay via Paystack, then we approve manually. Continue?");
-    if(pay) window.open("https://paystack.com/pay/mcc-featured-50", "_blank");
-  }
-
-  btn.disabled = true;
-  btn.innerText = "Uploading images...";
+window.uploadHostel = async function(){
+  const cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
+  if(!cur){ alert("Login first"); location.href="manager-login.html"; return; }
   
-  try {
-    status.innerText = `Uploading 1 of ${files.length} images... Don't close`;
-    const urls = [];
-    for(let i=0; i<files.length && i<5; i++) {
-      status.innerText = `Uploading image ${i+1} of ${files.length}...`;
+  const btn = document.getElementById('uploadBtn');
+  const msg = document.getElementById('msg');
+  btn.disabled=true; btn.innerText="Uploading..."; msg.innerText="Uploading images...";
+  
+  try{
+    const name = document.getElementById('hname').value.trim();
+    const locationVal = document.getElementById('location').value.trim();
+    const price = document.getElementById('price').value.trim();
+    const beds = document.getElementById('beds').value.trim();
+    const type = document.getElementById('type').value;
+    const desc = document.getElementById('desc').value.trim();
+    const managerPhone = document.getElementById('managerPhone').value.trim() || cur.phone;
+    
+    if(!name || !locationVal || !price){ throw new Error("Fill name, location, price"); }
+    
+    // Images to ImgBB
+    const files = document.getElementById('images').files;
+    let imageUrls = [];
+    for(let i=0;i<Math.min(files.length,5);i++){
+      msg.innerText=`Uploading image ${i+1}/${files.length}...`;
       const url = await uploadToImgBB(files[i]);
-      urls.push(url);
+      imageUrls.push(url);
     }
-
+    if(imageUrls.length===0) imageUrls = ["https://via.placeholder.com/400x300?text=Hostel"];
+    
+    // Video to Firebase Storage (optional)
     let videoUrl = "";
-    if(videoFile){
-      if(videoFile.size > 50*1024*1024){ alert("Video too big, max 50MB"); throw new Error("Video too big"); }
-      btn.innerText = "Uploading video tour...";
-      status.innerText = "Uploading video... this may take 30s";
-      const storageRef = ref(storage, `hostelVideos/${Date.now()}_${videoFile.name}`);
-      await uploadBytes(storageRef, videoFile);
-      videoUrl = await getDownloadURL(storageRef);
+    const vFile = document.getElementById('video').files[0];
+    if(vFile){
+      msg.innerText="Uploading video...";
+      const vRef = ref(storage, `hostelVideos/${Date.now()}_${vFile.name}`);
+      await uploadBytes(vRef, vFile);
+      videoUrl = await getDownloadURL(vRef);
     }
-
+    
+    msg.innerText="Saving LIVE...";
     const hostelData = {
-      name, location, price: Number(price), phone,
-      images: urls,
-      videoUrl: videoUrl,
-      video: videoUrl,
-      isFeatured: isFeatured ? true : false,
-      featured: isFeatured ? "pending_payment" : false,
-      status: "pending",
-      managerId: currentUser ? currentUser.uid : (JSON.parse(localStorage.getItem('mcc_current_manager')||'{}').uid || "guest"),
-      managerEmail: currentUser ? currentUser.email : (JSON.parse(localStorage.getItem('mcc_current_manager')||'{}').email || phone),
-      lat: location==="School Bus Road" ? 5.121 : location==="Apeosika" ? 5.115 : 5.119,
-      lng: location==="School Bus Road" ? -1.285 : location==="Apeosika" ? -1.29 : -1.287,
-      views: 0,
-      saves: 0,
-      createdAt: serverTimestamp(),
-      date: new Date().toISOString()
+      name, location: locationVal, price: Number(price), beds: Number(beds)||1,
+      type, description: desc, managerPhone, managerEmail: cur.email, managerName: cur.name,
+      images: imageUrls, videoUrl, status: "approved", views:0, inquiries:0,
+      createdAt: serverTimestamp()
     };
-
-    // SAVE TO FIREBASE (real)
-    btn.innerText = "Saving to database...";
+    
     await addDoc(collection(db, "hostels"), hostelData);
-
-    // ALSO keep local backup for instant view
-    const existing = JSON.parse(localStorage.getItem('hostels') || '[]');
-    existing.push({...hostelData, id: Date.now()});
-    localStorage.setItem('hostels', JSON.stringify(existing));
-
-    status.innerText = "✅ Success! Hostel + video uploaded. Waiting CEO approval.";
-    btn.innerText = "Uploaded ✅";
-    setTimeout(()=>{ window.location.href = "manager-dashboard.html"; }, 1500);
-
-  } catch(e) {
-    console.error(e);
-    alert("Upload failed: " + e.message);
-    btn.disabled = false;
-    btn.innerText = "Upload Hostel";
-    status.innerText = "Failed: "+e.message;
+    msg.style.color="green"; msg.innerText="✅ LIVE! Students can see it now on index.html";
+    btn.innerText="Done! Add Another";
+    btn.disabled=false;
+    setTimeout(()=> location.href="manager-dashboard.html", 1500);
+  }catch(e){
+    msg.style.color="red"; msg.innerText="Error: "+e.message;
+    btn.disabled=false; btn.innerText="Upload LIVE for Students";
   }
 }
 </script>

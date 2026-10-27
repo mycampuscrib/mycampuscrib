@@ -1,54 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Manager Signup - MyCampusCrib</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCC - Manager Signup</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
-<body style="font-family:sans-serif; padding:20px; max-width:400px; margin:auto;">
-<h2>Create Manager Account</h2>
-<input id="email" type="email" placeholder="Email" style="width:100%;padding:12px;margin:8px 0;"><br>
-<input id="password" type="password" placeholder="Password (6+ chars)" style="width:100%;padding:12px;margin:8px 0;"><br>
-<input id="hostelName" type="text" placeholder="Hostel Name" style="width:100%;padding:12px;margin:8px 0;"><br>
-<button id="signupBtn" style="width:100%;padding:14px;background:#000;color:#fff;border:none;">Create Account</button>
-<p id="msg"></p>
+<body class="bg-[#f8fafc] font-[Poppins] flex items-center justify-center min-h-screen p-4">
+<div class="bg-white w-full max-w-md rounded-[20px] p-6 shadow-xl">
+<!-- LOGO - DOES NOT CHANGE, KEEP YOUR PATH -->
+<div class="flex items-center gap-3 mb-6">
+<img src="logo.png" alt="MCC Logo" class="w-12 h-12 rounded-full object-cover bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/48?text=MCC'">
+<h1 class="font-[Playfair_Display] font-bold text-xl">MyCampusCrib<span class="text-[#c9a86a]">.Luxury</span></h1>
+</div>
+
+<h2 class="font-bold text-lg mb-1">Manager Signup</h2>
+<p class="text-xs text-slate-500 mb-4">Create account - No Firebase error</p>
+
+<input id="name" placeholder="Full Name" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="email" placeholder="Email" type="email" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="phone" placeholder="WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="password" placeholder="Password (min 6)" type="password" class="w-full p-3 border rounded-xl mb-3 text-sm">
+
+<button onclick="signup()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold text-sm">Create Account</button>
+<p id="msg" class="text-xs text-center mt-3"></p>
+<a href="manager-login.html" class="block text-center text-xs mt-4 text-slate-500">Already have account? Login</a>
+</div>
 
 <script type="module">
-import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { db } from "./firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const btn = document.getElementById('signupBtn');
-const msg = document.getElementById('msg');
+window.signup = async function(){
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const phone = document.getElementById('phone').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const msg = document.getElementById('msg');
 
-btn.addEventListener('click', async () => {
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const hostelName = document.getElementById('hostelName').value.trim();
+  if(!name || !email || !phone || password.length<6){ msg.style.color="red"; msg.innerText="Fill all fields, password min 6"; return; }
+
+  let managers = JSON.parse(localStorage.getItem('mcc_managers')||'[]');
+  if(managers.find(m=>m.email===email)){ msg.style.color="red"; msg.innerText="Email already exists, login"; return; }
+
+  // Generate referral CODE for this manager - e.g. MCC-KWESI-482
+  const referralCode = `MCC-${name.substring(0,4).toUpperCase()}-${Math.floor(100+Math.random()*900)}`;
+  const manager = { name, email, phone, password, referralCode, referralCount:0, createdAt: new Date().toISOString() };
   
-  if(!email || !password || !hostelName){
-    msg.textContent = "Fill all fields";
-    return;
+  try{
+    managers.push(manager);
+    localStorage.setItem('mcc_managers', JSON.stringify(managers));
+    localStorage.setItem('mcc_current_manager', JSON.stringify(manager));
+    
+    // Also save to Firebase for CEO to see
+    await addDoc(collection(db, "managers"), { ...manager, createdAt: serverTimestamp() });
+    
+    msg.style.color="green"; msg.innerText=`Account created! Your Code: ${referralCode}`;
+    setTimeout(()=> location.href="manager-dashboard.html", 1000);
+  }catch(e){
+    console.error(e);
+    // Even if Firebase fails, local still works
+    msg.style.color="green"; msg.innerText=`Account created locally! Your Code: ${referralCode}`;
+    setTimeout(()=> location.href="manager-dashboard.html", 1000);
   }
-  
-  msg.textContent = "Creating...";
-  btn.disabled = true;
-  
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, "managers", cred.user.uid), {
-      email: email,
-      hostelName: hostelName,
-      createdAt: new Date(),
-      role: "manager"
-    });
-    msg.textContent = "Account created! Redirecting...";
-    setTimeout(()=> location.href = "manager-login.html", 1000);
-  } catch(err){
-    msg.textContent = err.message;
-    btn.disabled = false;
-    console.error(err);
-  }
-});
+}
 </script>
 </body>
 </html>

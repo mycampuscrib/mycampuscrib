@@ -3,196 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyCampusCrib - MCC Luxury</title>
-<link rel="icon" href="mcc-logo.png">
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#020617">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{background:#f8fafc}
-nav{background:#020617;color:white;padding:12px 4%;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;width:100%;z-index:9999;border-bottom:2px solid #d4af37}
-.logo{display:flex;gap:10px;align-items:center;font-weight:800}
-.logo img{width:40px;height:40px;border-radius:10px;border:1.5px solid #d4af37}
-.logo span{color:#d4af37}
-.welcome{background:linear-gradient(135deg,rgba(2,6,23,0.95),rgba(15,23,42,0.9)),url('mcc-logo.png');background-size:380px;background-position:center;background-repeat:no-repeat;background-color:#020617;color:white;padding:130px 4% 80px;text-align:center;display:flex;flex-direction:column;align-items:center}
-.welcome-logo{width:120px;height:120px;border-radius:22px;border:3px solid #d4af37;box-shadow:0 8px 30px rgba(212,175,55,0.5);background:white;padding:4px;margin-bottom:16px}
-.welcome h1{font-size:42px;font-weight:800} .welcome h1 span{color:#d4af37}
-.btn{padding:13px 24px;border-radius:50px;border:none;font-weight:800;cursor:pointer;margin:6px}
-.btn-gold{background:linear-gradient(135deg,#d4af37,#a88611);color:black}
-.btn-white{background:white;color:#0f172a}
-.btn-install{background:linear-gradient(135deg,#25D366,#128C7E);color:white;animation: pulseBtn 1.5s infinite}
-@keyframes pulseBtn{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
-#installBanner{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#020617;color:white;padding:14px 20px;border-radius:14px;border:1.5px solid #d4af37;z-index:99999;display:none;box-shadow:0 10px 30px rgba(0,0,0,0.4);width:90%;max-width:400px;text-align:center}
-.search-wrap{max-width:1000px;margin:-30px auto 0;padding:0 12px;position:relative;z-index:10}
-.search-card{background:white;border-radius:20px;padding:16px;box-shadow:0 15px 40px rgba(0,0,0,0.12)}
-.search{width:70%;padding:12px;border:1.5px solid #e2e8f0;border-radius:12px}
-.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px;align-items:center}
-.filter-row select,.filter-row input{padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:10px}
-.section{padding:40px 4%;max-width:1300px;margin:0 auto}
-#map{height:600px;border-radius:18px;display:none;border:2px solid rgba(212,175,55,0.3)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
-.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,0.07);border:1px solid #e2e8f0}
-.card img{width:100%;height:180px;object-fit:cover}
-.card video{width:100%;height:180px;object-fit:cover;background:#000}
-.price-marker{background:white;color:#0f172a;padding:6px 10px;border-radius:20px;font-weight:800;font-size:11px;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid #0f172a}
-.nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.install-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100000;align-items:center;justify-content:center;padding:20px}
-.install-modal.show{display:flex}
-.modal-box{background:white;border-radius:20px;padding:24px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.empty{text-align:center;padding:50px 20px;background:white;border-radius:16px;border:2px dashed #e2e8f0;margin-top:20px}
-</style>
+<title>MyCampusCrib - Luxury Student Hostels</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
-<body>
-<nav>
-<div class="logo"><img src="mcc-logo.png">MyCampus<span>Crib</span></div>
-<div class="nav-links">
-<button onclick="toggleView('map')" style="padding:8px 14px;border-radius:20px;border:none;background:rgba(255,255,255,0.1);color:white;font-size:11px;cursor:pointer">🗺️ Map</button>
-<a href="manager-login.html" style="padding:8px 14px;border-radius:20px;background:#d4af37;color:black;font-weight:800;font-size:11px;text-decoration:none">Manager Login</a>
-<a href="manager-signup.html" style="padding:8px 14px;border-radius:20px;background:white;color:#0f172a;font-weight:800;font-size:11px;text-decoration:none">+ List Hostel</a>
-<a href="ceo-dashboard.html" style="padding:8px 14px;border-radius:20px;background:rgba(212,175,55,0.2);border:1px solid #d4af37;color:#d4af37;font-weight:800;font-size:11px;text-decoration:none">CEO</a>
+<body class="bg-[#f8fafc] font-[Poppins]">
+<header class="bg-white p-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<img src="logo.png" class="w-10 h-10 rounded-full bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/40?text=MCC'">
+<h1 class="font-[Playfair_Display] font-bold">MyCampusCrib<span class="text-[#c9a86a]">.Luxury</span></h1>
 </div>
-</nav>
+<div class="flex gap-2">
+<a href="manager-login.html" class="text-[11px] bg-[#0f172a] text-white px-3 py-2 rounded-full">Manager</a>
+<a href="ceo-dashboard.html" class="text-[11px] bg-slate-100 px-3 py-2 rounded-full">CEO</a>
+</div>
+</header>
 
-<div class="welcome">
-<img src="mcc-logo.png" class="welcome-logo">
-<h1><span>MCC</span> Luxury Hostels</h1>
-<p style="margin:10px 0 6px;opacity:0.9">MCC Luxury • Real Google Map • All Locations: Amamoma, Kwaprow, Ayensu, Apeosika, Science, School Bus Road</p>
-<div id="typing" style="color:#fde68a;font-weight:700;height:28px;margin:8px 0">Real Google Maps 🗺️</div>
-<div style="margin-top:18px;display:flex;flex-wrap:wrap;justify-content:center">
-<button class="btn btn-gold" onclick="document.getElementById('hostels').scrollIntoView({behavior:'smooth'})">Explore Hostels</button>
-<button class="btn btn-white" onclick="toggleView('map')">🗺️ Real Google Map</button>
-<button class="btn btn-install" id="installBtnMain" onclick="installApp()">📱 Download MCC App</button>
-</div>
-<p style="font-size:11px;opacity:0.7;margin-top:10px">Install with MCC logo as app icon!</p>
+<div class="p-4 max-w-6xl mx-auto">
+<div class="bg-[#0f172a] text-white rounded-[20px] p-5 mb-4">
+<h2 class="font-[Playfair_Display] text-xl">Find Your Luxury Crib</h2>
+<p class="text-[11px] opacity-70 mt-1">Verified hostels around UCC, Cape Coast</p>
+<input id="search" onkeyup="filterHostels()" placeholder="Search Amamoma, Kwaprow..." class="w-full mt-3 p-3 rounded-xl text-sm text-black">
 </div>
 
-<div class="search-wrap"><div class="search-card">
-<div style="display:flex;gap:8px"><input id="search" class="search" placeholder="Search e.g. School Bus Road under 3000..." onkeyup="applyFilters()"><button onclick="applyFilters()" style="padding:12px 18px;background:#0f172a;color:white;border:none;border-radius:12px;font-weight:800">Search</button></div>
-<div class="filter-row">📍<select id="locFilter" onchange="applyFilters()">
-<option value="">All Locations</option>
-<option>Amamoma</option>
-<option>Kwaprow</option>
-<option>Ayensu</option>
-<option>Apeosika</option>
-<option>Science</option>
-<option>School Bus Road</option>
-<option>University Hall</option>
-<option>Old Site</option>
-<option>New Site</option>
-</select>💰<input type="number" id="minPrice" placeholder="Min" oninput="applyFilters()">-<input type="number" id="maxPrice" placeholder="Max" oninput="applyFilters()"><button onclick="locateUser()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">📍 My Location</button><button onclick="toggleSat()" style="padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;background:white">🛰️ Satellite</button></div>
-</div></div>
-
-<div id="hostels" class="section">
-<div style="text-align:center"><h2 style="font-size:26px;font-weight:800">MCC Edition - All Locations</h2><p id="countText" style="font-size:12px;color:#64748b;margin-top:6px">Loading real hostels...</p></div>
-<div style="display:flex;gap:8px;justify-content:center;margin:16px 0"><button onclick="toggleView('grid')" style="padding:9px 18px;border-radius:20px;border:1px solid #e2e8f0;background:#0f172a;color:white;font-weight:700">Grid</button><button onclick="toggleView('map')" style="padding:9px 18px;border-radius:20px;border:1px solid #e2e8f0;background:white;font-weight:700">Map</button></div>
-<div id="map"></div><div id="hostelGrid" class="grid"></div>
-<div id="emptyMsg" class="empty" style="display:none"><h3>No hostels yet 😔</h3><p style="font-size:13px;color:#64748b;margin-top:8px">No manager has posted yet. Be the first to list on MCC!<br>Manager account → List Hostel → Add pictures & video tour</p><a href="manager-signup.html" style="display:inline-block;margin-top:12px;padding:10px 18px;background:#d4af37;color:black;border-radius:20px;font-weight:800;text-decoration:none">+ List Your Hostel</a></div>
-</div>
-
-<div id="installBanner">
-<div style="font-weight:800;margin-bottom:8px">📱 Install MCC App</div>
-<div style="font-size:12px;opacity:0.9;margin-bottom:12px">Get MCC logo as app icon!</div>
-<button onclick="installApp()" style="padding:10px 18px;background:linear-gradient(135deg,#d4af37,#a88611);border:none;border-radius:20px;font-weight:800;margin-right:8px">Install Now</button>
-<button onclick="document.getElementById('installBanner').style.display='none'" style="padding:10px 18px;background:rgba(255,255,255,0.1);border:none;border-radius:20px;color:white">Later</button>
-</div>
-
-<div id="installModal" class="install-modal" onclick="if(event.target==this) closeInstallModal()">
-<div class="modal-box">
-<h3 style="margin-bottom:8px">📲 Install MyCampusCrib</h3>
-<p style="font-size:13px;color:#64748b;margin-bottom:14px">Install MCC for quick access</p>
-<div style="background:#f8fafc;border-radius:14px;padding:16px;line-height:1.7;font-size:14px">
-<b>💻 Laptop / Desktop:</b><br>1. Look for install icon in address bar top right<br>2. Click it → Install<br>3. Or Chrome menu → Install MyCampusCrib<br><br><b>📱 iPhone (Safari):</b><br>1. Tap Share button at bottom<br>2. Tap Add to Home Screen<br>3. Tap Add top right<br><br><b>🤖 Android (Chrome):</b><br>1. Tap 3 dots menu top right<br>2. Tap Install app / Add to Home screen<br>3. Tap Install
-</div>
-<div style="margin-top:16px;display:flex;gap:10px"><button class="btn btn-gold" style="flex:1" onclick="closeInstallModal()">Got it!</button><button class="btn btn-white" style="flex:1;border:1.5px solid #e2e8f0" onclick="closeInstallModal()">Close</button></div>
+<div id="hostels" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<p class="text-xs text-slate-400">Loading hostels LIVE...</p>
 </div>
 </div>
 
-<script>
-const phrases=["Real Google Maps 🗺️","Apeosika, Science & School Bus Road Added 📍","Manager Videos Enabled 🎥","MCC Luxury 💎","WhatsApp Booking Ready 💬"];let pi=0,ci=0,del=false;const tEl=document.getElementById('typing');function loop(){const cur=phrases[pi];if(del){tEl.textContent=cur.substring(0,ci-1);ci--}else{tEl.textContent=cur.substring(0,ci+1);ci++}let s=del?40:80;if(!del&&ci===cur.length){s=2000;del=true}else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;s=500}setTimeout(loop,s)}loop();
-</script>
+<!-- Detail Modal -->
+<div id="modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+<div class="bg-white rounded-[20px] max-w-lg w-full p-4 max-h-[90vh] overflow-y-auto">
+<button onclick="closeModal()" class="float-right bg-slate-100 px-3 py-1 rounded-full text-xs">Close</button>
+<div id="modalContent"></div>
+</div>
+</div>
 
 <script type="module">
-// FIXED LOGIC - NO DEFAULT HOSTELS
-let allHostels = []; 
-let filteredList = [];
-let map, markers=[], streetLayer, satLayer, isSat=false;
+import { db } from "./firebase.js";
+import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-function renderHostels(list){
-  const grid = document.getElementById('hostelGrid');
-  const empty = document.getElementById('emptyMsg');
-  const countText = document.getElementById('countText');
-  countText.textContent = list.length ? `${list.length} hostels found • Real manager listings` : 'No hostels yet';
-  if(list.length === 0){
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    if(map) updateMapMarkers([]);
-    return;
-  }
-  empty.style.display = 'none';
-  grid.innerHTML = list.map(h=>{
-    const img = h.images?.[0] || h.image || 'mcc-logo.png';
-    const video = h.videoUrl || h.video || '';
-    const lat = h.lat || 5.119;
-    const lng = h.lng || -1.287;
-    const price = h.price || '0';
-    const location = h.location || 'UCC';
-    const name = (h.name || 'Hostel').replace(/'/g,"\\'");
-    const phone = h.phone || h.managerPhone || '0';
-    return `<div class="card">
-      ${video ? `<video src="${video}" controls muted playsinline poster="${img}"></video>` : `<img src="${img}" loading="lazy" onerror="this.src='mcc-logo.png'">`}
-      <div style="padding:14px">
-        <h3 style="font-size:15px">${h.name}</h3>
-        <p style="font-size:11px;color:#64748b">📍 ${location}</p>
-        <div style="font-weight:800;color:#059669;margin:6px 0">GHS ${price}/year</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-          <button onclick="contactWA('${name}','${phone}')" style="flex:1;padding:10px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:800;font-size:12px">💬 WhatsApp</button>
-          <button onclick="getDirections(${lat},${lng})" style="padding:10px;background:#0f172a;color:white;border:none;border-radius:10px;font-weight:800;font-size:12px">🧭 Map</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  if(map) updateMapMarkers(list);
-}
-
-window.initMap = function(){ if(map) return; streetLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20}); satLayer=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{maxZoom:20}); map=L.map('map',{layers:[streetLayer]}).setView([5.119,-1.287],14); updateMapMarkers(filteredList); }
-window.toggleSat = function(){ if(!map) return; isSat=!isSat; if(isSat){map.removeLayer(streetLayer);map.addLayer(satLayer)}else{map.removeLayer(satLayer);map.addLayer(streetLayer)} }
-window.updateMapMarkers = function(list){ if(!map) return; markers.forEach(m=>map.removeLayer(m));markers=[]; list.forEach(h=>{ const lat=h.lat||5.119; const lng=h.lng||-1.287; const icon=L.divIcon({className:'',html:`<div class="price-marker">GHS ${h.price}</div>`,iconSize:[80,28],iconAnchor:[40,14]}); const m=L.marker([lat,lng],{icon}).addTo(map); m.bindPopup(`<b>${h.name}</b><br>${h.location}<br>GHS ${h.price}<br>${h.videoUrl?'🎥 Video tour':''}`); markers.push(m) }); }
-window.toggleView = function(v){ if(v==='map'){document.getElementById('map').style.display='block';document.getElementById('hostelGrid').style.display='none';window.initMap();setTimeout(()=>map.invalidateSize(),200)}else{document.getElementById('map').style.display='none';document.getElementById('hostelGrid').style.display='grid'} }
-window.applyFilters = function(){ const q=document.getElementById('search').value.toLowerCase(); const min=parseInt(document.getElementById('minPrice').value)||0; const max=parseInt(document.getElementById('maxPrice').value)||999999; const locF=document.getElementById('locFilter').value; filteredList=allHostels.filter(h=>{ let text=((h.name||'')+(h.location||'')).toLowerCase(); let m=text.includes(q)||q.length<2; let p=parseInt(h.price)||0; return m&&p>=min&&p<=max&&(!locF||h.location===locF) }); renderHostels(filteredList); }
-window.locateUser = function(){ if(!navigator.geolocation) return; navigator.geolocation.getCurrentPosition(pos=>{ const {latitude,longitude}=pos.coords; if(!map) window.initMap(); L.marker([latitude,longitude]).addTo(map); map.setView([latitude,longitude],15) }) }
-window.getDirections = function(lat,lng){ window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,'_blank') }
-window.contactWA = function(name,phone){ let c=phone.replace(/[^0-9]/g,''); if(c.startsWith('0')) c='233'+c.substring(1); const urlParams=new URLSearchParams(window.location.search); const ref=urlParams.get('ref')||'direct'; const msg=`Hello, I saw ${name} on MyCampusCrib (MCC Luxury). Is it still available? My referral: ${ref}`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(msg)}`,'_blank') }
+let allHostels=[];
 
 async function loadHostels(){
-  let local=[]; try{ local=JSON.parse(localStorage.getItem('hostels')||'[]'); }catch(e){ local=[]; }
-  local=local.filter(h=>h&&h.name&&!h.isDefault);
-  allHostels=[...local];
+  const box=document.getElementById('hostels');
   try{
-    const mod=await import('./firebase.js');
-    if(mod.db){
-      const { collection, getDocs, query, where } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-      const q=query(collection(mod.db,"hostels"),where("status","==","approved"));
-      const snap=await getDocs(q);
-      const fb=[]; snap.forEach(d=>fb.push({id:d.id,...d.data()}));
-      const ids=new Set(allHostels.map(h=>h.id)); fb.forEach(h=>{ if(!ids.has(h.id)) allHostels.push(h) });
-    }
-  }catch(e){ console.log('Firebase skip',e.message) }
-  filteredList=[...allHostels]; renderHostels(filteredList);
+    const snap=await getDocs(query(collection(db,"hostels"), orderBy("createdAt","desc")));
+    allHostels=[];
+    snap.forEach(d=> allHostels.push({id:d.id, ...d.data()}));
+    render(allHostels);
+  }catch(e){
+    // fallback if no index
+    const snap2=await getDocs(collection(db,"hostels"));
+    allHostels=[]; snap2.forEach(d=> allHostels.push({id:d.id, ...d.data()}));
+    render(allHostels);
+  }
 }
-loadHostels();
-</script>
 
-<script>
-let deferredPrompt=null;
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').then(r=>console.log('MCC SW Ready')).catch(e=>console.log(e))})}
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').style.display='block';});
-function showInstallModal(){document.getElementById('installModal').classList.add('show');}
-function closeInstallModal(){document.getElementById('installModal').classList.remove('show');}
-function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(res=>{ if(res.outcome==='accepted'){document.getElementById('installBanner').style.display='none'} deferredPrompt=null; }) } else { showInstallModal(); } }
-setTimeout(()=>{document.getElementById('installBanner').style.display='block';},3000);
+function render(list){
+  const box=document.getElementById('hostels');
+  if(list.length===0){ box.innerHTML="<p class='text-xs text-slate-400'>No hostels yet</p>"; return; }
+  box.innerHTML="";
+  list.forEach(h=>{
+    box.innerHTML+=`<div class="bg-white rounded-[20px] overflow-hidden shadow-sm cursor-pointer" onclick="openModal('${h.id}')">
+    <img src="${h.images?.[0]||''}" class="w-full h-44 object-cover">
+    <div class="p-3">
+    <div class="flex justify-between items-start"><h3 class="font-bold text-sm">${h.name}</h3><span class="text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-full">${h.status||'approved'}</span></div>
+    <p class="text-[11px] text-slate-500">${h.location} • ${h.type||''}</p>
+    <div class="flex justify-between items-center mt-2"><p class="font-bold text-[#0f172a]">GH₵${h.price}</p><p class="text-[10px] text-slate-400">${h.beds||1} beds</p></div>
+    </div></div>`;
+  });
+}
+
+window.filterHostels = function(){
+  const s=document.getElementById('search').value.toLowerCase();
+  const f=allHostels.filter(h=> (h.name+h.location+h.type).toLowerCase().includes(s));
+  render(f);
+}
+
+window.openModal = function(id){
+  const h=allHostels.find(x=>x.id===id);
+  if(!h) return;
+  const m=document.getElementById('modal'); const c=document.getElementById('modalContent');
+  c.innerHTML=`
+  <img src="${h.images?.[0]||''}" class="w-full h-56 object-cover rounded-xl mb-3">
+  <h2 class="font-bold text-lg">${h.name}</h2>
+  <p class="text-xs text-slate-500">${h.location} • ${h.type} • ${h.beds} beds</p>
+  <p class="text-sm mt-2">${h.description||''}</p>
+  <p class="font-bold mt-3 text-lg">GH₵${h.price}/year</p>
+  ${h.videoUrl?`<video src="${h.videoUrl}" controls class="w-full mt-3 rounded-xl"></video>`:''}
+  <div class="grid grid-cols-3 gap-2 mt-3">${(h.images||[]).map(u=>`<img src="${u}" class="h-20 object-cover rounded-lg">`).join('')}</div>
+  <button onclick="contactManager('${h.id}')" class="w-full bg-[#25D366] text-white p-3 rounded-xl font-bold mt-4">WhatsApp Manager - Get CODE</button>
+  <p class="text-[10px] text-slate-400 text-center mt-2">A tracking code MCC-XXXX will be generated for admin & manager</p>
+  `;
+  m.classList.remove('hidden'); m.classList.add('flex');
+}
+
+window.closeModal = function(){ document.getElementById('modal').classList.add('hidden'); }
+
+window.contactManager = async function(hostelId){
+  const h=allHostels.find(x=>x.id===hostelId);
+  const code = `MCC-${Math.floor(1000+Math.random()*9000)}`; // MCC-7821
+  
+  try{
+    // Save inquiry code to Firebase - visible to CEO + Manager
+    await addDoc(collection(db,"inquiries"),{
+      code, hostelId: h.id, hostelName: h.name, managerEmail: h.managerEmail,
+      managerPhone: h.managerPhone, status:"new", createdAt: serverTimestamp()
+    });
+  }catch(e){ console.error("Inquiry save failed", e); }
+
+  // Open WhatsApp with code
+  const phone = h.managerPhone.replace(/[^0-9]/g,''); // clean
+  const ghPhone = phone.startsWith('0')? '233'+phone.substring(1) : phone;
+  const text = `Hi, I saw *${h.name}* on MyCampusCrib. Location: ${h.location}. Price: GH₵${h.price}.%0A%0AMy Inquiry Code: *${code}*%0A%0AIs it still available?`;
+  window.open(`https://wa.me/${ghPhone}?text=${text}`, '_blank');
+}
+
+loadHostels();
 </script>
 </body>
 </html>
