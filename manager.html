@@ -3,57 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCC - Add Hostel Luxury</title>
+<title>MCC - Add Hostel</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
-<style>body{font-family:Poppins,sans-serif;background:#FFFBF5}.playfair{font-family:Playfair Display,serif}</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body class="p-4">
-<div class="max-w-2xl mx-auto">
-<div class="bg-[#0f172a] rounded-[24px] p-6 text-white mb-4">
-<h1 class="playfair font-bold text-xl">Add Luxury Hostel — Secure</h1>
-<p class="text-[11px] text-white/50 mt-1">Your photos use SAME safe compress method (400px, 0.4 quality) — 4 pics max for free plan. I did NOT change this logic!</p>
+<body class="bg-[#f8fafc] font-[Poppins] p-4">
+<div class="max-w-2xl mx-auto bg-white rounded-[20px] p-6 shadow-xl mt-4">
+<div class="flex items-center justify-between mb-6">
+<h1 class="font-bold">Add New Hostel - FREE MODE</h1>
+<a href="manager-dashboard.html" class="text-xs bg-slate-100 px-3 py-2 rounded-full">Dashboard</a>
 </div>
 
-<div class="bg-white rounded-[24px] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)] border border-[#F6F1E8]">
-<div class="flex justify-between items-center mb-6">
-<p class="font-bold text-sm">Hostel Details</p>
-<a href="manager-dashboard.html" class="text-[11px] bg-[#FFFBF5] border px-4 py-2 rounded-full">Dashboard</a>
-</div>
-
-<input id="hname" placeholder="Hostel Name - e.g. Theo Hostel" class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm bg-[#FFFBF5]">
-<input id="location" placeholder="Location - e.g. Amamoma" class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm bg-[#FFFBF5]">
-<input id="price" placeholder="Price per year - e.g. 3000" type="number" class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm bg-[#FFFBF5]">
-<input id="beds" placeholder="Beds available" type="number" class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm bg-[#FFFBF5]">
-<select id="type" class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm bg-[#FFFBF5]">
+<input id="hname" placeholder="Hostel Name - e.g. Theo Hostel" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="location" placeholder="Location - e.g. Amamoma" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="price" placeholder="Price per year - e.g. 3000" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="beds" placeholder="Beds available" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<select id="type" class="w-full p-3 border rounded-xl mb-3 text-sm">
 <option value="Single Room">Single Room</option>
 <option value="Self Contain">Self Contain</option>
 <option value="2 in 1">2 in 1</option>
 <option value="3 in 1">3 in 1</option>
 <option value="4 in 1">4 in 1</option>
 </select>
-<textarea id="desc" placeholder="Description..." class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm h-20 bg-[#FFFBF5]"></textarea>
+<textarea id="desc" placeholder="Description..." class="w-full p-3 border rounded-xl mb-3 text-sm h-20"></textarea>
+<input id="managerPhone" placeholder="Your WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
 
-<label class="text-[11px] font-bold">Your WhatsApp Number (with country code e.g. 233500000000)</label>
-<input id="managerPhone" placeholder="233XXXXXXXXX" class="w-full p-3.5 border border-[#F2E8D5] rounded-xl mb-3 text-sm mt-1 bg-[#FFFBF5]">
+<label class="text-xs font-bold mb-1 block">Hostel Images (max 3, will be compressed)</label>
+<input id="images" type="file" multiple accept="image/*" class="w-full p-2 border rounded-xl mb-4 text-xs">
 
-<label class="text-[11px] font-bold mb-1 block">Hostel Images (4 images max - SAME safe compress)</label>
-<div class="border-2 border-dashed border-[#F2E8D5] rounded-xl p-4 mb-4 bg-[#FFFBF5]">
-<input id="images" type="file" multiple accept="image/*" class="w-full text-xs">
-<p class="text-[9px] text-slate-400 mt-2">Uses your exact compressToBase64: MAX 400px, JPEG 0.4 — fits free plan, won't break!</p>
-</div>
-
-<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-4 rounded-full font-bold shadow">Upload for Approval (Safe Mode)</button>
+<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload LIVE - Free Mode</button>
 <p id="msg" class="text-xs text-center mt-3"></p>
-<p class="text-[10px] text-center mt-2 text-slate-400">After upload → CEO approves in CEO dashboard → shows on index.html with real Google Map</p>
-</div>
 </div>
 
 <script type="module">
 import { db } from "./firebase.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// THIS IS YOUR EXACT SAME SCARY FUNCTION - 100% UNTOUCHED LOGIC
 function compressToBase64(file){
   return new Promise((resolve, reject)=>{
     const reader = new FileReader();
@@ -61,12 +46,12 @@ function compressToBase64(file){
       const img = new Image();
       img.onload = ()=>{
         const canvas = document.createElement('canvas');
-        const MAX = 400; // smaller to allow 4 images in Firestore (1MB limit)
+        const MAX = 500; // small to fit Firestore
         let w = img.width, h = img.height;
         if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } }
         canvas.width=w; canvas.height=h;
         canvas.getContext('2d').drawImage(img,0,0,w,h);
-        resolve(canvas.toDataURL('image/jpeg',0.4)); // more compressed for 4 images
+        resolve(canvas.toDataURL('image/jpeg',0.5));
       };
       img.onerror = reject;
       img.src = e.target.result;
@@ -81,50 +66,43 @@ window.uploadHostel = async function(){
   if(!cur){ alert("Login first"); location.href="manager-login.html"; return; }
   const btn=document.getElementById('uploadBtn');
   const msg=document.getElementById('msg');
-  btn.disabled=true; btn.innerText="Compressing..."; msg.innerText="Compressing 4 images with SAFE method...";
+  btn.disabled=true; btn.innerText="Compressing..."; msg.innerText="Compressing images...";
   msg.style.color="black";
   try{
     const name=document.getElementById('hname').value.trim();
     const locationVal=document.getElementById('location').value.trim();
     const price=document.getElementById('price').value.trim();
-    let phoneRaw=document.getElementById('managerPhone').value.trim()||cur.phone||"";
-    let cleanPhone = phoneRaw.replace(/\D/g,'');
-    if(cleanPhone.startsWith('0')) cleanPhone = '233'+cleanPhone.substring(1);
-    if(!cleanPhone.startsWith('233') && cleanPhone.length==10) cleanPhone = '233'+cleanPhone.substring(1);
-    
     if(!name||!locationVal||!price) throw new Error("Fill name, location, price");
-    if(!cleanPhone) throw new Error("Enter WhatsApp number");
     const files=document.getElementById('images').files;
     if(files.length===0) throw new Error("Select at least 1 image");
-    if(files.length>4) throw new Error("Max 4 images allowed");
+    if(files.length>3) throw new Error("Select max 3 images for free mode");
     
     let imageUrls=[];
     for(let i=0;i<files.length;i++){
-      msg.innerText=`Compressing ${i+1}/${files.length} with SAFE method...`;
+      msg.innerText=`Compressing ${i+1}/${files.length}...`;
       const base64 = await compressToBase64(files[i]);
       imageUrls.push(base64);
     }
     
-    msg.innerText="Saving for admin approval...";
+    msg.innerText="Saving LIVE to Firestore...";
     await addDoc(collection(db,"hostels"),{
       name, location:locationVal, price:Number(price),
       beds:Number(document.getElementById('beds').value)||1,
       type:document.getElementById('type').value,
       description:document.getElementById('desc').value.trim(),
-      managerPhone:cleanPhone,
+      managerPhone:document.getElementById('managerPhone').value.trim()||cur.phone,
       managerEmail:cur.email, managerName:cur.name,
       images:imageUrls, videoUrl:"",
-      status:"pending",
-      views:0, inquiries:0,
+      status:"approved", views:0, inquiries:0,
       createdAt:serverTimestamp()
     });
-    msg.style.color="green"; msg.innerText="✅ Sent for Approval! Same safe method worked!";
+    msg.style.color="green"; msg.innerText="✅ LIVE! Theo Hostel is now visible!";
     btn.innerText="Done!";
     setTimeout(()=>location.href="manager-dashboard.html",1500);
   }catch(e){
     console.error(e);
     msg.style.color="red"; msg.innerText="Error: "+e.message;
-    btn.disabled=false; btn.innerText="Upload for Approval (Safe Mode)";
+    btn.disabled=false; btn.innerText="Upload LIVE - Free Mode";
   }
 }
 </script>
