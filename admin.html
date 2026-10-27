@@ -3,93 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCC - CEO Dashboard</title>
+<title>MCC - CEO Dashboard Luxury - World Best</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:Poppins,sans-serif;background:#FFFBF5}
+.playfair{font-family:Playfair Display,serif}
+.card-shadow{box-shadow:0 20px 60px rgba(15,23,42,0.06),0 2px 12px rgba(0,0,0,0.04)}
+.glass{backdrop-filter:blur(20px);background:rgba(255,255,255,0.85)}
+</style>
 </head>
-<body class="bg-[#0f172a] font-[Poppins] min-h-screen p-4">
-<div class="max-w-6xl mx-auto">
-<div class="flex items-center justify-between mb-4 text-white">
+<body>
+
+<nav class="sticky top-0 z-50 glass border-b border-[#F2E8D5] px-4 md:px-8 py-3 flex justify-between items-center">
 <div class="flex items-center gap-3">
-<img src="logo.png" class="w-10 h-10 rounded-full bg-white" onerror="this.src='https://via.placeholder.com/40?text=MCC'">
-<h1 class="font-bold">CEO Dashboard - MyCampusCrib</h1>
+<div class="w-10 h-10 bg-[#0f172a] rounded-full flex items-center justify-center text-[#c9a86a] font-bold text-xs">MCC</div>
+<div>
+<h1 class="playfair font-black text-[15px]">CEO Dashboard — MyCampusCrib</h1>
+<p class="text-[9px] tracking-[0.3em] text-slate-400">WORLD BEST • APPROVE & TRACK</p>
 </div>
-<a href="index.html" class="text-[11px] bg-white/10 px-3 py-2 rounded-full">Home</a>
+</div>
+<a href="index.html" class="bg-[#0f172a] text-white px-5 py-2 rounded-full text-[11px] font-bold">Home — Live Site</a>
+</nav>
+
+<div class="max-w-[1280px] mx-auto px-4 md:px-8 py-6">
+
+<!-- TOP STATS -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-white rounded-[20px] p-5 card-shadow border border-[#F6F1E8]"><p class="text-[10px] text-slate-400">Total Hostels (All)</p><h2 class="playfair font-black text-2xl mt-1" id="totalHostels">0</h2><p class="text-[10px] text-green-600 mt-1">● Only approved show on homepage</p></div>
+<div class="bg-[#0f172a] rounded-[20px] p-5 card-shadow"><p class="text-[10px] text-white/50">Unique Inquiry Codes (Deduped)</p><h2 class="playfair font-black text-2xl text-white mt-1" id="totalCodes">0</h2><p class="text-[10px] text-[#c9a86a] mt-1">One per person per hostel</p></div>
+<div class="bg-white rounded-[20px] p-5 card-shadow border border-[#F6F1E8]"><p class="text-[10px] text-slate-400">Total Managers</p><h2 class="playfair font-black text-2xl mt-1" id="totalManagers">0</h2><p class="text-[10px] text-slate-400 mt-1">Can Approve/Disapprove anytime</p></div>
+<div class="bg-[#c9a86a] rounded-[20px] p-5 card-shadow"><p class="text-[10px] text-white/80">Revenue Track</p><h2 class="playfair font-black text-2xl text-white mt-1">GH₵ <span id="rev">0</span></h2><p class="text-[10px] text-white/70 mt-1">Sum of approved hostel prices</p></div>
 </div>
 
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-<div class="bg-white rounded-xl p-3"><p class="text-[10px] text-slate-500">Total Hostels</p><h2 class="font-bold text-xl" id="totalHostels">0</h2></div>
-<div class="bg-[#c9a86a] text-white rounded-xl p-3"><p class="text-[10px]">Total Inquiries / Codes</p><h2 class="font-bold text-xl" id="totalCodes">0</h2></div>
-<div class="bg-white rounded-xl p-3"><p class="text-[10px] text-slate-500">Total Managers</p><h2 class="font-bold text-xl" id="totalManagers">0</h2></div>
-<div class="bg-white rounded-xl p-3"><p class="text-[10px] text-slate-500">Revenue Track</p><h2 class="font-bold text-xl">GH₵ <span id="rev">0</span></h2></div>
+<!-- INQUIRY CODES - ONE PER PERSON PER HOSTEL -->
+<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8] mt-6">
+<div class="flex justify-between items-center">
+<h3 class="playfair font-bold">All Inquiry Codes — Student → Manager → Admin (Deduped: One Lead Per Person Per Hostel)</h3>
+<button onclick="loadAll()" class="bg-slate-50 border px-3 py-1.5 rounded-full text-[11px]">Refresh</button>
 </div>
-
-<div class="bg-white rounded-[18px] p-4 mb-4">
-<h3 class="font-bold text-sm mb-2">All Inquiry Codes (Student → Manager → Admin tracking)</h3>
-<div class="overflow-x-auto">
+<p class="text-[11px] text-slate-400 mt-1">If same student clicks same hostel 5 times, only 1 code shows here (latest). Manager can delete after seen.</p>
+<div class="overflow-x-auto mt-4">
 <table class="w-full text-[11px]">
-<thead class="text-slate-400 border-b"><tr><th class="text-left py-2">CODE</th><th class="text-left">Hostel</th><th class="text-left">Manager</th><th class="text-left">Status</th><th class="text-left">Date</th></tr></thead>
-<tbody id="codesTable"><tr><td colspan="5" class="py-3 text-slate-400">Loading codes...</td></tr></tbody>
+<thead class="text-slate-400 border-b"><tr><th class="text-left py-2">CODE</th><th class="text-left">Hostel</th><th class="text-left">Manager</th><th class="text-left">Status</th><th class="text-left">Date</th><th class="text-left">Action</th></tr></thead>
+<tbody id="codesTable"><tr><td colspan="6" class="py-3 text-slate-400">Loading unique codes...</td></tr></tbody>
 </table>
 </div>
 </div>
 
-<div class="bg-white rounded-[18px] p-4 mb-4">
-<h3 class="font-bold text-sm mb-2">All Hostels (LIVE)</h3>
-<div id="allHostels" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+<!-- ALL HOSTELS - WITH DELETE + APPROVE -->
+<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8] mt-6">
+<div class="flex justify-between items-center"><h3 class="playfair font-bold">All Hostels — LIVE + Pending (CEO can Delete + Approve/Disapprove)</h3></div>
+<div id="allHostels" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-xs"><p class="text-slate-400">Loading...</p></div>
 </div>
 
-<div class="bg-white rounded-[18px] p-4">
-<h3 class="font-bold text-sm mb-2">All Managers</h3>
-<div id="allManagers" class="text-xs space-y-2"></div>
+<!-- ALL MANAGERS - APPROVE/DISAPPROVE ANYTIME -->
+<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8] mt-6">
+<h3 class="playfair font-bold">All Managers — Approve / Disapprove Anytime</h3>
+<p class="text-[11px] text-slate-400 mt-1">You can disable manager account anytime. Their hostels will be hidden from index.html until you approve again.</p>
+<div id="allManagers" class="mt-4 space-y-2"><p class="text-xs text-slate-400">Loading managers...</p></div>
 </div>
+
 </div>
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, getDocs, query, orderBy, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-async function load(){
-  try{
-    const hostelsSnap = await getDocs(collection(db,"hostels"));
-    document.getElementById('totalHostels').innerText = hostelsSnap.size;
-    const hBox=document.getElementById('allHostels'); hBox.innerHTML="";
-    hostelsSnap.forEach(d=>{
-      const h=d.data();
-      hBox.innerHTML+=`<div class="border rounded-xl p-2"><img src="${h.images?.[0]||''}" class="w-full h-24 object-cover rounded-lg mb-1"><p class="font-bold">${h.name}</p><p class="text-[10px] text-slate-500">${h.location} - GH₵${h.price}</p><p class="text-[9px]">${h.managerEmail||''}</p></div>`;
-    });
+async function loadAll(){
+  await loadHostels();
+  await loadManagers();
+  await loadInquiries();
+}
+window.loadAll = loadAll;
 
-    const managersSnap = await getDocs(collection(db,"managers"));
-    document.getElementById('totalManagers').innerText = managersSnap.size;
-    const mBox=document.getElementById('allManagers'); mBox.innerHTML="";
-    managersSnap.forEach(d=>{
-      const m=d.data();
-      mBox.innerHTML+=`<div class="flex justify-between bg-slate-50 p-2 rounded-lg"><div><b>${m.name}</b> <span class="text-[10px]">${m.email}</span><br><span class="text-[10px] text-slate-500">Code: ${m.referralCode||'none'} - ${m.phone}</span></div></div>`;
-    });
-
-    const inquirySnap = await getDocs(query(collection(db,"inquiries"), orderBy("createdAt","desc")));
-    loadInquiries(inquirySnap);
-  }catch(e){
-    // fallback without orderBy
-    try{
-      const inquirySnap2 = await getDocs(collection(db,"inquiries"));
-      loadInquiries(inquirySnap2);
-    }catch(err){ document.getElementById('codesTable').innerHTML=`<tr><td colspan="5" class="text-red-500">${err.message}</td></tr>`; }
-  }
+async function loadHostels(){
+  const hBox=document.getElementById('allHostels');
+  const snap=await getDocs(collection(db,"hostels"));
+  document.getElementById('totalHostels').innerText=snap.size;
+  let revenue=0;
+  hBox.innerHTML="";
+  snap.forEach(d=>{
+    const h=d.data(); if(h.status==="approved") revenue+=Number(h.price||0);
+    const statusBadge = h.status==="approved" ? `<span class="bg-green-50 text-green-700 border border-green-100 px-2 py-1 rounded-full text-[9px]">APPROVED</span>` : `<span class="bg-amber-50 text-amber-700 border px-2 py-1 rounded-full text-[9px]">PENDING</span>`;
+    hBox.innerHTML+=`<div class="border border-[#F2E8D5] rounded-[18px] overflow-hidden bg-[#FFFBF5]">
+    <img src="${h.images?.[0]||''}" class="w-full h-32 object-cover">
+    <div class="p-3">
+    <div class="flex justify-between"><p class="font-bold text-[13px]">${h.name}</p>${statusBadge}</div>
+    <p class="text-[11px] text-slate-500">${h.location} • GH₵${h.price}</p>
+    <p class="text-[9px] text-slate-400 mt-1">${h.managerEmail}</p>
+    <div class="flex gap-2 mt-3">
+    <button onclick="approveHostel('${d.id}')" class="flex-1 bg-[#0f172a] text-white py-2 rounded-full text-[10px] font-bold">Approve</button>
+    <button onclick="disapproveHostel('${d.id}')" class="flex-1 bg-white border py-2 rounded-full text-[10px] font-bold">Disapprove</button>
+    <button onclick="deleteHostel('${d.id}')" class="bg-red-50 text-red-600 border border-red-100 px-3 py-2 rounded-full text-[10px] font-bold">Delete</button>
+    </div>
+    </div></div>`;
+  });
+  document.getElementById('rev').innerText=revenue.toLocaleString();
 }
 
-function loadInquiries(snap){
-  document.getElementById('totalCodes').innerText = snap.size;
-  const tbody=document.getElementById('codesTable'); tbody.innerHTML="";
-  if(snap.empty){ tbody.innerHTML="<tr><td colspan='5' class='py-3 text-slate-400'>No inquiries yet. When student clicks WhatsApp on index.html, code shows here.</td></tr>"; return; }
+async function loadManagers(){
+  const snap=await getDocs(collection(db,"managers"));
+  document.getElementById('totalManagers').innerText=snap.size;
+  const mBox=document.getElementById('allManagers'); mBox.innerHTML="";
   snap.forEach(d=>{
-    const i=d.data();
-    const date = i.createdAt?.seconds ? new Date(i.createdAt.seconds*1000).toLocaleDateString() : 'now';
-    tbody.innerHTML+=`<tr class="border-b"><td class="py-2 font-bold">${i.code}</td><td>${i.hostelName}</td><td class="text-[10px]">${i.managerEmail||i.managerPhone}</td><td><span class="bg-slate-100 px-2 py-1 rounded-full">${i.status||'new'}</span></td><td>${date}</td></tr>`;
+    const m=d.data();
+    const isApproved = m.status!=="disabled";
+    mBox.innerHTML+=`<div class="flex justify-between items-center bg-[#FFFBF5] border border-[#F2E8D5] p-3 rounded-[14px]">
+    <div><p class="font-bold text-xs">${m.name} <span class="text-[10px] font-normal text-slate-500">${m.email}</span></p><p class="text-[10px] text-slate-500">Code: ${m.referralCode||'none'} • ${m.phone||''} • Status: ${isApproved?'<span class=text-green-600>Active</span>':'<span class=text-red-600>Disabled</span>'}</p></div>
+    <div class="flex gap-2">
+    <button onclick="approveManager('${d.id}')" class="bg-green-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold">Approve</button>
+    <button onclick="disapproveManager('${d.id}')" class="bg-white border px-3 py-1.5 rounded-full text-[10px]">Disapprove</button>
+    </div></div>`;
   });
 }
 
-load();
+async function loadInquiries(){
+  const tbody=document.getElementById('codesTable');
+  tbody.innerHTML="<tr><td colspan='6' class='py-3 text-slate-400'>Loading...</td></tr>";
+  let snap;
+  try{ snap=await getDocs(query(collection(db,"inquiries"), orderBy("createdAt","desc"))); }
+  catch{ snap=await getDocs(collection(db,"inquiries")); }
+
+  // DEDUPE: ONE PER PERSON PER HOSTEL (by hostelId)
+  // If you later store userPhone, change key to hostelId + userPhone
+  const uniqueMap=new Map();
+  snap.forEach(d=>{
+    const data={id:d.id, ...d.data()};
+    const key = data.hostelId;
+    if(!uniqueMap.has(key) || (data.createdAt?.seconds||0) > (uniqueMap.get(key).createdAt?.seconds||0)){
+      uniqueMap.set(key, data);
+    }
+  });
+  const unique = Array.from(uniqueMap.values());
+  document.getElementById('totalCodes').innerText=unique.length;
+
+  if(unique.length===0){ tbody.innerHTML="<tr><td colspan='6' class='py-3 text-slate-400'>No inquiries yet. When student clicks WhatsApp on index.html, code shows here (deduped).</td></tr>"; return; }
+  tbody.innerHTML="";
+  unique.forEach(i=>{
+    const date = i.createdAt?.seconds ? new Date(i.createdAt.seconds*1000).toLocaleDateString() : 'now';
+    tbody.innerHTML+=`<tr class="border-b"><td class="py-2 font-bold">${i.code}</td><td>${i.hostelName||''}</td><td class="text-[10px]">${i.managerEmail||i.managerPhone||''}</td><td><span class="bg-slate-100 px-2 py-1 rounded-full text-[10px]">${i.status||'new'}</span></td><td>${date}</td><td><button onclick="deleteInquiry('${i.id}')" class="text-red-600 text-[10px] underline">Delete</button></td></tr>`;
+  });
+}
+
+window.deleteHostel = async function(id){ if(!confirm("Delete this hostel permanently?")) return; await deleteDoc(doc(db,"hostels",id)); loadAll(); }
+window.approveHostel = async function(id){ await updateDoc(doc(db,"hostels",id),{status:"approved"}); loadAll(); }
+window.disapproveHostel = async function(id){ await updateDoc(doc(db,"hostels",id),{status:"pending"}); loadAll(); }
+
+window.approveManager = async function(id){ await updateDoc(doc(db,"managers",id),{status:"active"}); loadAll(); }
+window.disapproveManager = async function(id){ if(!confirm("Disapprove this manager? Their hostels will still exist but you can disapprove them separately.")) return; await updateDoc(doc(db,"managers",id),{status:"disabled"}); loadAll(); }
+
+window.deleteInquiry = async function(id){ if(!confirm("Delete this inquiry code?")) return; await deleteDoc(doc(db,"inquiries",id)); loadAll(); }
+
+loadAll();
 </script>
 </body>
 </html>

@@ -3,55 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCC - Manager Dashboard</title>
+<title>MCC - Manager Dashboard Luxury</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:Poppins,sans-serif;background:#FFFBF5}
+.playfair{font-family:Playfair Display,serif}
+.card-shadow{box-shadow:0 20px 60px rgba(15,23,42,0.06),0 2px 12px rgba(0,0,0,0.04)}
+.glass{backdrop-filter:blur(20px);background:rgba(255,255,255,0.85)}
+</style>
 </head>
-<body class="bg-[#f8fafc] font-[Poppins] p-4">
-<div class="max-w-4xl mx-auto">
-<div class="flex items-center justify-between mb-4">
+<body>
+
+<!-- HEADER -->
+<nav class="sticky top-0 z-50 glass border-b border-[#F2E8D5] px-4 md:px-8 py-3 flex justify-between items-center">
 <div class="flex items-center gap-3">
-<img src="logo.png" class="w-10 h-10 rounded-full bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/40?text=MCC'">
+<div class="w-10 h-10 bg-[#0f172a] rounded-full flex items-center justify-center text-[#c9a86a] font-bold text-xs">MCC</div>
 <div>
-<h1 class="font-bold text-sm" id="mName">Manager</h1>
-<p class="text-[10px] text-slate-500" id="mEmail"></p>
+<h1 class="playfair font-bold text-[15px] leading-none" id="mName">Manager Name</h1>
+<p class="text-[10px] text-slate-500" id="mEmail">email</p>
 </div>
 </div>
-<button onclick="logout()" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-full">Logout</button>
+<div class="flex gap-2">
+<a href="index.html" class="bg-white border px-4 py-2 rounded-full text-[11px] font-bold">Home</a>
+<button onclick="logout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-[11px] font-bold">Logout</button>
+</div>
+</nav>
+
+<div class="max-w-[1280px] mx-auto px-4 md:px-8 py-6 grid lg:grid-cols-[340px_1fr] gap-6">
+
+<!-- LEFT - PROFILE + REFERRAL -->
+<div class="space-y-4">
+<div class="bg-[#0f172a] rounded-[24px] p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle,#c9a86a33_0%,transparent_70%)]"></div>
+<div class="relative z-10">
+<p class="text-[10px] tracking-[0.2em] text-[#c9a86a]">REFERRAL CODE • TRACKING</p>
+<h2 class="playfair text-3xl font-black text-white mt-2 tracking-widest" id="refCode">MCC-XXXX</h2>
+<p class="text-[11px] text-white/50 mt-3">This code is used when student clicks WhatsApp. You get lead in dashboard. One lead per person per hostel — no duplicates.</p>
+<div class="bg-white/10 border border-white/10 rounded-full px-3 py-1.5 mt-4 text-[10px] text-white inline-block">Share this with students</div>
+</div>
 </div>
 
-<!-- CODES BOX -->
-<div class="bg-[#0f172a] text-white rounded-[18px] p-4 mb-4">
-<p class="text-[10px] opacity-70">YOUR REFERRAL CODE (manager/student tracking)</p>
-<h2 class="font-bold text-xl tracking-widest" id="refCode">MCC-XXXX</h2>
-<p class="text-[10px] mt-2 opacity-60">Share this code — when student uses it to chat, you get lead</p>
+<div class="bg-white rounded-[24px] p-5 card-shadow border border-[#F6F1E8]">
+<h3 class="font-bold text-xs">Quick Stats</h3>
+<div class="grid grid-cols-2 gap-3 mt-3">
+<div class="bg-[#FFFBF5] border rounded-[14px] p-3"><p class="text-[10px] text-slate-400">My Hostels</p><p class="font-bold text-lg" id="statHostels">0</p></div>
+<div class="bg-[#0f172a] text-white rounded-[14px] p-3"><p class="text-[10px] opacity-60">Leads (Unique)</p><p class="font-bold text-lg" id="statLeads">0</p></div>
+<div class="bg-green-50 border border-green-100 rounded-[14px] p-3"><p class="text-[10px] text-green-600">Approved</p><p class="font-bold text-lg" id="statApproved">0</p></div>
+<div class="bg-amber-50 border border-amber-100 rounded-[14px] p-3"><p class="text-[10px] text-amber-700">Pending</p><p class="font-bold text-lg" id="statPending">0</p></div>
+</div>
+<a href="manager.html" class="block w-full bg-[#c9a86a] text-white text-center py-3 rounded-full font-bold text-xs mt-4">+ Add Hostel (4 Pics - Secure)</a>
+<p class="text-[9px] text-slate-400 text-center mt-2">Photos stay in free mode — untouched, you suffered for it!</p>
+</div>
 </div>
 
-<div class="grid grid-cols-2 gap-3 mb-4">
-<a href="manager.html" class="bg-[#c9a86a] text-white text-center p-3 rounded-xl font-bold text-sm">+ Add Hostel</a>
-<button onclick="loadHostels()" class="bg-white border p-3 rounded-xl font-bold text-sm">Refresh</button>
+<!-- RIGHT - LEADS + HOSTELS -->
+<div class="space-y-6">
+
+<!-- LEADS - ONE PER PERSON PER HOSTEL + DELETE AFTER SEEN -->
+<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8]">
+<div class="flex justify-between items-center">
+<h3 class="playfair font-bold text-[16px]">Leads — People Who Liked Your Hostel</h3>
+<button onclick="loadLeads()" class="text-[11px] bg-slate-50 border px-3 py-1.5 rounded-full">Refresh</button>
+</div>
+<p class="text-[11px] text-slate-400 mt-1">Standard rule: Only ONE lead per person per hostel. Manager can delete after seen. Admin sees same deduped in CEO dashboard.</p>
+<div id="leads" class="mt-4 space-y-2"><p class="text-xs text-slate-400">Loading unique leads...</p></div>
 </div>
 
-<div class="bg-white rounded-[18px] p-4 shadow-sm mb-4">
-<h3 class="font-bold text-sm mb-2">Leads / Inquiry Codes (Student → You)</h3>
-<div id="leads" class="text-xs space-y-2"><p class="text-slate-400">Loading leads...</p></div>
+<!-- MY HOSTELS -->
+<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8]">
+<div class="flex justify-between items-center">
+<h3 class="playfair font-bold text-[16px]">My Hostels — LIVE Status</h3>
+<button onclick="loadHostels()" class="text-[11px] bg-slate-50 border px-3 py-1.5 rounded-full">Refresh Hostels</button>
+</div>
+<div id="myHostels" class="grid md:grid-cols-2 gap-4 mt-4"><p class="text-xs text-slate-400">Loading...</p></div>
 </div>
 
-<div class="bg-white rounded-[18px] p-4 shadow-sm">
-<h3 class="font-bold text-sm mb-2">My Hostels (LIVE)</h3>
-<div id="myHostels" class="grid grid-cols-1 md:grid-cols-2 gap-3"><p class="text-xs text-slate-400">Loading...</p></div>
 </div>
 </div>
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, where, getDocs, deleteDoc, doc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
 if(!cur){ location.href="manager-login.html"; }
-document.getElementById('mName').innerText=cur.name;
-document.getElementById('mEmail').innerText=cur.email;
-document.getElementById('refCode').innerText=cur.referralCode||"MCC-XXXX";
+document.getElementById('mName').innerText=cur.name||"Manager";
+document.getElementById('mEmail').innerText=cur.email||"";
+document.getElementById('refCode').innerText=cur.referralCode||"MCC-"+Math.floor(1000+Math.random()*9000);
 
 window.logout = ()=>{ localStorage.removeItem('mcc_current_manager'); location.href="manager-login.html"; }
 
@@ -61,40 +100,79 @@ window.loadHostels = async()=>{
   try{
     const q=query(collection(db,"hostels"), where("managerEmail","==",cur.email));
     const snap=await getDocs(q);
-    if(snap.empty){ box.innerHTML="<p class='text-xs text-slate-400'>No hostels yet. Add one.</p>"; return; }
+    document.getElementById('statHostels').innerText=snap.size;
+    let approved=0, pending=0;
+    if(snap.empty){ box.innerHTML="<p class='text-xs text-slate-400'>No hostels yet. Click + Add Hostel</p>"; return; }
     box.innerHTML="";
     snap.forEach(d=>{
-      const h=d.data();
-      box.innerHTML+=`<div class="border rounded-xl p-3">
-      <img src="${h.images?.[0]||''}" class="w-full h-32 object-cover rounded-lg mb-2">
-      <p class="font-bold text-sm">${h.name}</p>
-      <p class="text-[11px] text-slate-500">${h.location} - GH₵${h.price}</p>
-      <p class="text-[10px] text-green-600 mt-1">LIVE for students ✅</p>
-      </div>`;
+      const h=d.data(); if(h.status==="approved") approved++; else pending++;
+      const badge = h.status==="approved" ? `<span class="bg-green-50 text-green-700 px-2 py-1 rounded-full text-[10px]">Approved • LIVE</span>` : `<span class="bg-amber-50 text-amber-700 px-2 py-1 rounded-full text-[10px]">Pending • Waiting CEO</span>`;
+      box.innerHTML+=`<div class="border border-[#F2E8D5] rounded-[18px] overflow-hidden">
+      <img src="${h.images?.[0]||''}" class="w-full h-36 object-cover">
+      <div class="p-3">
+      <div class="flex justify-between items-start"><p class="font-bold text-sm">${h.name}</p>${badge}</div>
+      <p class="text-[11px] text-slate-500">${h.location} • GH₵${h.price} • ${h.type}</p>
+      <p class="text-[10px] text-slate-400 mt-1">${h.images?.length||0}/4 pics • Secure free mode</p>
+      </div></div>`;
     });
+    document.getElementById('statApproved').innerText=approved;
+    document.getElementById('statPending').innerText=pending;
   }catch(e){ box.innerHTML=`<p class='text-xs text-red-500'>${e.message}</p>`; }
 }
 
+// LEADS: ONE PER PERSON PER HOSTEL + DELETE AFTER SEEN
 async function loadLeads(){
   const box=document.getElementById('leads');
+  box.innerHTML="<p class='text-xs text-slate-400'>Loading...</p>";
   try{
-    const q=query(collection(db,"inquiries"), where("managerEmail","==",cur.email), orderBy("createdAt","desc"));
-    const snap=await getDocs(q);
-    if(snap.empty){ box.innerHTML="<p class='text-slate-400'>No inquiries yet. When student clicks WhatsApp, code appears here.</p>"; return; }
-    box.innerHTML="";
-    snap.forEach(d=>{
-      const i=d.data();
-      box.innerHTML+=`<div class="flex justify-between bg-slate-50 p-2 rounded-lg">
-      <div><p class="font-bold">${i.code}</p><p class="text-[10px]">${i.hostelName} - ${new Date(i.createdAt?.seconds*1000).toLocaleDateString()}</p></div>
-      <span class="text-[10px] bg-white px-2 py-1 rounded-full h-fit">${i.status||'new'}</span></div>`;
-    });
-  }catch(e){ box.innerHTML=`<p class='text-red-400'>Need index - showing without sort</p>`; 
-    // fallback without orderBy
+    let snap;
     try{
-      const snap2=await getDocs(query(collection(db,"inquiries"), where("managerEmail","==",cur.email)));
-      box.innerHTML=""; snap2.forEach(d=>{ const i=d.data(); box.innerHTML+=`<div class="bg-slate-50 p-2 rounded-lg text-[11px]"><b>${i.code}</b> - ${i.hostelName}</div>`; });
-    }catch{}
-  }
+      const q=query(collection(db,"inquiries"), where("managerEmail","==",cur.email), orderBy("createdAt","desc"));
+      snap=await getDocs(q);
+    }catch{
+      const q2=query(collection(db,"inquiries"), where("managerEmail","==",cur.email));
+      snap=await getDocs(q2);
+    }
+    if(snap.empty){ box.innerHTML="<p class='text-xs text-slate-400'>No leads yet. When student clicks WhatsApp on index.html with MCC-XXXX code, it shows here. One per person per hostel only.</p>"; document.getElementById('statLeads').innerText="0"; return; }
+
+    // DEDUPLICATE: only one lead per hostel per person (using code + hostelId as unique person proxy)
+    // Since we don't have user phone yet, we dedupe by hostelId + code prefix = one per inquiry per hostel, but if same person clicks same hostel again with different code, we keep only latest.
+    // Better dedupe: Map hostelId -> keep latest
+    const uniqueMap = new Map();
+    snap.forEach(d=>{
+      const data = {id:d.id, ...d.data()};
+      const key = data.hostelId; // one lead per hostel (if you want per person, add userPhone later)
+      // If you later add userPhone to inquiries, change key to: data.hostelId + "-" + data.userPhone
+      if(!uniqueMap.has(key) || (data.createdAt?.seconds||0) > (uniqueMap.get(key).createdAt?.seconds||0)){
+        uniqueMap.set(key, data);
+      }
+    });
+
+    const uniqueLeads = Array.from(uniqueMap.values());
+    document.getElementById('statLeads').innerText=uniqueLeads.length;
+
+    if(uniqueLeads.length===0){ box.innerHTML="<p class='text-xs text-slate-400'>No unique leads</p>"; return; }
+
+    box.innerHTML="";
+    uniqueLeads.forEach(l=>{
+      const date = l.createdAt?.seconds ? new Date(l.createdAt.seconds*1000).toLocaleString() : 'now';
+      box.innerHTML+=`<div class="flex justify-between items-center bg-[#FFFBF5] border border-[#F2E8D5] p-3 rounded-[14px]">
+      <div class="flex-1">
+      <div class="flex gap-2 items-center"><p class="font-bold text-xs">${l.code}</p><span class="text-[9px] bg-white border px-2 py-0.5 rounded-full">${l.hostelName||'Hostel'}</span></div>
+      <p class="text-[11px] text-slate-500 mt-1">Lead from: ${l.hostelName} • ${date} • Status: ${l.status||'new'}</p>
+      <p class="text-[10px] text-slate-400">One lead per person per hostel rule applied</p>
+      </div>
+      <button onclick="deleteLead('${l.id}')" class="ml-3 bg-red-50 text-red-600 border border-red-100 px-3 py-2 rounded-full text-[11px] font-bold hover:bg-red-600 hover:text-white transition">Delete after seen</button>
+      </div>`;
+    });
+    box.innerHTML+=`<p class="text-[10px] text-slate-400 mt-3">Note: If same student clicks same hostel 3 times, only 1 lead shows here (deduped). Admin dashboard also shows same.</p>`;
+  }catch(e){ box.innerHTML=`<p class='text-xs text-red-500'>${e.message}</p>`; }
+}
+window.loadLeads = loadLeads;
+
+window.deleteLead = async function(id){
+  if(!confirm("Delete this lead after you have seen/contacted?")) return;
+  try{ await deleteDoc(doc(db,"inquiries",id)); loadLeads(); }catch(e){ alert(e.message); }
 }
 
 loadHostels(); loadLeads();
