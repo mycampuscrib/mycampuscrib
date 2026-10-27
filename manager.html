@@ -11,43 +11,36 @@
 <div class="max-w-2xl mx-auto bg-white rounded-[20px] p-6 shadow-xl mt-4">
 <div class="flex items-center justify-between mb-6">
 <div class="flex items-center gap-3">
-<img src="logo.png" class="w-10 h-10 rounded-full bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/40?text=MCC'">
+<img src="logo.png" class="w-10 h-10 rounded-full bg-[#0f172a]">
 <h1 class="font-bold">Add New Hostel</h1>
 </div>
 <a href="manager-dashboard.html" class="text-xs bg-slate-100 px-3 py-2 rounded-full">Dashboard</a>
 </div>
 
-<input id="hname" placeholder="Hostel Name - e.g. Luxury Lodge" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="location" placeholder="Location - e.g. Amamoma" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="price" placeholder="Price per year - e.g. 3500" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="hname" placeholder="Hostel Name" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="location" placeholder="Location" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<input id="price" placeholder="Price per year" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
 <input id="beds" placeholder="Beds available" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
 <select id="type" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<option value="Single Room">Single Room</option>
-<option value="Self Contain">Self Contain</option>
-<option value="2 in 1">2 in 1</option>
-<option value="3 in 1">3 in 1</option>
-<option value="4 in 1">4 in 1</option>
+<option>Single Room</option><option>Self Contain</option><option>2 in 1</option><option>3 in 1</option><option>4 in 1</option>
 </select>
-<textarea id="desc" placeholder="Description, facilities..." class="w-full p-3 border rounded-xl mb-3 text-sm h-20"></textarea>
-<input id="managerPhone" placeholder="Your WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+<textarea id="desc" placeholder="Description..." class="w-full p-3 border rounded-xl mb-3 text-sm h-20"></textarea>
+<input id="managerPhone" placeholder="WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
 
-<label class="text-xs font-bold mb-1 block">Hostel Images (max 5)</label>
+<label class="text-xs font-bold block">Hostel Images (max 5)</label>
 <input id="images" type="file" multiple accept="image/*" class="w-full p-2 border rounded-xl mb-3 text-xs">
 
-<label class="text-xs font-bold mb-1 block">Hostel Video (optional, max 30sec)</label>
-<input id="video" type="file" accept="video/*" class="w-full p-2 border rounded-xl mb-4 text-xs">
+<label class="text-xs font-bold block">Video Tour Link (YouTube link - optional)</label>
+<input id="videoLink" type="text" placeholder="Paste YouTube link" class="w-full p-3 border rounded-xl mb-4 text-sm">
 
-<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload LIVE for Students</button>
+<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload LIVE</button>
 <p id="msg" class="text-xs text-center mt-3"></p>
 </div>
 
 <script type="module">
-import { db, storage } from "./firebase.js";
+import { db } from "./firebase.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-const IMGBB_KEY = "7b28df43b6de3fa529a0cfec2f2d261e"; // your key
-
+const IMGBB_KEY = "7b28df43b6de3fa529a0cfec2f2d261e";
 async function uploadToImgBB(file){
   const form = new FormData(); form.append("image", file);
   const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:"POST", body:form});
@@ -55,63 +48,28 @@ async function uploadToImgBB(file){
   if(!data.success) throw new Error("Image upload failed");
   return data.data.url;
 }
-
 window.uploadHostel = async function(){
   const cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
   if(!cur){ alert("Login first"); location.href="manager-login.html"; return; }
-  
-  const btn = document.getElementById('uploadBtn');
-  const msg = document.getElementById('msg');
+  const btn=document.getElementById('uploadBtn'); const msg=document.getElementById('msg');
   btn.disabled=true; btn.innerText="Uploading..."; msg.innerText="Uploading images...";
-  
   try{
-    const name = document.getElementById('hname').value.trim();
-    const locationVal = document.getElementById('location').value.trim();
-    const price = document.getElementById('price').value.trim();
-    const beds = document.getElementById('beds').value.trim();
-    const type = document.getElementById('type').value;
-    const desc = document.getElementById('desc').value.trim();
-    const managerPhone = document.getElementById('managerPhone').value.trim() || cur.phone;
-    
-    if(!name || !locationVal || !price){ throw new Error("Fill name, location, price"); }
-    
-    // Images to ImgBB
-    const files = document.getElementById('images').files;
-    let imageUrls = [];
-    for(let i=0;i<Math.min(files.length,5);i++){
-      msg.innerText=`Uploading image ${i+1}/${files.length}...`;
-      const url = await uploadToImgBB(files[i]);
-      imageUrls.push(url);
-    }
-    if(imageUrls.length===0) imageUrls = ["https://via.placeholder.com/400x300?text=Hostel"];
-    
-    // Video to Firebase Storage (optional)
-    let videoUrl = "";
-    const vFile = document.getElementById('video').files[0];
-    if(vFile){
-      msg.innerText="Uploading video...";
-      const vRef = ref(storage, `hostelVideos/${Date.now()}_${vFile.name}`);
-      await uploadBytes(vRef, vFile);
-      videoUrl = await getDownloadURL(vRef);
-    }
-    
+    const name=document.getElementById('hname').value.trim();
+    const locationVal=document.getElementById('location').value.trim();
+    const price=document.getElementById('price').value.trim();
+    const beds=document.getElementById('beds').value.trim();
+    const type=document.getElementById('type').value;
+    const desc=document.getElementById('desc').value.trim();
+    const managerPhone=document.getElementById('managerPhone').value.trim()||cur.phone;
+    const videoLink=document.getElementById('videoLink').value.trim();
+    if(!name||!locationVal||!price) throw new Error("Fill name, location, price");
+    const files=document.getElementById('images').files;
+    let imageUrls=[]; if(files.length===0) throw new Error("Select at least 1 image");
+    for(let i=0;i<Math.min(files.length,5);i++){ msg.innerText=`Uploading image ${i+1}/${files.length}...`; const url=await uploadToImgBB(files[i]); imageUrls.push(url); }
     msg.innerText="Saving LIVE...";
-    const hostelData = {
-      name, location: locationVal, price: Number(price), beds: Number(beds)||1,
-      type, description: desc, managerPhone, managerEmail: cur.email, managerName: cur.name,
-      images: imageUrls, videoUrl, status: "approved", views:0, inquiries:0,
-      createdAt: serverTimestamp()
-    };
-    
-    await addDoc(collection(db, "hostels"), hostelData);
-    msg.style.color="green"; msg.innerText="✅ LIVE! Students can see it now on index.html";
-    btn.innerText="Done! Add Another";
-    btn.disabled=false;
-    setTimeout(()=> location.href="manager-dashboard.html", 1500);
-  }catch(e){
-    msg.style.color="red"; msg.innerText="Error: "+e.message;
-    btn.disabled=false; btn.innerText="Upload LIVE for Students";
-  }
+    await addDoc(collection(db,"hostels"),{name,location:locationVal,price:Number(price),beds:Number(beds)||1,type,description:desc,managerPhone,managerEmail:cur.email,managerName:cur.name,images:imageUrls,videoUrl:videoLink,status:"approved",views:0,inquiries:0,createdAt:serverTimestamp()});
+    msg.style.color="green"; msg.innerText="✅ LIVE!"; btn.innerText="Done!"; setTimeout(()=>location.href="manager-dashboard.html",1500);
+  }catch(e){ msg.style.color="red"; msg.innerText="Error: "+e.message; btn.disabled=false; btn.innerText="Upload LIVE"; }
 }
 </script>
 </body>
