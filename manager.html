@@ -2,108 +2,161 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MCC - Add Hostel</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f172a;--gold:#c9a86a;--cream:#FFFBF5;--sand:#F2E8D5;--line:#F6F1E8;--mut:#64748b;--sh:0 20px 60px rgba(15,23,42,.06),0 2px 12px rgba(0,0,0,.04)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--navy);line-height:1.5;padding:16px 16px 60px;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}a{color:inherit;text-decoration:none}
+input,select,textarea{font:inherit;color:inherit}[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card{max-width:720px;margin:12px auto;background:#fff;border-radius:24px;padding:22px;box-shadow:var(--sh);border:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{font-family:"Playfair Display",serif;font-size:26px;line-height:1.1}
+.sub{font-size:12px;color:var(--mut);margin-top:4px}
+.sec{margin-top:26px}.sec h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);padding-bottom:6px;border-bottom:1px solid var(--sand)}
+.fl{display:block;font-size:12px;font-weight:600;margin-top:14px}
+.field{width:100%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--sand);background:var(--cream);outline:0;margin-top:6px;transition:border-color .2s}
+.field:focus{border-color:var(--gold)}textarea.field{min-height:100px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:11px;color:var(--mut);margin-top:4px;font-weight:400}
+.checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chk{position:relative}.chk input{position:absolute;opacity:0;inset:0;cursor:pointer;width:100%;height:100%}
+.chk span{display:inline-block;padding:9px 16px;border-radius:99px;border:1.5px solid var(--sand);font-size:12px;font-weight:600;background:#fff;transition:.2s}
+.chk input:checked+span{background:var(--navy);color:#fff;border-color:var(--navy)}
+.chk input:focus-visible+span{outline:3px solid var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 22px;border-radius:99px;font-weight:700;font-size:13px;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.6;transform:none;cursor:wait}
+.btn.dark{background:var(--navy);color:#fff}.btn.line{border:1.5px solid var(--sand);background:#fff}.btn.sm{padding:8px 14px;font-size:11px}.btn.full{width:100%;padding:15px;font-size:14px;margin-top:22px}
+.pl{display:grid;gap:10px;margin-top:12px}
+.pi{display:flex;gap:12px;align-items:center;background:var(--cream);border:1px solid var(--sand);padding:8px;border-radius:16px}
+.pi img{width:72px;height:56px;object-fit:cover;border-radius:10px;flex:none}.pi .field{margin:0;flex:1}
+.msg{font-size:13px;text-align:center;margin-top:14px;min-height:20px;font-weight:500}
+.banner{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:18px;border-radius:18px;font-size:14px;text-align:center}
+@media(max-width:480px){.two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
-<body class="bg-[#f8fafc] font-[Poppins] p-4">
-<div class="max-w-2xl mx-auto bg-white rounded-[20px] p-6 shadow-xl mt-4">
-<div class="flex items-center justify-between mb-6">
-<h1 class="font-bold">Add New Hostel - FREE MODE</h1>
-<a href="manager-dashboard.html" class="text-xs bg-slate-100 px-3 py-2 rounded-full">Dashboard</a>
-</div>
+<body>
+<div class="card">
+ <div class="top"><div><h1>Add New Hostel</h1><p class="sub">Signed in as <b id="who"></b>. Your hostel goes live after the admin approves it.</p></div><a class="btn line sm" href="manager-dashboard.html">Dashboard</a></div>
+ <div class="banner" id="blocked" hidden style="margin-top:18px">Your manager account has been disabled by the admin. Please contact MyCampusCrib support.</div>
 
-<input id="hname" placeholder="Hostel Name - e.g. Theo Hostel" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="location" placeholder="Location - e.g. Amamoma" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="price" placeholder="Price per year - e.g. 3000" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="beds" placeholder="Beds available" type="number" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<select id="type" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<option value="Single Room">Single Room</option>
-<option value="Self Contain">Self Contain</option>
-<option value="2 in 1">2 in 1</option>
-<option value="3 in 1">3 in 1</option>
-<option value="4 in 1">4 in 1</option>
-</select>
-<textarea id="desc" placeholder="Description..." class="w-full p-3 border rounded-xl mb-3 text-sm h-20"></textarea>
-<input id="managerPhone" placeholder="Your WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
+ <form id="form" novalidate>
+  <div class="sec"><h2>Basics</h2>
+   <label class="fl" for="hname">Hostel name *</label><input class="field" id="hname" maxlength="60" placeholder="e.g. Theo Hostel" autocomplete="off">
+   <label class="fl" for="location">Location *</label><input class="field" id="location" list="locs" maxlength="40" placeholder="e.g. Amamoma" autocomplete="off"><datalist id="locs"><option value="Amamoma"><option value="Ayensu"><option value="Kwaprow"><option value="3rd Gate"></datalist>
+   <label class="fl" for="distance">Distance to campus (optional)<span class="hint">Type it with a unit, e.g. "5 min walk" or "1.2 km"</span></label><input class="field" id="distance" maxlength="40" autocomplete="off">
+   <label class="fl" for="desc">Description</label><textarea class="field" id="desc" maxlength="1000" placeholder="Tell students what makes this hostel good…"></textarea>
+  </div>
 
-<label class="text-xs font-bold mb-1 block">Hostel Images (max 3, will be compressed)</label>
-<input id="images" type="file" multiple accept="image/*" class="w-full p-2 border rounded-xl mb-4 text-xs">
+  <div class="sec"><h2>Room &amp; price</h2>
+   <label class="fl" for="type">Room type *</label>
+   <select class="field" id="type"><option value="Single Room">Single Room</option><option value="Self Contain">Self Contain</option><option value="2 in 1">2 in 1</option><option value="3 in 1">3 in 1</option><option value="4 in 1">4 in 1</option></select>
+   <div class="two"><label class="fl" for="price">Price per year (GH₵) *<input class="field" id="price" type="number" min="1" inputmode="numeric"></label>
+    <label class="fl" for="priceSem">Price per semester (GH₵)<input class="field" id="priceSem" type="number" min="1" inputmode="numeric" placeholder="Optional"></label></div>
+   <div class="two"><label class="fl" for="beds">Total beds *<input class="field" id="beds" type="number" min="1" inputmode="numeric"></label>
+    <label class="fl" for="roomsLeft">Rooms left now<input class="field" id="roomsLeft" type="number" min="0" max="999" inputmode="numeric" placeholder="Optional"></label></div>
+  </div>
 
-<button id="uploadBtn" onclick="uploadHostel()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold">Upload for Approval</button>
-<p id="msg" class="text-xs text-center mt-3"></p>
+  <div class="sec"><h2>Who is it for? *</h2>
+   <div class="checks" id="gender"><label class="chk"><input type="checkbox" value="male"><span>Male</span></label><label class="chk"><input type="checkbox" value="female"><span>Female</span></label><label class="chk"><input type="checkbox" value="mixed"><span>Mixed</span></label></div>
+  </div>
+
+  <div class="sec"><h2>Amenities</h2>
+   <div class="checks" id="amen"><label class="chk"><input type="checkbox" value="WiFi"><span>WiFi</span></label><label class="chk"><input type="checkbox" value="Water"><span>Water</span></label><label class="chk"><input type="checkbox" value="Kitchen"><span>Kitchen</span></label><label class="chk"><input type="checkbox" value="Light"><span>Light</span></label><label class="chk"><input type="checkbox" value="Security"><span>Security</span></label><label class="chk"><input type="checkbox" value="Self-Contained"><span>Self-Contained</span></label></div>
+  </div>
+
+  <div class="sec"><h2>Photos *</h2>
+   <label class="fl" for="photos">Add up to 4 photos<span class="hint">They are compressed automatically. Label each one so students know what they are looking at.</span></label>
+   <input class="field" id="photos" type="file" accept="image/*" multiple>
+   <div class="pl" id="plist"></div><p class="hint" id="pcount">0/4 photos</p>
+  </div>
+
+  <div class="sec"><h2>Contact</h2>
+   <label class="fl" for="managerPhone">WhatsApp number *</label><input class="field" id="managerPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="e.g. 0241234567">
+  </div>
+
+  <button class="btn dark full" id="uploadBtn">Upload for Approval</button>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+ </form>
 </div>
 
 <script type="module">
-import { db } from "./firebase.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { auth, db } from "./firebase.js";
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-function compressToBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onload = e=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const canvas = document.createElement('canvas');
-        const MAX = 500;
-        let w = img.width, h = img.height;
-        if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } }
-        canvas.width=w; canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        resolve(canvas.toDataURL('image/jpeg',0.5));
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const LABELS=['Front','Room','Bathroom','Kitchen','Outside'],MAXP=4;
+let PICS=[],busy=false;
+const num=v=>{v=String(v??'').trim();if(v==='')return null;const n=Number(v);return Number.isFinite(n)?n:null};
+const normPhone=p=>{let s=String(p||'').replace(/\D/g,'');if(s.startsWith('00'))s=s.slice(2);if(s.startsWith('0'))s='233'+s.slice(1);else if(s.length===9)s='233'+s;return s};
+const say=(t,c)=>{const m=$('#msg');m.textContent=t;m.style.color=c==='red'?'#b91c1c':c==='green'?'#15803d':'inherit'};
+
+/* same login method as before */
+let cur=null;try{cur=JSON.parse(localStorage.getItem('mcc_current_manager')||'null')}catch{}
+await auth.authStateReady();
+if(!cur||!cur.email||!auth.currentUser||String(auth.currentUser.email||'').toLowerCase()!==String(cur.email).toLowerCase()){localStorage.removeItem('mcc_current_manager');location.replace('manager-login.html')}else{init()}
+
+async function init(){
+ $('#who').textContent=cur.name||cur.email;
+ $('#photos').addEventListener('change',addPics);
+ $('#plist').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(!b)return;const p=PICS.splice(+b.dataset.rm,1)[0];if(p)URL.revokeObjectURL(p.url);renderPics()});
+ $('#plist').addEventListener('input',e=>{const s=e.target.closest('select[data-i]');if(s&&PICS[+s.dataset.i])PICS[+s.dataset.i].label=s.value});
+ $('#form').addEventListener('submit',submit);
+ try{const s=await getDocs(query(collection(db,'managers'),where('email','==',cur.email)));if(s.size>0&&s.docs.every(d=>d.data().status==='disabled')){$('#blocked').hidden=false;$('#form').hidden=true}}catch{}
 }
 
-window.uploadHostel = async function(){
-  const cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
-  if(!cur){ alert("Login first"); location.href="manager-login.html"; return; }
-  const btn=document.getElementById('uploadBtn');
-  const msg=document.getElementById('msg');
-  btn.disabled=true; btn.innerText="Compressing..."; msg.innerText="Compressing images...";
-  msg.style.color="black";
-  try{
-    const name=document.getElementById('hname').value.trim();
-    const locationVal=document.getElementById('location').value.trim();
-    const price=document.getElementById('price').value.trim();
-    if(!name||!locationVal||!price) throw new Error("Fill name, location, price");
-    const files=document.getElementById('images').files;
-    if(files.length===0) throw new Error("Select at least 1 image");
-    if(files.length>3) throw new Error("Select max 3 images for free mode");
-    
-    let imageUrls=[];
-    for(let i=0;i<files.length;i++){
-      msg.innerText=`Compressing ${i+1}/${files.length}...`;
-      const base64 = await compressToBase64(files[i]);
-      imageUrls.push(base64);
-    }
-    
-    msg.innerText="Sending for CEO approval...";
-    await addDoc(collection(db,"hostels"),{
-      name, location:locationVal, price:Number(price),
-      beds:Number(document.getElementById('beds').value)||1,
-      type:document.getElementById('type').value,
-      description:document.getElementById('desc').value.trim(),
-      managerPhone:document.getElementById('managerPhone').value.trim()||cur.phone,
-      managerEmail:cur.email, managerName:cur.name,
-      images:imageUrls, videoUrl:"",
-      status:"pending", views:0, inquiries:0,
-      createdAt:serverTimestamp()
-    });
-    msg.style.color="green"; msg.innerText="✅ Sent for CEO approval! CEO will review soon.";
-    btn.innerText="Sent!";
-    setTimeout(()=>location.href="manager-dashboard.html",1500);
-  }catch(e){
-    console.error(e);
-    msg.style.color="red"; msg.innerText="Error: "+e.message;
-    btn.disabled=false; btn.innerText="Upload for Approval";
-  }
+function renderPics(){
+ $('#plist').innerHTML=PICS.map((p,i)=>`<div class="pi"><img src="${p.url}" alt="Photo ${i+1}"><select class="field" data-i="${i}" aria-label="Label for photo ${i+1}">${LABELS.map(x=>`<option${x===p.label?' selected':''}>${x}</option>`).join('')}</select><button type="button" class="btn line sm" data-rm="${i}" aria-label="Remove photo ${i+1}">✕</button></div>`).join('');
+ $('#pcount').textContent=PICS.length+'/'+MAXP+' photos'}
+function addPics(e){
+ const files=[...e.target.files];e.target.value='';let skipped=0;
+ for(const f of files){if(PICS.length>=MAXP||!/^image\//.test(f.type)||f.size>15*1024*1024){skipped++;continue}PICS.push({file:f,url:URL.createObjectURL(f),label:LABELS[Math.min(PICS.length,LABELS.length-1)]})}
+ say(skipped?`Only up to ${MAXP} image files (max 15 MB each) are allowed.`:'',skipped?'red':'');renderPics()}
+
+function compress(file,max,q){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),img=new Image();
+ img.onload=()=>{URL.revokeObjectURL(u);const k=Math.min(1,max/Math.max(img.width,img.height,1)),w=Math.max(1,Math.round(img.width*k)),h=Math.max(1,Math.round(img.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',q))};
+ img.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('Could not read '+file.name))};img.src=u})}
+
+async function submit(e){
+ e.preventDefault();if(busy)return;
+ const name=$('#hname').value.trim(),loc=$('#location').value.trim(),price=num($('#price').value),sem=num($('#priceSem').value),beds=num($('#beds').value),left=num($('#roomsLeft').value),
+  distance=$('#distance').value.trim(),desc=$('#desc').value.trim(),gender=$$('#gender input:checked').map(i=>i.value),amenities=$$('#amen input:checked').map(i=>i.value),
+  phoneRaw=$('#managerPhone').value.trim()||String(cur.phone||'').trim(),phone=normPhone(phoneRaw);
+ let err='';
+ if(name.length<3)err='Enter the hostel name.';else if(!loc)err='Enter the location.';else if(!(price>0))err='Enter the price per year.';
+ else if(sem!==null&&!(sem>0))err='Semester price must be more than 0.';else if(!(beds>=1))err='Enter the number of beds.';
+ else if(left!==null&&!(left>=0&&left<=999))err='Rooms left must be from 0 to 999.';else if(!gender.length)err='Choose who the hostel is for (Male, Female or Mixed).';
+ else if(!PICS.length)err='Add at least 1 photo.';else if(!/^\d{10,15}$/.test(phone))err='Enter a valid WhatsApp number.';
+ if(err){say(err,'red');return}
+ busy=true;const btn=$('#uploadBtn');btn.disabled=true;btn.textContent='Preparing photos…';say('Compressing photos…');
+ try{
+  let imgs=[];for(let i=0;i<PICS.length;i++){say(`Compressing photo ${i+1} of ${PICS.length}…`);imgs.push(await compress(PICS[i].file,800,.6))}
+  const total=()=>imgs.reduce((t,s)=>t+s.length,0);
+  if(total()>850000){imgs=[];for(const p of PICS)imgs.push(await compress(p.file,640,.5))}
+  if(total()>900000)throw new Error('Photos are too large. Use fewer or smaller photos.');
+  say('Sending for admin approval…');btn.textContent='Sending…';
+  await addDoc(collection(db,'hostels'),{
+   name,location:loc,price,beds:Math.floor(beds),type:$('#type').value,description:desc,
+   managerPhone:phoneRaw,managerEmail:cur.email,managerName:cur.name||'',
+   images:imgs,imageLabels:PICS.map(p=>p.label),videoUrl:'',
+   status:'pending',views:0,inquiries:0,createdAt:serverTimestamp(),
+   gender,
+   ...(amenities.length?{amenities}:{}),
+   ...(sem!==null?{priceSemester:sem}:{}),
+   ...(left!==null?{roomsLeft:Math.floor(left)}:{}),
+   ...(distance?{distance}:{})
+  });
+  say('✅ Sent for admin approval! It goes live once approved.','green');btn.textContent='Sent!';
+  setTimeout(()=>location.href='manager-dashboard.html',1500);
+ }catch(ex){console.error(ex);say('Error: '+ex.message,'red');btn.disabled=false;btn.textContent='Upload for Approval';busy=false}
 }
 </script>
 </body>

@@ -2,180 +2,245 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MCC - Manager Dashboard Luxury</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
-body{font-family:Poppins,sans-serif;background:#FFFBF5}
-.playfair{font-family:Playfair Display,serif}
-.card-shadow{box-shadow:0 20px 60px rgba(15,23,42,0.06),0 2px 12px rgba(0,0,0,0.04)}
-.glass{backdrop-filter:blur(20px);background:rgba(255,255,255,0.85)}
+:root{--navy:#0f172a;--gold:#c9a86a;--cream:#FFFBF5;--sand:#F2E8D5;--line:#F6F1E8;--wa:#25D366;--mut:#64748b;--sh:0 20px 60px rgba(15,23,42,.06),0 2px 12px rgba(0,0,0,.04)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--navy);line-height:1.5;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
+input,select{font:inherit;color:inherit}[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.pf{font-family:"Playfair Display",serif}.mut{color:var(--mut)}
+.nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--sand)}
+.who{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.who b{display:block;font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.who small{display:block;font-size:10px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:99px;font-weight:700;font-size:12px;transition:transform .2s,box-shadow .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}.btn.sm{padding:8px 14px;font-size:11px}
+.btn.dark{background:var(--navy);color:#fff}.btn.gold{background:var(--gold);color:#fff;box-shadow:0 8px 22px rgba(201,168,106,.35)}
+.btn.wa{background:var(--wa);color:#fff}.btn.line{border:1.5px solid var(--sand);background:#fff}.btn.red{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 60px;display:grid;gap:20px}
+.side{display:grid;gap:16px;height:fit-content}
+.refc{background:var(--navy);border-radius:24px;padding:22px;position:relative;overflow:hidden;color:#fff}
+.refc::before{content:"";position:absolute;top:-30%;right:-20%;width:260px;height:260px;background:radial-gradient(circle,rgba(201,168,106,.25),transparent 70%)}
+.refc>*{position:relative}.refc small{font-size:10px;letter-spacing:.2em;color:var(--gold)}.refc h2{font-size:28px;font-weight:800;letter-spacing:.08em;margin:6px 0;word-break:break-all}.refc p{font-size:11px;color:rgba(255,255,255,.55)}
+.box{background:#fff;border-radius:24px;padding:20px;box-shadow:var(--sh);border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.st{background:var(--cream);border:1px solid var(--sand);border-radius:14px;padding:12px}.st p{font-size:10px;color:var(--mut)}.st b{font-size:22px;display:block;line-height:1.2}
+.st.d{background:var(--navy);color:#fff;border-color:var(--navy)}.st.d p{color:rgba(255,255,255,.6)}.st.g{background:#f0fdf4;border-color:#dcfce7}.st.a{background:#fffbeb;border-color:#fef3c7}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 18px;border-radius:99px;border:1.5px solid var(--sand);background:#fff;font-weight:600;font-size:12px;white-space:nowrap;transition:.2s}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}.tab em{font-style:normal;background:var(--gold);color:#fff;border-radius:99px;font-size:10px;padding:1px 7px;margin-left:5px}.tab em:empty{display:none}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}.ph h3{font-size:18px}
+.hint{font-size:11px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:14px}
+.hc{border:1px solid var(--sand);border-radius:20px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.hc img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--sand);opacity:0;transition:opacity .4s}.hc img.ld{opacity:1}
+.hb{padding:14px;display:grid;gap:8px;flex:1}.hb h4{font-size:15px;line-height:1.2}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.chip{font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}.chip.ok{background:#f0fdf4;color:#15803d}.chip.wait{background:#fffbeb;color:#b45309}.chip.n{background:#f1f5f9;color:#475569}
+.sub{font-size:11px;color:var(--mut)}.stars{color:var(--gold);font-weight:700}
+.rooms{display:flex;gap:8px;align-items:flex-end}.rooms label{flex:1;font-size:11px;font-weight:600}
+.field{width:100%;padding:9px 12px;border-radius:12px;border:1.5px solid var(--sand);background:var(--cream);margin-top:4px;outline:0}.field:focus{border-color:var(--gold)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--cream);border:1px solid var(--sand);padding:12px 14px;border-radius:16px}
+.list{display:grid;gap:10px;margin-top:14px}.item b{font-size:13px}.item p{font-size:12px;color:#475569}
+.mini{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}.mini .field{width:auto;min-width:160px;margin:0}
+.empty{background:var(--cream);border:1px dashed var(--sand);border-radius:18px;padding:30px 16px;text-align:center;font-size:13px;color:var(--mut);grid-column:1/-1}
+.sk{height:260px;border-radius:20px;background:linear-gradient(90deg,#f3ede0,#fbf6ec,#f3ede0);background-size:200%;animation:sk 1.2s infinite}@keyframes sk{to{background-position:-200% 0}}
+.banner{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:20px;border-radius:20px;font-size:14px;text-align:center}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:200}.toast.on{opacity:1;transform:translate(-50%,0)}
+.panel{animation:in .3s ease both}@keyframes in{from{opacity:0;transform:translateY(8px)}}
+@media(min-width:960px){.wrap{grid-template-columns:320px 1fr;padding:28px 32px 60px}.nav{padding:12px 32px}.side{position:sticky;top:84px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.hc img{opacity:1}}
 </style>
 </head>
 <body>
+<header class="nav">
+ <div class="who"><span class="logo">MCC</span><div><b class="pf" id="mName">Manager</b><small id="mEmail"></small></div></div>
+ <div style="display:flex;gap:8px"><a class="btn line sm" href="index.html">Home</a><button class="btn red sm" data-a="logout">Logout</button></div>
+</header>
 
-<!-- HEADER -->
-<nav class="sticky top-0 z-50 glass border-b border-[#F2E8D5] px-4 md:px-8 py-3 flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-[#0f172a] rounded-full flex items-center justify-center text-[#c9a86a] font-bold text-xs">MCC</div>
-<div>
-<h1 class="playfair font-bold text-[15px] leading-none" id="mName">Manager Name</h1>
-<p class="text-[10px] text-slate-500" id="mEmail">email</p>
-</div>
-</div>
-<div class="flex gap-2">
-<a href="index.html" class="bg-white border px-4 py-2 rounded-full text-[11px] font-bold">Home</a>
-<button onclick="logout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-[11px] font-bold">Logout</button>
-</div>
-</nav>
+<main class="wrap" id="app">
+ <div class="banner" id="blocked" hidden style="grid-column:1/-1"><b>Your manager account has been disabled by the admin.</b><br>Please contact MyCampusCrib support. <br><br><button class="btn dark sm" data-a="logout">Logout</button></div>
 
-<div class="max-w-[1280px] mx-auto px-4 md:px-8 py-6 grid lg:grid-cols-[340px_1fr] gap-6">
+ <aside class="side" id="side">
+  <div class="refc"><small>REFERRAL CODE</small><h2 class="pf" id="refCode">Not set</h2><p>Your personal code. It is shown only if one was saved on your account.</p></div>
+  <div class="box"><b style="font-size:13px">Quick Stats</b>
+   <div class="stats">
+    <div class="st"><p>My Hostels</p><b id="sHostels">—</b></div>
+    <div class="st d"><p>Leads</p><b id="sLeads">—</b></div>
+    <div class="st g"><p>Approved</p><b id="sApproved">—</b></div>
+    <div class="st a"><p>Pending</p><b id="sPending">—</b></div>
+    <div class="st"><p>Total views</p><b id="sViews">—</b></div>
+    <div class="st"><p>Reviews</p><b id="sReviews">—</b></div>
+   </div>
+   <a class="btn gold" href="manager.html" style="width:100%;margin-top:16px">+ Add Hostel</a>
+   <p class="hint" style="text-align:center;margin-top:8px">Up to 4 photos per hostel</p>
+  </div>
+ </aside>
 
-<!-- LEFT - PROFILE + REFERRAL -->
-<div class="space-y-4">
-<div class="bg-[#0f172a] rounded-[24px] p-6 relative overflow-hidden">
-<div class="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle,#c9a86a33_0%,transparent_70%)]"></div>
-<div class="relative z-10">
-<p class="text-[10px] tracking-[0.2em] text-[#c9a86a]">REFERRAL CODE • TRACKING</p>
-<h2 class="playfair text-3xl font-black text-white mt-2 tracking-widest" id="refCode">MCC-XXXX</h2>
-<p class="text-[11px] text-white/50 mt-3">This code is used when student clicks WhatsApp. You get lead in dashboard. One lead per person per hostel — no duplicates.</p>
-<div class="bg-white/10 border border-white/10 rounded-full px-3 py-1.5 mt-4 text-[10px] text-white inline-block">Share this with students</div>
-</div>
-</div>
+ <section id="main">
+  <div class="tabs" role="tablist">
+   <button class="tab on" role="tab" data-a="tab" data-t="hostels">My Hostels<em id="cH"></em></button>
+   <button class="tab" role="tab" data-a="tab" data-t="leads">Leads<em id="cL"></em></button>
+   <button class="tab" role="tab" data-a="tab" data-t="requests">Student Requests<em id="cR"></em></button>
+   <button class="tab" role="tab" data-a="tab" data-t="reviews">Reviews<em id="cV"></em></button>
+  </div>
 
-<div class="bg-white rounded-[24px] p-5 card-shadow border border-[#F6F1E8]">
-<h3 class="font-bold text-xs">Quick Stats</h3>
-<div class="grid grid-cols-2 gap-3 mt-3">
-<div class="bg-[#FFFBF5] border rounded-[14px] p-3"><p class="text-[10px] text-slate-400">My Hostels</p><p class="font-bold text-lg" id="statHostels">0</p></div>
-<div class="bg-[#0f172a] text-white rounded-[14px] p-3"><p class="text-[10px] opacity-60">Leads (Unique)</p><p class="font-bold text-lg" id="statLeads">0</p></div>
-<div class="bg-green-50 border border-green-100 rounded-[14px] p-3"><p class="text-[10px] text-green-600">Approved</p><p class="font-bold text-lg" id="statApproved">0</p></div>
-<div class="bg-amber-50 border border-amber-100 rounded-[14px] p-3"><p class="text-[10px] text-amber-700">Pending</p><p class="font-bold text-lg" id="statPending">0</p></div>
-</div>
-<a href="manager.html" class="block w-full bg-[#c9a86a] text-white text-center py-3 rounded-full font-bold text-xs mt-4">+ Add Hostel (4 Pics - Secure)</a>
-<p class="text-[9px] text-slate-400 text-center mt-2">Photos stay in free mode — untouched, you suffered for it!</p>
-</div>
-</div>
+  <div class="box panel" id="p-hostels" style="margin-top:14px">
+   <div class="ph"><h3 class="pf">My Hostels — LIVE Status</h3><button class="btn line sm" data-a="refresh">Refresh</button></div>
+   <div class="grid" id="hostelsBox"></div>
+  </div>
 
-<!-- RIGHT - LEADS + HOSTELS -->
-<div class="space-y-6">
+  <div class="box panel" id="p-leads" style="margin-top:14px" hidden>
+   <div class="ph"><h3 class="pf">Leads — Students Who Tapped WhatsApp</h3><button class="btn line sm" data-a="refresh">Refresh</button></div>
+   <p class="hint">Each lead is a student who tapped WhatsApp on one of your hostels. Repeat taps from the same device are merged. Delete a lead after you have contacted the student.</p>
+   <div class="list" id="leadsBox"></div>
+  </div>
 
-<!-- LEADS - ONE PER PERSON PER HOSTEL + DELETE AFTER SEEN -->
-<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8]">
-<div class="flex justify-between items-center">
-<h3 class="playfair font-bold text-[16px]">Leads — People Who Liked Your Hostel</h3>
-<button onclick="loadLeads()" class="text-[11px] bg-slate-50 border px-3 py-1.5 rounded-full">Refresh</button>
-</div>
-<p class="text-[11px] text-slate-400 mt-1">Standard rule: Only ONE lead per person per hostel. Manager can delete after seen. Admin sees same deduped in CEO dashboard.</p>
-<div id="leads" class="mt-4 space-y-2"><p class="text-xs text-slate-400">Loading unique leads...</p></div>
-</div>
+  <div class="box panel" id="p-requests" style="margin-top:14px" hidden>
+   <div class="ph"><h3 class="pf">Students Looking for a Hostel</h3><button class="btn line sm" data-a="refresh">Refresh</button></div>
+   <p class="hint">Posted by students on “I Need Hostel”. Tap WhatsApp to reply.</p>
+   <div class="mini"><select class="field" id="rqLoc" aria-label="Location"><option value="">All locations</option></select><span class="hint" id="rqCount"></span></div>
+   <div class="list" id="reqBox"></div>
+  </div>
 
-<!-- MY HOSTELS -->
-<div class="bg-white rounded-[24px] p-6 card-shadow border border-[#F6F1E8]">
-<div class="flex justify-between items-center">
-<h3 class="playfair font-bold text-[16px]">My Hostels — LIVE Status</h3>
-<button onclick="loadHostels()" class="text-[11px] bg-slate-50 border px-3 py-1.5 rounded-full">Refresh Hostels</button>
-</div>
-<div id="myHostels" class="grid md:grid-cols-2 gap-4 mt-4"><p class="text-xs text-slate-400">Loading...</p></div>
-</div>
-
-</div>
-</div>
+  <div class="box panel" id="p-reviews" style="margin-top:14px" hidden>
+   <div class="ph"><h3 class="pf">Reviews on My Hostels</h3><button class="btn line sm" data-a="refresh">Refresh</button></div>
+   <div class="list" id="revBox"></div>
+  </div>
+ </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
-import { db } from "./firebase.js";
-import { collection, query, where, getDocs, deleteDoc, doc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { auth, db } from "./firebase.js";
+import { collection, query, where, getDocs, deleteDoc, doc, updateDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const cur = JSON.parse(localStorage.getItem('mcc_current_manager')||'null');
-if(!cur){ location.href="manager-login.html"; }
-document.getElementById('mName').innerText=cur.name||"Manager";
-document.getElementById('mEmail').innerText=cur.email||"";
-document.getElementById('refCode').innerText=cur.referralCode||"MCC-"+Math.floor(1000+Math.random()*9000);
+/* ---------- helpers ---------- */
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+const num=v=>{if(v===null||v===undefined||v==='')return null;const n=Number(String(v).replace(/[^\d.]/g,''));return Number.isFinite(n)?n:null};
+const money=n=>'GH₵'+Number(n).toLocaleString('en-GH');
+const ms=t=>t?(t.toMillis?t.toMillis():t.seconds?t.seconds*1000:typeof t==='number'?t:0):0;
+const ago=m=>{if(!m)return'';const s=(Date.now()-m)/1e3;if(s<60)return'just now';const mi=s/60;if(mi<60)return Math.floor(mi)+' min ago';const h=mi/60;if(h<24)return Math.floor(h)+' hr ago';const d=h/24;if(d<30)return Math.floor(d)+' day'+(d>=2?'s':'')+' ago';return new Date(m).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})};
+const safeUrl=u=>{u=String(u||'').trim();return /^(https:\/\/|data:image\/)/i.test(u)?u:''};
+const normPhone=p=>{let s=String(p||'').replace(/\D/g,'');if(s.startsWith('00'))s=s.slice(2);if(s.startsWith('0'))s='233'+s.slice(1);else if(s.length===9)s='233'+s;return s};
+const PH='data:image/svg+xml;utf8,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#F2E8D5'/><text x='50%' y='50%' text-anchor='middle' fill='#0f172a' font-family='sans-serif' font-size='22' opacity='.5'>No photo yet</text></svg>");
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2200)};
+document.addEventListener('load',e=>{if(e.target.tagName==='IMG')e.target.classList.add('ld')},true);
+document.addEventListener('error',e=>{const i=e.target;if(i.tagName==='IMG'&&!i.dataset.fb){i.dataset.fb='1';i.src=PH}},true);
+const empty=(t)=>`<div class="empty">${esc(t)}</div>`;
+const SK='<div class="sk"></div>';
 
-window.logout = ()=>{ localStorage.removeItem('mcc_current_manager'); location.href="manager-login.html"; }
+/* ---------- session (same login method as before) ---------- */
+let cur=null;try{cur=JSON.parse(localStorage.getItem('mcc_current_manager')||'null')}catch{}
+await auth.authStateReady();
+if(!cur||!cur.email||!auth.currentUser||String(auth.currentUser.email||'').toLowerCase()!==String(cur.email).toLowerCase()){localStorage.removeItem('mcc_current_manager');location.replace('manager-login.html')}else{boot()}
 
-window.loadHostels = async()=>{
-  const box=document.getElementById('myHostels');
-  box.innerHTML="<p class='text-xs text-slate-400'>Loading...</p>";
-  try{
-    const q=query(collection(db,"hostels"), where("managerEmail","==",cur.email));
-    const snap=await getDocs(q);
-    document.getElementById('statHostels').innerText=snap.size;
-    let approved=0, pending=0;
-    if(snap.empty){ box.innerHTML="<p class='text-xs text-slate-400'>No hostels yet. Click + Add Hostel</p>"; return; }
-    box.innerHTML="";
-    snap.forEach(d=>{
-      const h=d.data(); if(h.status==="approved") approved++; else pending++;
-      const badge = h.status==="approved" ? `<span class="bg-green-50 text-green-700 px-2 py-1 rounded-full text-[10px]">Approved • LIVE</span>` : `<span class="bg-amber-50 text-amber-700 px-2 py-1 rounded-full text-[10px]">Pending • Waiting CEO</span>`;
-      box.innerHTML+=`<div class="border border-[#F2E8D5] rounded-[18px] overflow-hidden">
-      <img src="${h.images?.[0]||''}" class="w-full h-36 object-cover">
-      <div class="p-3">
-      <div class="flex justify-between items-start"><p class="font-bold text-sm">${h.name}</p>${badge}</div>
-      <p class="text-[11px] text-slate-500">${h.location} • GH₵${h.price} • ${h.type}</p>
-      <p class="text-[10px] text-slate-400 mt-1">${h.images?.length||0}/4 pics • Secure free mode</p>
-      </div></div>`;
-    });
-    document.getElementById('statApproved').innerText=approved;
-    document.getElementById('statPending').innerText=pending;
-  }catch(e){ box.innerHTML=`<p class='text-xs text-red-500'>${e.message}</p>`; }
-}
+let HOSTELS=[],LEADS=[],REQS=[],REVS=[];
+const OK={h:false,l:false,r:false,v:false},ER={h:false,l:false,r:false,v:false};
+const rate=id=>{const a=REVS.filter(r=>r.hostelId===id);return a.length?{avg:a.reduce((t,r)=>t+r.rating,0)/a.length,n:a.length}:null};
 
-// LEADS: ONE PER PERSON PER HOSTEL + DELETE AFTER SEEN
-async function loadLeads(){
-  const box=document.getElementById('leads');
-  box.innerHTML="<p class='text-xs text-slate-400'>Loading...</p>";
-  try{
-    let snap;
-    try{
-      const q=query(collection(db,"inquiries"), where("managerEmail","==",cur.email), orderBy("createdAt","desc"));
-      snap=await getDocs(q);
-    }catch{
-      const q2=query(collection(db,"inquiries"), where("managerEmail","==",cur.email));
-      snap=await getDocs(q2);
-    }
-    if(snap.empty){ box.innerHTML="<p class='text-xs text-slate-400'>No leads yet. When student clicks WhatsApp on index.html with MCC-XXXX code, it shows here. One per person per hostel only.</p>"; document.getElementById('statLeads').innerText="0"; return; }
+async function boot(){
+ $('#mName').textContent=cur.name||'Manager';$('#mEmail').textContent=cur.email;$('#refCode').textContent=cur.referralCode||'Not set';
+ if(await isDisabled()){$('#blocked').hidden=false;$('#side').hidden=true;$('#main').hidden=true;return}
+ loadAll()}
+async function isDisabled(){try{const s=await getDocs(query(collection(db,'managers'),where('email','==',cur.email)));return s.size>0&&s.docs.every(d=>d.data().status==='disabled')}catch{return false}}
 
-    // DEDUPLICATE: only one lead per hostel per person (using code + hostelId as unique person proxy)
-    // Since we don't have user phone yet, we dedupe by hostelId + code prefix = one per inquiry per hostel, but if same person clicks same hostel again with different code, we keep only latest.
-    // Better dedupe: Map hostelId -> keep latest
-    const uniqueMap = new Map();
-    snap.forEach(d=>{
-      const data = {id:d.id, ...d.data()};
-      const key = data.hostelId; // one lead per hostel (if you want per person, add userPhone later)
-      // If you later add userPhone to inquiries, change key to: data.hostelId + "-" + data.userPhone
-      if(!uniqueMap.has(key) || (data.createdAt?.seconds||0) > (uniqueMap.get(key).createdAt?.seconds||0)){
-        uniqueMap.set(key, data);
-      }
-    });
+/* ---------- loading ---------- */
+async function loadHostels(){OK.h=false;ER.h=false;renderHostels();
+ try{const s=await getDocs(query(collection(db,'hostels'),where('managerEmail','==',cur.email)));HOSTELS=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b.createdAt)-ms(a.createdAt))}catch{ER.h=true;HOSTELS=[]}
+ OK.h=true}
+async function loadReviews(){OK.v=false;ER.v=false;
+ try{const ids=new Set(HOSTELS.map(h=>h.id));const s=await getDocs(query(collection(db,'reviews'),limit(500)));
+  REVS=s.docs.map(d=>{const x=d.data();return{id:d.id,hostelId:String(x.hostelId||''),name:String(x.name||'Student'),rating:Math.min(5,Math.max(1,Math.round(Number(x.rating))||1)),text:String(x.text||''),createdAt:ms(x.createdAt)}}).filter(r=>ids.has(r.hostelId)).sort((a,b)=>b.createdAt-a.createdAt)}catch{ER.v=true;REVS=[]}
+ OK.v=true}
+async function loadLeads(){OK.l=false;ER.l=false;
+ try{const s=await getDocs(query(collection(db,'inquiries'),where('managerEmail','==',cur.email)));LEADS=s.docs.map(d=>({id:d.id,...d.data(),createdAt:ms(d.data().createdAt)}))}catch{ER.l=true;LEADS=[]}
+ OK.l=true}
+async function loadReqs(){OK.r=false;ER.r=false;
+ try{const s=await getDocs(query(collection(db,'hostelRequests'),limit(200)));REQS=s.docs.map(d=>({id:d.id,...d.data(),createdAt:ms(d.data().createdAt)})).sort((a,b)=>b.createdAt-a.createdAt)}catch{ER.r=true;REQS=[]}
+ OK.r=true}
+async function loadAll(){
+ $('#hostelsBox').innerHTML=SK.repeat(2);
+ await loadHostels();await Promise.all([loadReviews(),loadLeads(),loadReqs()]);renderAll()}
 
-    const uniqueLeads = Array.from(uniqueMap.values());
-    document.getElementById('statLeads').innerText=uniqueLeads.length;
+/* ---------- render ---------- */
+function leadList(){const seen=new Map();LEADS.slice().sort((a,b)=>b.createdAt-a.createdAt).forEach(l=>{const k=l.hostelId+'|'+(l.visitorId||l.id);if(!seen.has(k))seen.set(k,l)});return[...seen.values()]}
+function renderAll(){renderHostels();renderLeads();renderReqs();renderReviews();renderStats()}
+function renderStats(){
+ const ap=HOSTELS.filter(h=>h.status==='approved').length;
+ $('#sHostels').textContent=OK.h&&!ER.h?HOSTELS.length:'—';$('#sApproved').textContent=OK.h&&!ER.h?ap:'—';$('#sPending').textContent=OK.h&&!ER.h?HOSTELS.length-ap:'—';
+ $('#sViews').textContent=OK.h&&!ER.h?HOSTELS.reduce((t,h)=>t+(Number(h.views)||0),0):'—';
+ $('#sLeads').textContent=OK.l&&!ER.l?leadList().length:'—';$('#sReviews').textContent=OK.v&&!ER.v?REVS.length:'—';
+ $('#cH').textContent=OK.h&&HOSTELS.length||'';$('#cL').textContent=OK.l&&leadList().length||'';$('#cR').textContent=OK.r&&REQS.length||'';$('#cV').textContent=OK.v&&REVS.length||''}
+function hostelCard(h){
+ const g=Array.isArray(h.images)?h.images.map(safeUrl).filter(Boolean):[],ok=h.status==='approved',r=rate(h.id),v=Number(h.views)||0,rl=num(h.roomsLeft),p=num(h.price),id=esc(h.id);
+ const live=new URL('index.html',location.href).href+'#/hostel/'+encodeURIComponent(h.id);
+ return `<article class="hc"><img src="${esc(g[0]||PH)}" alt="${esc(h.name)}" loading="lazy" decoding="async"><div class="hb">
+ <div class="row"><h4 class="pf">${esc(h.name)}</h4><span class="chip ${ok?'ok':'wait'}">${ok?'Approved • LIVE':'Pending • waiting for admin'}</span></div>
+ <p class="sub">${esc(h.location||'')}${p!=null?' • '+money(p):''}${h.type?' • '+esc(h.type):''}</p>
+ <p class="sub">📷 ${g.length}/4 photos • 👁 ${v} view${v===1?'':'s'} • ${r?`<span class="stars">★ ${r.avg.toFixed(1)}</span> (${r.n})`:'No reviews yet'}</p>
+ <div class="rooms"><label>Rooms left<input class="field" type="number" min="0" max="999" inputmode="numeric" placeholder="Not set" value="${rl??''}" data-rl="${id}"></label><button class="btn dark sm" data-a="saverooms" data-id="${id}">Save</button></div>
+ ${ok?`<div class="acts"><a class="btn line sm" href="${esc(live)}" target="_blank" rel="noopener">View live</a><button class="btn line sm" data-a="copy" data-url="${esc(live)}">Copy link</button></div>`:''}
+  <div class="acts"><a class="btn dark sm" href="edit-hostel.html?id=${encodeURIComponent(h.id)}">Edit details</a></div></div></article>`}
+function renderHostels(){const b=$('#hostelsBox');
+ if(!OK.h){b.innerHTML=SK.repeat(2);return}
+ if(ER.h){b.innerHTML=empty('Could not load your hostels. Check your connection and tap Refresh.');return}
+ b.innerHTML=HOSTELS.length?HOSTELS.map(hostelCard).join(''):empty('No hostels yet. Tap “+ Add Hostel” to list your first one.')}
+function renderLeads(){const b=$('#leadsBox');
+ if(!OK.l){b.innerHTML=SK;return}
+ if(ER.l){b.innerHTML=empty('Could not load leads. Tap Refresh.');return}
+ const L=leadList();
+ b.innerHTML=L.length?L.map(l=>{
+  /* student phone (saved when the student asked to contact you) */
+  const sp=String(l.studentPhone||'').replace(/[^\d+]/g,''),ok=/^\+?\d{10,15}$/.test(sp),w=normPhone(sp),
+   txt=`Hi, I am the manager of ${l.hostelName||'the hostel'}. I received your inquiry ${l.code||''} on MyCampusCrib. Are you still interested?`;
+  return `<div class="item"><div><b>${esc(l.code||'—')}</b> <span class="chip n">${esc(l.hostelName||'Hostel')}</span><p>${ago(l.createdAt)||'—'} • ${l.status==='contacted'?'<span class="chip ok">Contacted</span>':'<span class="chip wait">New</span>'}</p>
+  ${ok?`<p>📞 <b>${esc(sp)}</b></p>`:'<p class="sub">No student phone on this lead (older inquiry).</p>'}</div>
+ <div class="acts" style="margin:0">${ok?`<a class="btn wa sm" href="https://wa.me/${w}?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">WhatsApp student</a><a class="btn dark sm" href="tel:${esc(sp)}">Call</a>`:''}${l.status==='contacted'?'':`<button class="btn line sm" data-a="contacted" data-id="${esc(l.id)}">Mark contacted</button>`}<button class="btn red sm" data-a="dellead" data-id="${esc(l.id)}">Delete</button></div></div>`}).join(''):empty('No leads yet. When a student taps WhatsApp on one of your approved hostels, it appears here.')}
+function renderReqs(){const b=$('#reqBox'),sel=$('#rqLoc');
+ if(!OK.r){b.innerHTML=SK;return}
+ if(ER.r){b.innerHTML=empty('Could not load student requests. Tap Refresh.');return}
+ const v=sel.value,locs=[...new Set(REQS.map(r=>String(r.location||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ sel.innerHTML='<option value="">All locations</option>'+locs.map(l=>`<option>${esc(l)}</option>`).join('');sel.value=locs.includes(v)?v:'';
+ const L=REQS.filter(r=>!sel.value||norm(r.location)===norm(sel.value));$('#rqCount').textContent=L.length+' request'+(L.length===1?'':'s');
+ b.innerHTML=!REQS.length?empty('No student requests yet.'):L.length?L.map(r=>{const d=r.moveIn?new Date(r.moveIn+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+  return `<div class="item"><div><b>${esc(r.name)}</b> <span class="sub">${esc(r.program||'')}</span><p>📍 ${esc(r.location||'')} • 💰 ${money(num(r.budget)||0)} • ${esc(r.roomType||'')}${d?' • 📅 '+esc(d):''}</p><p class="sub">${ago(r.createdAt)}</p></div><button class="btn wa sm" data-a="reply" data-id="${esc(r.id)}">WhatsApp</button></div>`}).join(''):empty('No requests match this location.')}
+function renderReviews(){const b=$('#revBox');
+ if(!OK.v){b.innerHTML=SK;return}
+ if(ER.v){b.innerHTML=empty('Could not load reviews. Tap Refresh.');return}
+ b.innerHTML=REVS.length?REVS.map(r=>{const h=HOSTELS.find(x=>x.id===r.hostelId);return `<div class="item"><div><span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span> <span class="chip n">${esc(h?h.name:'Hostel')}</span><p>${esc(r.text)}</p><p class="sub">${esc(r.name)} • ${ago(r.createdAt)}</p></div></div>`}).join(''):empty('No reviews on your hostels yet.')}
 
-    if(uniqueLeads.length===0){ box.innerHTML="<p class='text-xs text-slate-400'>No unique leads</p>"; return; }
-
-    box.innerHTML="";
-    uniqueLeads.forEach(l=>{
-      const date = l.createdAt?.seconds ? new Date(l.createdAt.seconds*1000).toLocaleString() : 'now';
-      box.innerHTML+=`<div class="flex justify-between items-center bg-[#FFFBF5] border border-[#F2E8D5] p-3 rounded-[14px]">
-      <div class="flex-1">
-      <div class="flex gap-2 items-center"><p class="font-bold text-xs">${l.code}</p><span class="text-[9px] bg-white border px-2 py-0.5 rounded-full">${l.hostelName||'Hostel'}</span></div>
-      <p class="text-[11px] text-slate-500 mt-1">Lead from: ${l.hostelName} • ${date} • Status: ${l.status||'new'}</p>
-      <p class="text-[10px] text-slate-400">One lead per person per hostel rule applied</p>
-      </div>
-      <button onclick="deleteLead('${l.id}')" class="ml-3 bg-red-50 text-red-600 border border-red-100 px-3 py-2 rounded-full text-[11px] font-bold hover:bg-red-600 hover:text-white transition">Delete after seen</button>
-      </div>`;
-    });
-    box.innerHTML+=`<p class="text-[10px] text-slate-400 mt-3">Note: If same student clicks same hostel 3 times, only 1 lead shows here (deduped). Admin dashboard also shows same.</p>`;
-  }catch(e){ box.innerHTML=`<p class='text-xs text-red-500'>${e.message}</p>`; }
-}
-window.loadLeads = loadLeads;
-
-window.deleteLead = async function(id){
-  if(!confirm("Delete this lead after you have seen/contacted?")) return;
-  try{ await deleteDoc(doc(db,"inquiries",id)); loadLeads(); }catch(e){ alert(e.message); }
-}
-
-loadHostels(); loadLeads();
+/* ---------- actions ---------- */
+function reply(id){const r=REQS.find(x=>x.id===id);if(!r)return;const phone=normPhone(r.whatsapp);if(!/^\d{10,15}$/.test(phone)){toast('This request has no valid WhatsApp number.');return}
+ const ap=HOSTELS.filter(h=>h.status==='approved'),h=ap.find(x=>norm(x.location)===norm(r.location))||ap[0];
+ const text=`Hi ${r.name}, I saw your request on MyCampusCrib (${r.roomType||'a room'} in ${r.location}, budget ${money(num(r.budget)||0)}).`+(h?` I manage ${h.name} (${h.location}).`:'')+` Are you still looking?`;
+ window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank','noopener')}
+const ACT={
+ logout:()=>{localStorage.removeItem('mcc_current_manager');location.href='manager-login.html'},
+ tab:t=>{$$('.tab').forEach(b=>b.classList.toggle('on',b===t));['hostels','leads','requests','reviews'].forEach(x=>{const p=$('#p-'+x);p.hidden=x!==t.dataset.t;if(x===t.dataset.t){p.classList.remove('panel');void p.offsetWidth;p.classList.add('panel')}})},
+ refresh:()=>loadAll(),
+ copy:async t=>{try{await navigator.clipboard.writeText(t.dataset.url);toast('Link copied ✓')}catch{prompt('Copy this link',t.dataset.url)}},
+ saverooms:async t=>{const id=t.dataset.id,inp=$(`[data-rl="${CSS.escape(id)}"]`),n=num(inp.value);if(inp.value.trim()===''||n===null||n<0||n>999){toast('Enter a number from 0 to 999');return}
+  try{await updateDoc(doc(db,'hostels',id),{roomsLeft:Math.floor(n)});const h=HOSTELS.find(x=>x.id===id);if(h)h.roomsLeft=Math.floor(n);toast('Rooms updated ✓')}catch{toast('Could not save. Please try again.')}},
+ contacted:async t=>{const l=LEADS.find(x=>x.id===t.dataset.id);if(!l)return;const key=l.hostelId+'|'+(l.visitorId||l.id),ids=LEADS.filter(x=>x.hostelId+'|'+(x.visitorId||x.id)===key).map(x=>x.id);
+  try{await Promise.all(ids.map(i=>updateDoc(doc(db,'inquiries',i),{status:'contacted'})));LEADS.forEach(x=>{if(ids.includes(x.id))x.status='contacted'});renderLeads();toast('Marked as contacted ✓')}catch{toast('Could not update. Please try again.')}},
+ dellead:async t=>{const l=LEADS.find(x=>x.id===t.dataset.id);if(!l||!confirm('Delete this lead after you have seen it?'))return;const key=l.hostelId+'|'+(l.visitorId||l.id),ids=LEADS.filter(x=>x.hostelId+'|'+(x.visitorId||x.id)===key).map(x=>x.id);
+  try{await Promise.all(ids.map(i=>deleteDoc(doc(db,'inquiries',i))));LEADS=LEADS.filter(x=>!ids.includes(x.id));renderLeads();renderStats();toast('Lead deleted')}catch{toast('Could not delete. Please try again.')}},
+ reply:t=>reply(t.dataset.id)};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&ACT[t.dataset.a])ACT[t.dataset.a](t)});
+$('#rqLoc').addEventListener('input',renderReqs);
 </script>
 </body>
 </html>

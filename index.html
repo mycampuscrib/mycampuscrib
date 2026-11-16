@@ -2,186 +2,796 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MyCampusCrib - World Best Luxury Hostels</title>
+<meta name="description" content="Verified student hostels in Cape Coast. Compare, save, find roommates and message caretakers directly on WhatsApp.">
 <meta name="theme-color" content="#0f172a">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<script>
+/* Capture the install prompt as early as possible (used by the single Install button in the nav) */
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__dp=e;window.dispatchEvent(new Event('mcc-install'))});
+</script>
 <style>
-body{font-family:Poppins,sans-serif;background:#FFFBF5}
-.playfair{font-family:Playfair Display,serif}
-.card-shadow{box-shadow:0 20px 60px rgba(15,23,42,0.06),0 2px 12px rgba(0,0,0,0.04)}
-@keyframes pulseGold{0%,100%{transform:scale(1); box-shadow:0 0 0 0 rgba(201,168,106,0.7)}50%{transform:scale(1.05); box-shadow:0 0 0 12px rgba(201,168,106,0)}}
-.install-pulse{animation:pulseGold 2s infinite}
+/* ================= TOKENS (your brand colours, unchanged) ================= */
+:root{--navy:#0f172a;--gold:#c9a86a;--cream:#FFFBF5;--sand:#F2E8D5;--line:#F6F1E8;--wa:#25D366;--mut:#64748b;--r:24px;--sh:0 20px 60px rgba(15,23,42,.06),0 2px 12px rgba(0,0,0,.04);--sh2:0 24px 60px rgba(15,23,42,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--navy);overflow-x:hidden;line-height:1.5;padding-bottom:76px}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+[hidden]{display:none!important}
+.pf{font-family:"Playfair Display",serif}
+.mut{color:var(--mut)}.center{text-align:center}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+.skip{position:fixed;left:8px;top:-60px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:99px;z-index:999}.skip:focus{top:8px}
+/* ================= NAV ================= */
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(255,255,255,.84);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--sand)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.brand b{display:block;font-size:17px;line-height:1;font-weight:900;white-space:nowrap}.brand i{font-style:normal;color:var(--gold)}
+.brand small{display:block;font-size:8px;letter-spacing:.3em;color:#94a3b8;margin-top:3px}
+.tabs{display:none;gap:4px}
+.tabs a{padding:9px 16px;border-radius:99px;font-size:13px;font-weight:600;color:#475569;transition:background .2s,color .2s}
+.tabs a:hover{background:var(--sand)}.tabs a.on{background:var(--navy);color:#fff}
+.badge{font-style:normal;background:var(--gold);color:#fff;border-radius:99px;font-size:10px;padding:1px 7px;margin-left:4px}.badge:empty{display:none}
+.nav-r{display:flex;gap:8px;align-items:center}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--sand);padding-bottom:env(safe-area-inset-bottom)}
+.bnav a{flex:1;text-align:center;padding:8px 2px;font-size:10px;font-weight:600;color:var(--mut);position:relative}
+.bnav a span{display:block;font-size:19px;line-height:1.2}.bnav a.on{color:var(--navy)}
+.bnav a.on::before{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;background:var(--gold);border-radius:0 0 4px 4px}
+.bnav .badge{position:absolute;top:2px;right:18%;margin:0}
+/* ================= BUTTONS / CHIPS ================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border-radius:99px;font-weight:700;font-size:12px;transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:none}
+.btn.dark{background:var(--navy);color:#fff}
+.btn.gold{background:var(--gold);color:#fff;box-shadow:0 8px 22px rgba(201,168,106,.35)}
+.btn.wa{background:var(--wa);color:#fff;box-shadow:0 10px 26px rgba(37,211,102,.3)}
+.btn.line{border:1.5px solid var(--sand);background:#fff;color:var(--navy)}
+.btn.inst{background:var(--navy);color:#fff;border:2px solid var(--gold)}
+.btn.big{padding:15px 24px;font-size:14px}.btn.full{width:100%}
+.btn.line[aria-pressed=true],.btn.line.on{border-color:var(--gold);background:var(--sand)}
+.link{color:var(--gold);font-weight:700;font-size:12px}
+.chip{font-size:10px;background:var(--cream);border:1px solid var(--sand);padding:3px 10px;border-radius:99px;white-space:nowrap;max-width:46%;overflow:hidden;text-overflow:ellipsis}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.cp{display:inline-block;padding:10px 18px;border-radius:99px;border:1.5px solid var(--sand);background:#fff;font-weight:600;font-size:13px;transition:.2s}
+button.cp:hover{border-color:var(--gold)}.cp.on{background:var(--navy);color:#fff;border-color:var(--navy)}.cp.dim{opacity:.4}
+.field{width:100%;padding:11px 14px;border-radius:14px;border:1.5px solid var(--sand);background:var(--cream);outline:0;transition:border-color .2s}
+.field:focus{border-color:var(--gold)}
+/* ================= HERO ================= */
+.hero{margin-top:18px;background:var(--navy);border-radius:32px;padding:24px;position:relative;overflow:hidden;display:grid;gap:24px}
+.hero::before{content:"";position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,106,.2),transparent 70%);pointer-events:none}
+.hero>*{position:relative}
+.eyebrow{display:inline-flex;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:6px 14px;border-radius:99px;font-size:10px;color:var(--gold);letter-spacing:.04em}
+.hero h2{font-size:clamp(38px,10vw,60px);line-height:.95;font-weight:900;color:#fff;margin-top:16px}.hero h2 span{color:var(--gold)}
+.hero .sub{color:rgba(255,255,255,.55);font-size:13px;margin-top:14px;max-width:400px}
+.sbox{background:#fff;border-radius:20px;padding:8px;margin-top:22px;display:flex;align-items:center;gap:8px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.sbox .in{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--cream);border-radius:14px;padding:12px 14px;color:#94a3b8}
+.sbox input{flex:1;min-width:0;border:0;outline:0;background:none;font-size:13px;color:var(--navy)}
+.qcs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.qc{padding:8px 16px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.12);transition:.2s}
+.qc:hover{background:rgba(255,255,255,.2)}.qc.w{background:#fff;color:var(--navy)}.qc.g{background:rgba(201,168,106,.2);color:var(--gold);border-color:rgba(201,168,106,.25)}
+.mapcard{background:var(--cream);border-radius:24px;padding:12px;box-shadow:var(--sh)}
+.map-h{display:flex;justify-content:space-between;gap:8px;padding:2px 6px 10px;font-size:12px}.map-h b{font-weight:700}.map-h span{font-size:10px;color:#94a3b8}
+.mapbox{position:relative;height:280px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#ece6d6,#f6efe0)}
+.mapbox iframe{width:100%;height:100%;border:0}
+.maplo{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:700;font-size:14px}
+.maplo small{font-weight:400;color:var(--mut);font-size:11px}
+.map-f{display:flex;gap:8px;margin-top:10px}
+.pillx{background:var(--navy);color:#fff;border-radius:99px;padding:6px 14px;font-size:11px}
+.mq{margin-top:28px;background:var(--navy);color:#fff;overflow:hidden;white-space:nowrap;padding:13px 0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.mq>div{display:inline-block;animation:mq 34s linear infinite}.mq b{color:var(--gold);margin:0 14px}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* ================= LIST + FILTERS ================= */
+.listhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:32px 0 16px}
+.listhead h3{font-size:26px;font-weight:700;line-height:1.1}
+.found{font-size:12px;color:var(--mut);margin-top:4px}
+.lh-r{display:flex;gap:8px;align-items:center}.lh-r .field{width:auto;padding:10px 14px;border-radius:99px;font-size:12px;font-weight:600}
+.layout{display:grid;gap:20px}
+.filters{background:#fff;border-radius:var(--r);padding:18px;box-shadow:var(--sh);border:1px solid var(--line);height:fit-content;display:none}
+.filters.open{display:block;animation:swap .3s both}
+.fhead{display:flex;justify-content:space-between;align-items:center}
+.fgrp{margin-top:16px}.t{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.chk{position:relative}.chk input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.chk span{display:inline-block;padding:8px 14px;border-radius:99px;border:1.5px solid var(--sand);font-size:12px;font-weight:600;transition:.2s;background:#fff}
+.chk input:checked+span{background:var(--navy);color:#fff;border-color:var(--navy)}.chk input:focus-visible+span{outline:3px solid var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.swap{animation:swap .3s ease both}
+@keyframes swap{from{opacity:0;transform:translateY(8px)}}
+.card{position:relative;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);border:1px solid var(--line);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;min-width:0}
+@media(hover:hover){.card:hover{transform:translateY(-6px);box-shadow:var(--sh2)}.card:hover .cimg img{transform:scale(1.05)}}
+.cimg{display:block;position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--sand)}
+.cimg img{width:100%;height:100%;object-fit:cover;transition:opacity .4s,transform .7s}
+img.fade{opacity:0}img.fade.ld{opacity:1}
+.pill{position:absolute;padding:5px 12px;border-radius:99px;font-size:10px;font-weight:700}
+.pill.loc{top:14px;left:14px;background:rgba(255,255,255,.92);box-shadow:0 4px 12px rgba(0,0,0,.1);max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill.price{bottom:14px;right:14px;background:var(--navy);color:#fff;font-size:12px}
+.pill.ver{bottom:14px;left:14px;background:var(--gold);color:#fff;font-size:9px;letter-spacing:.1em}
+.heart{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;font-size:18px;color:#cbd5e1;box-shadow:0 4px 12px rgba(0,0,0,.12);transition:transform .2s,color .2s}
+.heart[aria-pressed=true]{color:var(--gold)}.heart.pop{animation:pop .4s}
+@keyframes pop{30%{transform:scale(1.35)}60%{transform:scale(.9)}100%{transform:scale(1)}}
+.cb{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.crow{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.crow h3{font-size:16px;line-height:1.2;font-weight:700}
+.csub{font-size:11px;color:var(--mut)}.stars{color:var(--gold);font-weight:700;font-size:12px}
+.acts{display:flex;gap:8px;margin-top:auto;padding-top:10px}.acts .btn{flex:1;padding:10px 12px}
+.ib{width:42px;flex:none;border-radius:99px;border:1.5px solid var(--sand);background:#fff;font-size:15px;transition:.2s}.ib.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.empty{grid-column:1/-1;background:#fff;border-radius:var(--r);padding:44px 20px;text-align:center;box-shadow:var(--sh)}
+.empty h4{font-size:22px;font-weight:700}.empty p{font-size:12px;color:var(--mut);margin:6px 0 16px}
+.sk{border-radius:var(--r);height:330px;background:linear-gradient(90deg,#f3ede0,#fbf6ec,#f3ede0);background-size:200%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.rrow{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.rcard{flex:0 0 230px;display:flex;gap:10px;align-items:center;background:#fff;border-radius:18px;padding:8px;border:1px solid var(--line);box-shadow:var(--sh)}
+.rcard img{width:64px;height:54px;border-radius:12px;object-fit:cover;flex:none}.rcard b{font-size:12px;display:block;line-height:1.2}.rcard small{font-size:11px;color:var(--mut)}
+/* ================= DETAIL PAGE ================= */
+.dgrid{display:grid;gap:26px;margin-top:16px}
+.gal-main{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;background:var(--sand);cursor:zoom-in;touch-action:pan-y;box-shadow:var(--sh)}
+.gal-main img{width:100%;height:100%;object-fit:cover;transition:opacity .35s}
+.gnav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);font-size:24px;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.gnav.prev{left:10px}.gnav.next{right:10px}
+.gct{position:absolute;left:12px;bottom:12px;background:rgba(15,23,42,.75);color:#fff;font-size:11px;padding:4px 12px;border-radius:99px}
+.thumbs{display:flex;gap:10px;margin-top:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.thumbs button{flex:0 0 84px;height:64px;border-radius:14px;overflow:hidden;border:2.5px solid transparent;opacity:.7;transition:.2s}
+.thumbs button.on{border-color:var(--gold);opacity:1}.thumbs img{width:100%;height:100%;object-fit:cover}
+.locb{display:inline-block;background:var(--navy);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.08em;padding:6px 14px;border-radius:99px}
+.dname{font-size:clamp(30px,6vw,46px);line-height:1.05;font-weight:900;margin:12px 0 8px}
+.dmeta{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:13px;color:#475569}.dot{color:#cbd5e1}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:18px 0 8px}
+.dprice{font-size:clamp(34px,6vw,46px);font-weight:900;margin:16px 0 4px;font-family:"Playfair Display",serif}.dprice small{font-size:14px;font-weight:400;font-family:Poppins,sans-serif;color:var(--mut)}
+.dcta{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.dcta .big{flex:1 1 220px}
+.dsec{margin-top:28px}.dsec h3{font-size:20px;margin-bottom:12px;font-weight:700}
+.amen{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.am{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center;font-size:12px;font-weight:600;box-shadow:var(--sh)}.am i{display:block;font-size:22px;font-style:normal;margin-bottom:4px}
+.desc{white-space:pre-line;font-size:14px;color:#334155;line-height:1.7}
+.rev{padding:14px 0;border-bottom:1px solid var(--sand)}.rev p{font-size:13px;margin-top:4px}.rev small{color:var(--mut);font-size:11px}
+.cbox{background:#fff;border:1.5px dashed var(--gold);border-radius:var(--r);padding:20px}
+.cbox .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.scta{position:fixed;left:0;right:0;bottom:0;z-index:61;display:none;align-items:center;gap:12px;background:#fff;padding:10px 16px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.12)}
+.scta b{font-size:18px;display:block;line-height:1.1}.scta small{font-size:10px;color:var(--mut)}.scta .btn{flex:1}
+body.on-detail .scta{display:flex}body.on-detail .bnav{display:none}
+/* ================= PEOPLE CARDS / PAGES ================= */
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin:28px 0 18px}
+.page-head h2{font-size:clamp(28px,6vw,40px);font-weight:900;line-height:1.05}.page-head p{font-size:13px;color:var(--mut);max-width:520px;margin-top:6px}
+.mini{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}.mini .field{width:auto;flex:1 1 150px;min-width:0}
+.sub-h{font-size:18px;font-weight:700;margin:26px 0 12px}
+.pc{padding:18px;gap:10px}
+.pc-h{display:flex;gap:12px;align-items:center;padding-right:44px}
+.av{width:44px;height:44px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700;flex:none}
+.pc-h b{display:block;line-height:1.2}.pc-h small{font-size:11px;color:var(--mut)}
+.pc .ln{font-size:13px;color:#334155}.pc .vib{display:flex;flex-wrap:wrap;gap:6px}
+.pc .vib span{font-size:10px;background:var(--cream);border:1px solid var(--sand);border-radius:99px;padding:3px 10px;font-weight:600}
+.cmpw{overflow-x:auto;background:#fff;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--line)}
+.cmp{border-collapse:collapse;min-width:640px;width:100%}
+.cmp th,.cmp td{padding:14px;border-bottom:1px solid var(--sand);text-align:center;vertical-align:middle;font-size:13px}
+.cmp th{text-align:left;color:var(--mut);font-weight:600;position:sticky;left:0;background:#fff;min-width:100px}
+.cmp img{width:140px;height:96px;object-fit:cover;border-radius:14px;margin:0 auto 8px}.cmp .yes{color:#15803d}.cmp .no{color:#b91c1c}
+/* ================= MODALS / FORMS / TOAST ================= */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.sheet{background:var(--cream);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;animation:sheet .3s ease both;box-shadow:var(--sh2)}
+@keyframes sheet{from{opacity:0;transform:translateY(30px)}}
+.sheet-h{position:sticky;top:0;background:var(--cream);display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--sand);z-index:1}
+.sheet-b{padding:18px}
+.fl{display:block;margin-top:12px;font-size:12px;font-weight:600}.fl .field{margin-top:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note{font-size:11px;color:var(--mut);margin-top:12px}.err{color:#b91c1c;font-size:12px;margin-top:8px;min-height:0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.lb{position:fixed;inset:0;background:rgba(15,23,42,.94);z-index:120;display:none;align-items:center;justify-content:center;overflow:hidden}.lb.open{display:flex}
+.lb img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .25s;cursor:zoom-in}.lb img.z{transform:scale(2.2);cursor:zoom-out}
+.lbx{position:absolute;top:14px;right:14px;z-index:2}
+.toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,16px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:200;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+footer{margin-top:50px;padding:28px 16px;text-align:center;font-size:11px;color:var(--mut)}
+.view.in{animation:viewIn .35s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(14px)}}
+/* ================= RESPONSIVE ================= */
+@media(min-width:700px){.wrap{padding:0 32px}.modal{align-items:center;padding:16px}.sheet{border-radius:28px}.hero{padding:40px}.mapbox{height:340px}}
+@media(min-width:900px){
+ .nav{padding:12px 32px}.tabs{display:flex}.bnav{display:none}body{padding-bottom:0}.toast{bottom:28px}
+ .hero{grid-template-columns:1fr 1fr;align-items:center}.mapbox{height:380px}
+ .dgrid{grid-template-columns:1.1fr 1fr;align-items:start;gap:40px}.gal{position:sticky;top:84px}
+ body.on-detail .scta{display:none}
+}
+@media(min-width:1000px){.layout{grid-template-columns:270px 1fr;align-items:start}.filters{display:block;position:sticky;top:84px}.ftoggle{display:none}}
+@media(max-width:380px){.brand small{display:none}.nav-r .btn{padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}img.fade{opacity:1}}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<!-- VERY VISIBLE INSTALL APP BANNER - TOP -->
-<div id="pwaBanner" class="bg-[#0f172a] text-white px-4 py-2 flex justify-between items-center text-[12px] sticky top-0 z-[100]">
-<div class="flex items-center gap-2">📲 <span class="font-bold">Install MyCampusCrib App for FREE - Works Offline!</span> <span class="hidden md:inline text-white/60">— World Best PWA</span></div>
-<button id="installBtnTop" class="bg-[#c9a86a] text-white px-5 py-2 rounded-full font-black text-[11px] install-pulse">INSTALL APP NOW</button>
-</div>
+<!-- ============ NAV (the ONLY place the Install button lives) ============ -->
+<header class="nav">
+ <a class="brand" href="#/"><span class="logo">MCC</span><span><b class="pf">MyCampusCrib<i>.Luxury</i></b><small>WORLD BEST • UCC</small></span></a>
+ <nav class="tabs" aria-label="Main">
+  <a href="#/" data-tab="home">Hostels</a>
+  <a href="#/roommates" data-tab="roommates">Roommates</a>
+  <a href="#/need" data-tab="need">I Need Hostel</a>
+  <a href="#/saved" data-tab="saved">Saved<em class="badge" data-count="saved"></em></a>
+  <a href="#/compare" data-tab="compare">Compare<em class="badge" data-count="cmp"></em></a>
+ </nav>
+ <div class="nav-r">
+  <button id="installBtn" class="btn inst" hidden>📲 Install App</button>
+  <a class="btn gold" href="manager-login.html">+ List Hostel</a>
+ </div>
+</header>
 
-<nav class="sticky top-[40px] z-50 backdrop-blur-xl bg-white/80 border-b border-[#F2E8D5] px-4 md:px-8 py-3 flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-[#0f172a] rounded-full flex items-center justify-center text-[#c9a86a] font-bold text-xs">MCC</div>
-<div>
-<h1 class="playfair font-black text-[17px] leading-none">MyCampusCrib<span class="text-[#c9a86a]">.Luxury</span></h1>
-<p class="text-[8px] tracking-[0.3em] text-slate-400">WORLD BEST • UCC</p>
-</div>
-</div>
-<div class="flex gap-2 items-center">
-<button id="installBtn" class="bg-[#0f172a] text-white border-2 border-[#c9a86a] px-5 py-2.5 rounded-full font-bold text-[11px] install-pulse">📲 Install App</button>
-<a href="manager-login.html" class="bg-[#c9a86a] text-white text-[11px] px-5 py-2.5 rounded-full font-bold shadow">+ List Hostel</a>
-</div>
+<main id="main">
+<!-- ============ HOME ============ -->
+<section id="v-home" class="view in">
+ <div class="wrap">
+  <div class="hero">
+   <div>
+    <div class="eyebrow">✦ ADMIN APPROVED ONLY • REAL LOCATIONS • DIRECT WHATSAPP</div>
+    <h2 class="pf">Luxury<br><span>Student</span><br>Cribs in<br>Cape Coast</h2>
+    <p class="sub">Only verified hostels. Real Google Map. MCC-XXXX tracking. Message the caretaker straight on WhatsApp.</p>
+    <div class="sbox"><label class="in"><span aria-hidden="true">⌕</span><input class="q-in" id="search" type="search" placeholder="Try: Self contain Amamoma under 4000" aria-label="Search hostels" autocomplete="off"></label><button class="btn dark" data-a="search">Search</button></div>
+    <div class="qcs">
+     <button class="qc w" data-a="qc" data-v="">All Verified</button>
+     <button class="qc" data-a="qc" data-v="Amamoma">Amamoma</button>
+     <button class="qc" data-a="qc" data-v="Kwaprow">Kwaprow</button>
+     <button class="qc" data-a="qc" data-v="Ayensu">Ayensu</button>
+     <button class="qc g" data-a="qc" data-v="Self Contain">Self Contain</button>
+    </div>
+   </div>
+   <div class="mapcard">
+    <div class="map-h"><b>📍 Real Google Map Location</b><span id="mapLabel">Cape Coast, UCC</span></div>
+    <div class="mapbox" id="mapBox"><button class="maplo" data-a="map" data-place="University of Cape Coast Ghana">📍 Tap to load the map<small>Saves your data until you need it</small></button></div>
+    <div class="map-f"><span class="pillx"><b id="count">0</b> Verified Hostels</span></div>
+   </div>
+  </div>
+ </div>
+ <div class="mq" aria-hidden="true"><div><span>Admin-approved hostels<b>✦</b>Direct WhatsApp to caretakers<b>✦</b>Real locations<b>✦</b>Compare up to 3<b>✦</b>Save your favourites<b>✦</b>Find a roommate<b>✦</b>Post what you need<b>✦</b></span><span>Admin-approved hostels<b>✦</b>Direct WhatsApp to caretakers<b>✦</b>Real locations<b>✦</b>Compare up to 3<b>✦</b>Save your favourites<b>✦</b>Find a roommate<b>✦</b>Post what you need<b>✦</b></span></div></div>
+ <div class="wrap">
+  <div id="recentBox"></div>
+  <div class="listhead">
+   <div><h3 class="pf">Verified Luxury Cribs</h3><p class="found" id="found">Loading hostels…</p></div>
+   <div class="lh-r"><button class="btn line ftoggle" data-a="ftoggle">⚙ Filters</button>
+    <select class="field" id="sort" aria-label="Sort hostels"><option value="new">Newest</option><option value="cheap">Cheapest</option><option value="rated">Highest rated</option><option value="views">Most viewed</option></select></div>
+  </div>
+  <div class="layout">
+   <aside class="filters" id="filters" aria-label="Filters">
+    <div class="fhead"><b>Filters</b><button class="link" data-a="reset">Reset all</button></div>
+    <div class="fgrp"><label class="t" for="search2">Search</label><input class="field q-in" id="search2" type="search" placeholder="Name, area, type…" autocomplete="off"></div>
+    <div class="fgrp"><label class="t" for="fPrice">Max price: <b id="fPriceV">Any</b></label><input id="fPrice" type="range" min="0" max="5000" step="100" value="5000"></div>
+    <div class="fgrp"><label class="t" for="fLoc">Location</label><select class="field" id="fLoc"><option value="">All locations</option></select></div>
+    <div class="fgrp"><label class="t" for="fGender">Gender</label><select class="field" id="fGender"><option value="">Any</option><option value="male">Male</option><option value="female">Female</option><option value="mixed">Mixed</option></select></div>
+    <div class="fgrp"><span class="t">Amenities</span><div class="checks" id="fAmen">
+     <label class="chk"><input type="checkbox" value="wifi"><span>WiFi</span></label>
+     <label class="chk"><input type="checkbox" value="water"><span>Water</span></label>
+     <label class="chk"><input type="checkbox" value="kitchen"><span>Kitchen</span></label>
+     <label class="chk"><input type="checkbox" value="selfcontained"><span>Self-Contained</span></label></div></div>
+    <div class="fgrp"><div class="checks"><label class="chk"><input type="checkbox" id="fAvail"><span>Available now</span></label></div></div>
+   </aside>
+   <div><div id="hostels" class="grid"></div><div id="moreBox" class="center" style="margin-top:20px"></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ HOSTEL DETAIL ============ -->
+<section id="v-detail" class="view" hidden><div class="wrap"><div id="detailBox" style="padding-top:18px"></div></div></section>
+
+<!-- ============ ROOMMATES ============ -->
+<section id="v-roommates" class="view" hidden><div class="wrap">
+ <div class="page-head"><div><h2 class="pf">Find a Roommate</h2><p>Students looking for roommates. Every post comes from a real student.</p></div><button class="btn gold big" data-a="openform" data-kind="roommate">+ Post Request</button></div>
+ <div class="mini"><select class="field" id="rLoc" aria-label="Location"><option value="">All locations</option></select><select class="field" id="rGender" aria-label="Gender"><option value="">Any gender</option><option>Male</option><option>Female</option></select><input class="field" id="rBudget" type="number" min="0" placeholder="Max budget (GH₵)" aria-label="Max budget"><span class="found" id="rCount"></span></div>
+ <div id="rList" class="grid"></div>
+</div></section>
+
+<!-- ============ I NEED A HOSTEL ============ -->
+<section id="v-need" class="view" hidden><div class="wrap">
+ <div class="page-head"><div><h2 class="pf">I Need a Hostel</h2><p>Students post what they are looking for. Managers can reply straight on WhatsApp.</p></div><button class="btn gold big" data-a="openform" data-kind="need">+ Post What I Need</button></div>
+ <div class="mini"><select class="field" id="nLoc" aria-label="Location"><option value="">All locations</option></select><select class="field" id="nRoom" aria-label="Room type"><option value="">Any room type</option><option>Self-Contain</option><option>2-in-Room</option><option>4-in-Room</option><option>Any</option></select><input class="field" id="nBudget" type="number" min="0" placeholder="Min budget (GH₵)" aria-label="Minimum budget"><span class="found" id="nCount"></span></div>
+ <div id="nList" class="grid"></div>
+</div></section>
+
+<!-- ============ SAVED ============ -->
+<section id="v-saved" class="view" hidden><div class="wrap">
+ <div class="page-head"><div><h2 class="pf">Saved</h2><p>Your saved hostels and roommates.</p></div></div>
+ <h3 class="sub-h">Saved hostels</h3><div id="savedH" class="grid"></div>
+ <h3 class="sub-h">Saved roommates</h3><div id="savedR" class="grid"></div>
+</div></section>
+
+<!-- ============ COMPARE ============ -->
+<section id="v-compare" class="view" hidden><div class="wrap">
+ <div class="page-head"><div><h2 class="pf">Compare Hostels</h2><p>Side by side, up to 3 hostels.</p></div></div>
+ <div id="cmpBox"></div>
+</div></section>
+</main>
+
+<footer>© MyCampusCrib · Cape Coast · Only admin-approved hostels are listed.</footer>
+
+<nav class="bnav" aria-label="Main">
+ <a href="#/" data-tab="home"><span>🏠</span>Hostels</a>
+ <a href="#/roommates" data-tab="roommates"><span>🤝</span>Roommates</a>
+ <a href="#/need" data-tab="need"><span>🔎</span>Need</a>
+ <a href="#/saved" data-tab="saved"><span>♥</span>Saved<em class="badge" data-count="saved"></em></a>
+ <a href="#/compare" data-tab="compare"><span>⇄</span>Compare<em class="badge" data-count="cmp"></em></a>
 </nav>
+<div id="stickyCta" class="scta"></div>
 
-<!-- FLOATING INSTALL CARD - VERY SEEN ON MOBILE -->
-<div id="floatingInstall" class="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-[360px] bg-white rounded-[20px] p-4 card-shadow border-2 border-[#c9a86a] z-[90] flex gap-3 items-center">
-<div class="w-12 h-12 bg-[#0f172a] rounded-full flex items-center justify-center text-[#c9a86a] font-bold">MCC</div>
-<div class="flex-1">
-<p class="font-bold text-[13px]">Install MCC Luxury App</p>
-<p class="text-[10px] text-slate-500">Get real map + offline + faster</p>
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+ <div class="sheet"><div class="sheet-h"><b class="pf" id="mTitle">Details</b><button class="btn line" data-a="close">Close</button></div><div class="sheet-b" id="modalBody"></div></div>
 </div>
-<button id="installBtnFloat" class="bg-[#0f172a] text-white px-5 py-2.5 rounded-full text-[11px] font-bold">Install</button>
-<button onclick="document.getElementById('floatingInstall').style.display='none'" class="text-slate-400 text-xs px-2">✕</button>
-</div>
-
-<div class="max-w-[1280px] mx-auto px-4 md:px-8 mt-6">
-<div class="bg-[#0f172a] rounded-[32px] p-6 md:p-10 relative overflow-hidden">
-<div class="absolute top-0 right-0 w-[600px] h-[600px] bg-[radial-gradient(circle,#c9a86a33_0%,transparent_70%)]"></div>
-<div class="relative z-10 grid md:grid-cols-2 gap-8 items-center">
-<div>
-<div class="inline-flex gap-2 items-center bg-white/[0.07] border border-white/10 px-4 py-1.5 rounded-full text-[10px] text-[#c9a86a]">✦ ADMIN APPROVED ONLY • PWA INSTALLABLE • WORLD BEST</div>
-<h2 class="playfair text-[38px] md:text-[56px] font-black text-white leading-[0.95] mt-4">Luxury<br><span class="text-[#c9a86a]">Student</span><br>Cribs in<br>Cape Coast</h2>
-<p class="text-white/50 text-[13px] mt-4 max-w-[380px]">Only verified hostels. Real Google Map. MCC-XXXX tracking. Install App button is now VERY visible!</p>
-<div class="bg-white rounded-[20px] p-2 mt-6 flex items-center shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
-<div class="bg-[#FFFBF5] rounded-[14px] px-4 py-3 flex items-center gap-2 flex-1">
-<span class="text-slate-400">⌕</span>
-<input id="search" onkeyup="filterHostels()" placeholder="AI search: Self contain Amamoma under 4000" class="bg-transparent outline-none w-full text-[13px]">
-</div>
-<button onclick="filterHostels()" class="bg-[#0f172a] text-white px-6 py-3 rounded-[14px] text-xs font-bold ml-2">Search</button>
-</div>
-<div class="flex gap-2 mt-4 flex-wrap">
-<button onclick="quick('')" class="bg-white text-[#0f172a] px-4 py-2 rounded-full text-[11px] font-bold">All Verified</button>
-<button onclick="quick('Amamoma')" class="bg-white/10 text-white border border-white/10 px-4 py-2 rounded-full text-[11px]">Amamoma</button>
-<button onclick="quick('Kwaprow')" class="bg-white/10 text-white border border-white/10 px-4 py-2 rounded-full text-[11px]">Kwaprow</button>
-<button onclick="quick('Ayensu')" class="bg-white/10 text-white border border-white/10 px-4 py-2 rounded-full text-[11px]">Ayensu</button>
-<button onclick="quick('Self Contain')" class="bg-[#c9a86a]/20 text-[#c9a86a] border border-[#c9a86a]/20 px-4 py-2 rounded-full text-[11px]">Self Contain</button>
-</div>
-</div>
-<div class="bg-[#FFFBF5] rounded-[24px] p-3 card-shadow">
-<div class="flex justify-between items-center px-2 pb-2">
-<p class="font-bold text-xs">📍 Real Google Map Location</p>
-<p class="text-[10px] text-slate-400" id="mapLabel">Cape Coast, UCC</p>
-</div>
-<iframe id="realMap" class="w-full h-[320px] md:h-[380px] rounded-[18px] border-0" src="https://www.google.com/maps?q=University+of+Cape+Coast+Ghana&z=14&output=embed" loading="lazy"></iframe>
-<div class="flex gap-2 mt-3">
-<div class="bg-[#0f172a] text-white rounded-full px-3 py-1.5 text-[10px]"><span id="count">0</span> Verified Hostels</div>
-<div class="bg-green-50 text-green-700 rounded-full px-3 py-1.5 text-[10px]">Live + PWA ✅</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="max-w-[1280px] mx-auto px-4 md:px-8 mt-10 pb-24">
-<div class="flex justify-between items-end"><h3 class="playfair text-2xl font-bold">Verified Luxury Cribs</h3><p class="text-[11px] text-slate-400">Pending hidden until CEO approves</p></div>
-<div id="hostels" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6"><p class="text-xs text-slate-400">Loading world best hostels...</p></div>
-</div>
-</div>
-
-<div id="modal" class="fixed inset-0 bg-[#0f172a]/60 backdrop-blur-md hidden items-center justify-center p-4 z-[100]">
-<div class="bg-[#FFFBF5] rounded-[28px] max-w-[520px] w-full max-h-[90vh] overflow-hidden flex flex-col card-shadow">
-<div class="p-4 flex justify-between items-center border-b border-[#F2E8D5]"><p class="playfair font-bold">Crib Details</p><button onclick="closeModal()" class="bg-white border px-4 py-1.5 rounded-full text-xs">Close</button></div>
-<div id="modalContent" class="overflow-y-auto p-5"></div>
-</div>
-</div>
+<div id="lb" class="lb" role="dialog" aria-modal="true" aria-label="Photo viewer"><button class="btn line lbx" data-a="lbclose">✕ Close</button><img id="lbImg" alt=""></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<datalist id="locList"></datalist>
 
 <script type="module">
-import { db } from "./firebase.js";
-import { collection, getDocs, addDoc, serverTimestamp, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-let allHostels=[];
+import * as FB from "./firebase.js";
+import { collection,getDocs,addDoc,serverTimestamp,query,where,orderBy,limit,doc,getDoc,setDoc,updateDoc,deleteDoc,increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const db=FB.db;
+
+/* ================= HELPERS ================= */
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+const num=v=>{if(v===null||v===undefined||v==='')return null;const c=String(v).replace(/[^\d.]/g,'');if(c==='')return null;const n=Number(c);return Number.isFinite(n)?n:null};
+const money=n=>'GH₵'+Number(n).toLocaleString('en-GH');
+const ms=t=>t?(t.toMillis?t.toMillis():t.seconds?t.seconds*1000:typeof t==='number'?t:0):0;
+const ago=m=>{if(!m)return'';const s=(Date.now()-m)/1e3;if(s<60)return'just now';const mi=s/60;if(mi<60)return Math.floor(mi)+' min ago';const h=mi/60;if(h<24)return Math.floor(h)+' hr ago';const d=h/24;if(d<30)return Math.floor(d)+' day'+(d>=2?'s':'')+' ago';return new Date(m).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})};
+const LS={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const safeUrl=u=>{u=String(u||'').trim();return /^(https:\/\/|data:image\/)/i.test(u)?u:''};
+const PH='data:image/svg+xml;utf8,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#F2E8D5'/><text x='50%' y='50%' text-anchor='middle' fill='#0f172a' font-family='sans-serif' font-size='22' opacity='.5'>No photo yet</text></svg>");
+const SK='<div class="sk"></div>';
+const emptyHTML=(t,s,extra='')=>`<div class="empty"><h4 class="pf">${esc(t)}</h4><p>${esc(s)}</p>${extra}</div>`;
+const normPhone=p=>{let s=String(p||'').replace(/\D/g,'');if(s.startsWith('00'))s=s.slice(2);if(s.startsWith('0'))s='233'+s.slice(1);else if(s.length===9)s='233'+s;return s};
+const validPhone=s=>/^\d{10,15}$/.test(s);
+const shareUrl=id=>location.href.split('#')[0]+'#/hostel/'+id;
+const vid=()=>{let v=localStorage.getItem('mcc_vid');if(!v){v=crypto.randomUUID?crypto.randomUUID():Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('mcc_vid',v)}return v};
+let toastT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2200)};
+/* image fade-in + broken image fallback (no external placeholder service) */
+document.addEventListener('load',e=>{if(e.target.tagName==='IMG')e.target.classList.add('ld')},true);
+document.addEventListener('error',e=>{const i=e.target;if(i.tagName==='IMG'&&!i.dataset.fb){i.dataset.fb='1';i.src=PH}},true);
+
+/* ================= HOSTEL DATA HELPERS (work with whatever fields exist) ================= */
+const BASE_LOCS=['Amamoma','Ayensu','Kwaprow','3rd Gate'];
+const AM={wifi:['WiFi','📶'],water:['Water','💧'],kitchen:['Kitchen','🍳'],light:['Light','💡'],security:['Security','🛡️'],selfcontained:['Self-Contained','🚿']};
+const price0=h=>num(h.price);
+const gallery=h=>{const a=Array.isArray(h.images)?h.images:h.image?[h.image]:[];return a.map(safeUrl).filter(Boolean)};
+const roomOpts=h=>{if(Array.isArray(h.roomTypes)&&h.roomTypes.length)return h.roomTypes.map(r=>typeof r==='string'?{type:r}:{type:String(r.type||r.name||''),price:num(r.price),sem:num(r.priceSemester??r.semester)}).filter(r=>r.type);return h.type?[{type:String(h.type)}]:[]};
+const typeText=h=>roomOpts(h).map(r=>r.type).join(' / ');
+const genders=h=>{const g=Array.isArray(h.gender)?h.gender:h.gender?[h.gender]:[];return g.map(x=>String(x).toLowerCase()).filter(x=>['male','female','mixed'].includes(x))};
+function amenInfo(h){return Array.isArray(h.amenities)||typeof h.amenities==='string'||Object.keys(AM).some(k=>typeof h[k]==='boolean')||typeof h.selfContained==='boolean'}
+function amen(h){const s=new Set();const a=Array.isArray(h.amenities)?h.amenities:typeof h.amenities==='string'?h.amenities.split(','):[];
+ a.forEach(x=>{const k=String(x).toLowerCase().replace(/[^a-z]/g,'');if(/wifi|internet/.test(k))s.add('wifi');else if(/water/.test(k))s.add('water');else if(/kitchen|cook/.test(k))s.add('kitchen');else if(/light|electric|power/.test(k))s.add('light');else if(/secur|cctv|guard/.test(k))s.add('security');else if(/selfcontain|selfcontained|ensuite/.test(k))s.add('selfcontained')});
+ Object.keys(AM).forEach(k=>{if(h[k]===true)s.add(k)});if(h.selfContained===true)s.add('selfcontained');
+ if(/self[\s-]?contain/i.test(typeText(h)))s.add('selfcontained');return s}
+const isAvail=h=>!(num(h.roomsLeft)===0||h.available===false);
+
+/* ================= STATE ================= */
+let H=[],LOADED=false,LOADERR=false,PMAX=5000;
+const REVS={};let cur='',navCount=0,DS={id:'',ri:0,stay:'year',gi:0,waiting:false},shown=12,lastFocus=null;
+const F={q:'',loc:'',gender:'',max:null,amen:new Set(),avail:false,sort:'new'};
+let UID='guest';const SAVED={h:new Set(),r:new Set()};let CMP=LS.get('mcc_cmp',[]);
+let ROOM=[],NEED=[],RL=false,NL=false,ROOMERR=false,NEEDERR=false;const MINE=LS.get('mcc_mine',{r:[],n:[]});
+const rate=id=>{const a=REVS[id];if(!a||!a.length)return null;return{avg:a.reduce((t,r)=>t+r.rating,0)/a.length,n:a.length}};
+function loadSaved(){SAVED.h=new Set(LS.get('mcc_sh_'+UID,[]));SAVED.r=new Set(LS.get('mcc_sr_'+UID,[]))}
+function persistSaved(){LS.set('mcc_sh_'+UID,[...SAVED.h]);LS.set('mcc_sr_'+UID,[...SAVED.r]);if(UID!=='guest')setDoc(doc(db,'favourites',UID),{hostels:[...SAVED.h],roommates:[...SAVED.r],updatedAt:serverTimestamp()},{merge:true}).catch(()=>{})}
+loadSaved();
+/* Saved items follow the logged-in user if firebase.js exports `auth`; otherwise they stay on this device */
+(async()=>{if(!FB.auth)return;try{const {onAuthStateChanged}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+ onAuthStateChanged(FB.auth,async u=>{UID=u?u.uid:'guest';loadSaved();
+  if(u){try{const s=await getDoc(doc(db,'favourites',UID));if(s.exists()){const d=s.data();(d.hostels||[]).forEach(x=>SAVED.h.add(x));(d.roommates||[]).forEach(x=>SAVED.r.add(x));LS.set('mcc_sh_'+UID,[...SAVED.h]);LS.set('mcc_sr_'+UID,[...SAVED.r])}}catch{}}
+  syncBtns();renderCurrent()})}catch{}})();
+
+/* ================= LOAD FROM FIREBASE ================= */
 async function loadHostels(){
-  try{
-    const q = query(collection(db,"hostels"), where("status","==","approved"), orderBy("createdAt","desc"));
-    const snap=await getDocs(q); parseSnap(snap);
-  }catch(e){
-    const snap2=await getDocs(collection(db,"hostels")); parseSnap(snap2, true);
-  }
-}
-function parseSnap(snap, filterJS=false){
-  allHostels=[]; snap.forEach(d=>{ const data={id:d.id, ...d.data()}; if(filterJS && data.status!=="approved") return; allHostels.push(data); });
-  document.getElementById('count').innerText=allHostels.length; render(allHostels);
-}
-function render(list){
-  const box=document.getElementById('hostels');
-  if(list.length===0){ box.innerHTML=`<div class="col-span-3 bg-white rounded-[24px] p-12 text-center card-shadow"><p class="playfair text-2xl font-bold">No approved cribs yet</p><p class="text-xs text-slate-400 mt-2">CEO has not approved any pending hostels.</p></div>`; return; }
-  box.innerHTML=""; list.forEach(h=>{
-    box.innerHTML+=`<div class="group bg-white rounded-[24px] overflow-hidden card-shadow border border-[#F6F1E8] cursor-pointer" onclick="openModal('${h.id}'); updateRealMap('${h.location} ${h.name}')">
-    <div class="relative overflow-hidden"><img src="${h.images?.[0]||'https://via.placeholder.com/600x400?text=Luxury+Crib'}" class="w-full h-[240px] object-cover group-hover:scale-105 transition duration-700"><div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold shadow">${h.location}</div><div class="absolute top-4 right-4 bg-[#0f172a] text-white px-3 py-1 rounded-full text-[10px]">GH₵${h.price}</div><div class="absolute bottom-4 left-4 bg-[#c9a86a] text-white px-3 py-1 rounded-full text-[9px] tracking-widest">VERIFIED • MCC</div></div>
-    <div class="p-5"><div class="flex justify-between items-start"><h3 class="playfair font-bold text-[16px] leading-tight">${h.name}</h3><span class="text-[10px] bg-[#FFFBF5] border px-2 py-1 rounded-full">${h.type||''}</span></div><p class="text-[11px] text-slate-500 mt-1">${h.beds||1} beds • Real location on map</p><div class="flex gap-2 mt-4"><button class="flex-1 bg-[#0f172a] text-white py-2.5 rounded-full text-[11px] font-bold">View Details</button><button class="bg-[#25D366]/10 text-[#25D366] px-4 py-2.5 rounded-full text-[11px] font-bold">WhatsApp</button></div></div></div>`;
-  });
-}
-window.updateRealMap = function(place){ const q=encodeURIComponent(place+" Cape Coast Ghana"); document.getElementById('realMap').src=`https://www.google.com/maps?q=${q}&z=16&output=embed`; document.getElementById('mapLabel').innerText=place; }
-window.filterHostels = function(){ const s=document.getElementById('search').value.toLowerCase(); const f=allHostels.filter(h=> (h.name+" "+h.location+" "+h.type+" "+h.price).toLowerCase().includes(s)); render(f); }
-window.quick = function(t){ document.getElementById('search').value=t; filterHostels(); if(t) updateRealMap(t); }
-window.openModal = function(id){
-  const h=allHostels.find(x=>x.id===id); if(!h) return;
-  const c=document.getElementById('modalContent');
-  c.innerHTML=`<img src="${h.images?.[0]||''}" class="w-full h-[300px] object-cover rounded-[20px]"><h2 class="playfair font-black text-[22px] mt-4">${h.name}</h2><p class="text-xs text-slate-500">${h.location} • ${h.type} • ${h.beds} beds • Verified</p><p class="text-[13px] mt-3 leading-relaxed text-slate-700">${h.description||''}</p><div class="bg-white border rounded-[16px] p-3 mt-4"><p class="text-[10px] font-bold">REAL GOOGLE MAP LOCATION</p><iframe class="w-full h-[200px] rounded-xl mt-2 border-0" src="https://www.google.com/maps?q=${encodeURIComponent(h.location+' '+h.name+' Cape Coast Ghana')}&z=16&output=embed"></iframe></div><p class="playfair font-black text-2xl mt-4">GH₵${h.price}<span class="text-xs font-normal">/year</span></p><div class="grid grid-cols-3 gap-2 mt-3">${(h.images||[]).map(u=>`<img src="${u}" class="h-24 object-cover rounded-xl">`).join('')}</div><button onclick="contactManager('${h.id}')" class="w-full bg-[#25D366] text-white p-4 rounded-full font-bold mt-6 shadow-[0_12px_30px_rgba(37,211,102,0.35)]">WhatsApp Manager + Get MCC-XXXX CODE</button>`;
-  document.getElementById('modal').classList.remove('hidden'); document.getElementById('modal').classList.add('flex');
-}
-window.closeModal = function(){ document.getElementById('modal').classList.add('hidden'); }
-window.contactManager = async function(id){
-  const h=allHostels.find(x=>x.id===id); const code=`MCC-${Math.floor(1000+Math.random()*9000)}`;
-  try{ await addDoc(collection(db,"inquiries"),{code,hostelId:h.id,hostelName:h.name,managerEmail:h.managerEmail,managerPhone:h.managerPhone,status:"new",createdAt:serverTimestamp()}); }catch(e){}
-  let phone=(h.managerPhone||'').replace(/\D/g,''); if(phone.startsWith('0')) phone='233'+phone.substring(1);
-  const text=`Hi, I saw *${h.name}* on MyCampusCrib Luxury. Location: ${h.location}. Price: GH₵${h.price}.%0A%0AMy Inquiry Code: *${code}*%0A%0AIs it still available?`;
-  window.open(`https://wa.me/${phone}?text=${text}`,'_blank');
-}
-loadHostels();
+ try{const s=await getDocs(query(collection(db,'hostels'),where('status','==','approved'),orderBy('createdAt','desc')));H=s.docs.map(d=>({id:d.id,...d.data()}))}
+ catch(e){try{const s=await getDocs(query(collection(db,'hostels'),where('status','==','approved')));H=s.docs.map(d=>({id:d.id,...d.data()})).filter(h=>h.status==='approved').sort((a,b)=>ms(b.createdAt)-ms(a.createdAt))}catch(e2){LOADERR=true;H=[]}}
+ LOADED=true;CMP=CMP.filter(id=>H.some(h=>h.id===id));LS.set('mcc_cmp',CMP);
+ setupFilters();renderCurrent();loadAllReviews()}
+async function loadAllReviews(){try{const s=await getDocs(query(collection(db,'reviews'),limit(500)));const m={};s.docs.forEach(d=>{const r=cleanReview(d);(m[r.hostelId]=m[r.hostelId]||[]).push(r)});Object.keys(m).forEach(k=>{if(k!==DS.id||!REVS[k])REVS[k]=m[k].sort((a,b)=>b.createdAt-a.createdAt)});renderCurrent()}catch{}}
+const cleanReview=d=>{const x=d.data();return{id:d.id,hostelId:String(x.hostelId||''),name:String(x.name||'Student').slice(0,40),rating:Math.min(5,Math.max(1,Math.round(Number(x.rating))||1)),text:String(x.text||'').slice(0,300),createdAt:ms(x.createdAt)}};
+async function fetchCol(name){const map=s=>s.docs.map(d=>({id:d.id,...d.data(),createdAt:ms(d.data().createdAt)}));
+ try{return map(await getDocs(query(collection(db,name),orderBy('createdAt','desc'),limit(100))))}
+ catch(e){try{return map(await getDocs(query(collection(db,name),limit(100)))).sort((a,b)=>b.createdAt-a.createdAt)}catch(e2){return null}}}
+
+/* ================= ROUTER ================= */
+const VIEWS=['home','detail','roommates','need','saved','compare'];let scrollPos={};
+function route(){
+ const parts=location.hash.replace(/^#\/?/,'').split('/'),p=parts[0]||'';let arg='';try{arg=decodeURIComponent(parts[1]||'')}catch{}
+ let v='home';if(p==='hostel'&&arg)v='detail';else if(['roommates','need','saved','compare'].includes(p))v=p;
+ if(cur)scrollPos[cur]=scrollY;const prev=cur;cur=v;
+ VIEWS.forEach(x=>{const el=$('#v-'+x);el.hidden=x!==v;el.classList.remove('in')});
+ const el=$('#v-'+v);void el.offsetWidth;el.classList.add('in');
+ document.body.classList.toggle('on-detail',v==='detail');
+ $$('[data-tab]').forEach(a=>a.classList.toggle('on',a.dataset.tab===(v==='detail'?'home':v)));
+ document.title=({home:'MyCampusCrib - World Best Luxury Hostels',roommates:'Find a Roommate — MyCampusCrib',need:'I Need a Hostel — MyCampusCrib',saved:'Saved — MyCampusCrib',compare:'Compare Hostels — MyCampusCrib',detail:'Hostel — MyCampusCrib'})[v];
+ if(v==='home'){renderList();renderRecent()}
+ if(v==='detail')openDetail(arg);
+ if(v==='roommates')ensureRoommates();
+ if(v==='need')ensureNeeds();
+ if(v==='saved')renderSaved();
+ if(v==='compare')renderCompare();
+ scrollTo(0,v==='home'&&prev&&prev!=='home'?(scrollPos.home||0):0);updateCounts()}
+function renderCurrent(){updateCounts();
+ if(cur==='home'){renderList();renderRecent()}else if(cur==='detail'&&DS.waiting)openDetail(DS.id);else if(cur==='detail'){const h=H.find(x=>x.id===DS.id);if(h){renderTop(h);paintReviews(h)}}
+ else if(cur==='saved')renderSaved();else if(cur==='compare')renderCompare()}
+addEventListener('hashchange',()=>{navCount++;route()});
+
+/* ================= COUNTS / BUTTON SYNC ================= */
+function updateCounts(){const s=SAVED.h.size+SAVED.r.size;$$('[data-count=saved]').forEach(e=>e.textContent=s||'');$$('[data-count=cmp]').forEach(e=>e.textContent=CMP.length||'')}
+function syncBtns(){
+ $$('[data-a=save]').forEach(b=>{const on=SAVED.h.has(b.dataset.id);b.setAttribute('aria-pressed',on);if(b.dataset.lbl)b.textContent=on?'♥ Saved':'♡ Save'});
+ $$('[data-a=rsave]').forEach(b=>b.setAttribute('aria-pressed',SAVED.r.has(b.dataset.id)));
+ $$('[data-a=cmp]').forEach(b=>{const on=CMP.includes(b.dataset.id);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);if(b.dataset.lbl)b.textContent=on?'✓ In Compare':'⇄ Add to Compare'});
+ updateCounts()}
+function toggleSave(id,btn){const add=!SAVED.h.has(id);add?SAVED.h.add(id):SAVED.h.delete(id);persistSaved();syncBtns();toast(add?'Saved ✓':'Removed from saved');
+ if(btn&&add){btn.classList.remove('pop');void btn.offsetWidth;btn.classList.add('pop')}if(cur==='saved')renderSaved()}
+function toggleRSave(id,btn){const add=!SAVED.r.has(id);add?SAVED.r.add(id):SAVED.r.delete(id);persistSaved();syncBtns();toast(add?'Saved ✓':'Removed from saved');
+ if(btn&&add){btn.classList.remove('pop');void btn.offsetWidth;btn.classList.add('pop')}if(cur==='saved')renderSaved()}
+function toggleCmp(id){if(CMP.includes(id))CMP=CMP.filter(x=>x!==id);else if(CMP.length>=3){toast('You can compare up to 3 hostels');return}else CMP.push(id);LS.set('mcc_cmp',CMP);syncBtns();toast(CMP.includes(id)?'Added to compare ('+CMP.length+'/3)':'Removed from compare');if(cur==='compare')renderCompare()}
+
+/* ================= FILTERS + LIST ================= */
+function parseQ(q){q=norm(q);let cap=null;q=q.replace(/\b(?:under|below|less than|max|budget|within)\s*(?:ghc|gh|cedis)?\s*(\d+)/g,(m,n)=>{cap=+n;return' '});q=q.replace(/\b(?:ghc|gh|cedis)\b/g,' ');return{terms:q.split(/\s+/).filter(Boolean),cap}}
+function filtered(){
+ const {terms,cap}=parseQ(F.q),capAll=Math.min(F.max??Infinity,cap??Infinity);
+ const L=H.filter(h=>{const p=price0(h);
+  if(capAll!==Infinity&&(p==null||p>capAll))return false;
+  if(terms.length){const hay=norm([h.name,h.location,typeText(h),h.description,h.price,[...amen(h)].map(k=>AM[k][0]).join(' '),genders(h).join(' ')].join(' '));if(!terms.every(t=>hay.includes(t)))return false}
+  if(F.loc&&norm(h.location)!==norm(F.loc))return false;
+  if(F.gender&&!genders(h).includes(F.gender))return false;
+  if(F.amen.size){const a=amen(h);for(const k of F.amen)if(!a.has(k))return false}
+  if(F.avail&&!isAvail(h))return false;return true});
+ const by={cheap:(a,b)=>(price0(a)??1e12)-(price0(b)??1e12),new:(a,b)=>ms(b.createdAt)-ms(a.createdAt),rated:(a,b)=>(rate(b.id)?.avg||0)-(rate(a.id)?.avg||0)||(rate(b.id)?.n||0)-(rate(a.id)?.n||0),views:(a,b)=>(Number(b.views)||0)-(Number(a.views)||0)};
+ return L.sort(by[F.sort]||by.new)}
+function cardHTML(h){
+ const id=esc(h.id),g=gallery(h),p=price0(h),r=rate(h.id),rl=num(h.roomsLeft),v=Number(h.views)||0,sv=SAVED.h.has(h.id),cm=CMP.includes(h.id),t=typeText(h);
+ const meta=[];if(h.beds)meta.push(esc(h.beds)+' bed'+(Number(h.beds)===1?'':'s'));if(rl!=null)meta.push(rl>0?rl+' room'+(rl===1?'':'s')+' left':'Fully booked');meta.push('👁 '+v+' view'+(v===1?'':'s'));
+ return `<article class="card"><a class="cimg" href="#/hostel/${id}" aria-label="View ${esc(h.name)}"><img class="fade" src="${esc(g[0]||PH)}" alt="${esc(h.name)}" loading="lazy" decoding="async"><span class="pill loc">${esc(h.location||'Cape Coast')}</span>${p!=null?`<span class="pill price">${money(p)}</span>`:''}<span class="pill ver">✔ VERIFIED • MCC</span></a>
+ <button class="heart" data-a="save" data-id="${id}" aria-pressed="${sv}" aria-label="Save ${esc(h.name)}">♥</button>
+ <div class="cb"><div class="crow"><h3 class="pf"><a href="#/hostel/${id}">${esc(h.name)}</a></h3>${t?`<span class="chip">${esc(t)}</span>`:''}</div>
+ <p class="csub">${meta.join(' • ')}</p><div>${r?`<span class="stars">★ ${r.avg.toFixed(1)}</span> <span class="csub">(${r.n})</span>`:'<span class="csub">No reviews yet</span>'}</div>
+ <div class="acts"><a class="btn dark" href="#/hostel/${id}">View Details</a><button class="btn wa" data-a="wa" data-id="${id}">WhatsApp</button><button class="ib ${cm?'on':''}" data-a="cmp" data-id="${id}" aria-pressed="${cm}" aria-label="Compare ${esc(h.name)}" title="Compare">⇄</button></div></div></article>`}
+function renderList(anim){
+ const box=$('#hostels'),mb=$('#moreBox');
+ if(!LOADED){box.innerHTML=SK.repeat(6);$('#found').textContent='Loading hostels…';mb.innerHTML='';return}
+ if(LOADERR){box.innerHTML=emptyHTML('Could not load hostels','Check your internet connection and refresh the page.');$('#found').textContent='';mb.innerHTML='';return}
+ if(!H.length){box.innerHTML=emptyHTML('No hostels yet - check back soon','Approved hostels will appear here.');$('#found').textContent='0 hostels found';mb.innerHTML='';return}
+ const L=filtered();$('#found').textContent=L.length+' hostel'+(L.length===1?'':'s')+' found';
+ box.innerHTML=L.length?L.slice(0,shown).map(cardHTML).join(''):emptyHTML('No hostels match your filters','Try a higher price, another location or fewer amenities.','<button class="btn dark" data-a="reset">Reset filters</button>');
+ mb.innerHTML=L.length>shown?`<button class="btn line big" data-a="more">Show more (${L.length-shown})</button>`:'';
+ if(anim){box.classList.remove('swap');void box.offsetWidth;box.classList.add('swap')}}
+function renderRecent(){const b=$('#recentBox');if(!LOADED){b.innerHTML='';return}
+ const ids=LS.get('mcc_recent',[]).filter(id=>H.some(h=>h.id===id));if(!ids.length){b.innerHTML='';return}
+ b.innerHTML=`<div class="listhead" style="margin-bottom:10px"><h3 class="pf" style="font-size:20px">Recently viewed</h3></div><div class="rrow">${ids.map(id=>{const h=H.find(x=>x.id===id),p=price0(h);return `<a class="rcard" href="#/hostel/${esc(id)}"><img class="fade" loading="lazy" decoding="async" src="${esc(gallery(h)[0]||PH)}" alt=""><div><b>${esc(h.name)}</b><small>${p!=null?money(p):esc(h.location||'')}</small></div></a>`}).join('')}</div>`}
+function setupFilters(){
+ const prices=H.map(price0).filter(x=>x!=null);PMAX=Math.max(500,Math.ceil(Math.max(0,...prices)/500)*500);
+ const sl=$('#fPrice');sl.max=PMAX;sl.value=F.max??PMAX;$('#fPriceV').textContent=F.max?money(F.max):'Any';
+ const locs=[...new Set(H.map(h=>String(h.location||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ const sel=$('#fLoc'),v=F.loc;sel.innerHTML='<option value="">All locations</option>'+locs.map(l=>`<option>${esc(l)}</option>`).join('');sel.value=v;
+ $('#locList').innerHTML=[...new Set([...BASE_LOCS,...locs])].map(l=>`<option value="${esc(l)}">`).join('');
+ $('#count').textContent=H.length}
+function applyFilters(){shown=12;renderList(true)}
+function resetFilters(){Object.assign(F,{q:'',loc:'',gender:'',max:null,avail:false,sort:'new'});F.amen=new Set();$$('.q-in').forEach(i=>i.value='');$('#fPrice').value=PMAX;$('#fPriceV').textContent='Any';$('#fLoc').value='';$('#fGender').value='';$('#sort').value='new';$$('#fAmen input').forEach(i=>i.checked=false);$('#fAvail').checked=false;applyFilters()}
+$$('.q-in').forEach(i=>i.addEventListener('input',e=>{F.q=e.target.value;$$('.q-in').forEach(o=>{if(o!==e.target)o.value=F.q});applyFilters()}));
+$('#fPrice').addEventListener('input',e=>{const v=+e.target.value;F.max=v>=PMAX?null:v;$('#fPriceV').textContent=F.max?money(F.max):'Any';applyFilters()});
+$('#fLoc').addEventListener('input',e=>{F.loc=e.target.value;applyFilters()});
+$('#fGender').addEventListener('input',e=>{F.gender=e.target.value;applyFilters()});
+$('#sort').addEventListener('input',e=>{F.sort=e.target.value;applyFilters()});
+$('#fAvail').addEventListener('input',e=>{F.avail=e.target.checked;applyFilters()});
+$$('#fAmen input').forEach(i=>i.addEventListener('input',()=>{i.checked?F.amen.add(i.value):F.amen.delete(i.value);applyFilters()}));
+
+/* ================= MAP (loads only when tapped = faster page) ================= */
+const loadMap=(box,place)=>{box.innerHTML=`<iframe title="Map: ${esc(place)}" src="https://www.google.com/maps?q=${encodeURIComponent(place)}&z=15&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>`};
+function updateMap(place){$('#mapLabel').textContent=place;const f=$('#mapBox iframe');if(f)f.src=`https://www.google.com/maps?q=${encodeURIComponent(place+' Cape Coast Ghana')}&z=15&output=embed`;else{const b=$('#mapBox .maplo');if(b)b.dataset.place=place+' Cape Coast Ghana'}}
+
+/* ================= HOSTEL DETAIL ================= */
+function openDetail(id){
+ DS={id,ri:0,stay:'year',gi:0,waiting:false};const box=$('#detailBox');
+ if(!LOADED){DS.waiting=true;box.innerHTML='<div class="sk" style="height:420px"></div>';$('#stickyCta').innerHTML='';return}
+ const h=H.find(x=>x.id===id);
+ if(!h){box.innerHTML=`<div class="grid">${emptyHTML('This hostel is not available','It may have been removed or is not approved yet.','<a class="btn dark" href="#/">Browse hostels</a>')}</div>`;$('#stickyCta').innerHTML='';return}
+ document.title=h.name+' — MyCampusCrib';
+ box.innerHTML=detailHTML(h);renderTop(h);setGal(0);paintReviews(h);loadReviews(h);countView(h);addRecent(h.id);
+ const gm=$('#galMain');let sx=0;gm.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});gm.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>45){gm.dataset.sw='1';setGal(DS.gi+(dx<0?1:-1));setTimeout(()=>delete gm.dataset.sw,50)}},{passive:true});
+ $('#rvForm').addEventListener('submit',e=>{e.preventDefault();submitReview(h,e.target)})}
+function detailHTML(h){
+ const imgs=gallery(h),am=amen(h),dist=h.distance!=null&&h.distance!==''?String(h.distance):'';
+ const amHTML=[...am].map(k=>`<div class="am"><i>${AM[k][1]}</i>${AM[k][0]}</div>`).join('')+(dist?`<div class="am"><i>🚶</i>${esc(dist)}<br><small class="mut">to campus</small></div>`:'');
+ return `<button class="btn line" data-a="back">← Back</button>
+ <div class="dgrid">
+  <div class="gal"><div class="gal-main" id="galMain" data-a="zoom"><img id="galImg" class="fade" alt="${esc(h.name)}">${imgs.length>1?`<button class="gnav prev" data-a="gal" data-d="-1" aria-label="Previous photo">‹</button><button class="gnav next" data-a="gal" data-d="1" aria-label="Next photo">›</button>`:''}<span class="gct" id="galCt"></span></div>
+  ${imgs.length>1?`<div class="thumbs">${imgs.map((u,i)=>`<button data-a="thumb" data-i="${i}" aria-label="Photo ${i+1}"><img src="${esc(u)}" alt="" loading="lazy" decoding="async"></button>`).join('')}</div>`:''}</div>
+  <div class="dinfo"><div id="dTop"></div>
+   <div class="dsec"><h3 class="pf">Amenities</h3>${amHTML?`<div class="amen">${amHTML}</div>`:'<p class="mut" style="font-size:13px">The caretaker has not listed amenities yet.</p>'}</div>
+   ${h.description?`<div class="dsec"><h3 class="pf">Description</h3><p class="desc">${esc(h.description)}</p></div>`:''}
+   <div class="dsec"><h3 class="pf">Location</h3><div class="mapbox" style="height:240px"><button class="maplo" data-a="map" data-place="${esc((h.location||'')+' '+h.name+' Cape Coast Ghana')}">📍 Tap to load map<small>${esc(h.location||'Cape Coast')}</small></button></div></div>
+   <div class="dsec"><h3 class="pf">Reviews</h3><div id="revBox"></div>
+    <form id="rvForm" class="cbox" style="margin-top:16px" novalidate><b>Stayed here? Write a review</b>
+     <label class="fl">Your name<input class="field" name="name" maxlength="40" autocomplete="nickname"></label>
+     <label class="fl">Rating<select class="field" name="rating"><option value="5">5 ★★★★★</option><option value="4">4 ★★★★</option><option value="3">3 ★★★</option><option value="2">2 ★★</option><option value="1">1 ★</option></select></label>
+     <label class="fl">Your review<textarea class="field" name="text" rows="3" maxlength="300"></textarea></label>
+     <p class="err" id="rvErr" role="alert"></p><button class="btn dark" style="margin-top:12px">Submit review</button></form></div>
+   <div class="dsec"><div class="cbox"><b class="pf" style="font-size:18px">${esc(h.managerName||h.caretakerName||'Caretaker')}</b><p class="mut" style="font-size:12px">Listing approved by MyCampusCrib admin</p>
+    <div class="row"><button class="btn wa" data-a="wa" data-id="${esc(h.id)}">WhatsApp Caretaker</button><button class="btn line" data-a="report" data-id="${esc(h.id)}">⚑ Report Listing</button></div></div></div>
+  </div></div>`}
+function renderTop(h){
+ h=h||H.find(x=>x.id===DS.id);const el=$('#dTop');if(!h||!el)return;
+ const ro=roomOpts(h),c=ro[DS.ri]||{},yr=c.price??price0(h),sem=c.sem??num(h.priceSemester);
+ if(DS.stay==='sem'&&sem==null)DS.stay='year';
+ const p=DS.stay==='sem'?sem:yr,r=rate(h.id),g=genders(h),rl=num(h.roomsLeft),v=Number(h.views)||0,id=esc(h.id);
+ el.innerHTML=`<span class="locb">📍 ${esc(String(h.location||'Cape Coast').toUpperCase())} · VERIFIED</span>
+ <h1 class="pf dname">${esc(h.name)}</h1>
+ <div class="dmeta"><span class="stars">${r?'★ '+r.avg.toFixed(1):'☆'}</span><span>${r?r.n+' review'+(r.n===1?'':'s'):'No reviews yet'}</span>${rl!=null?`<span class="dot">•</span><span>${rl>0?rl+' room'+(rl===1?'':'s')+' left':'Fully booked'}</span>`:''}<span class="dot">•</span><span>👁 <b id="dViews">${v}</b> view${v===1?'':'s'}</span></div>
+ ${ro.length?`<div class="lbl">Room type</div><div class="chips">${ro.length>1?ro.map((o,i)=>`<button class="cp ${i===DS.ri?'on':''}" data-a="room" data-i="${i}" aria-pressed="${i===DS.ri}">${esc(o.type)}</button>`).join(''):`<span class="cp on">${esc(ro[0].type)}</span>`}</div>`:''}
+ ${sem!=null?`<div class="lbl">Stay</div><div class="chips"><button class="cp ${DS.stay==='year'?'on':''}" data-a="stay" data-v="year" aria-pressed="${DS.stay==='year'}">1 Year</button><button class="cp ${DS.stay==='sem'?'on':''}" data-a="stay" data-v="sem" aria-pressed="${DS.stay==='sem'}">1 Semester</button></div>`:''}
+ ${g.length?`<div class="lbl">Gender</div><div class="chips">${['male','female','mixed'].map(x=>`<span class="cp ${g.includes(x)?'on':'dim'}">${x[0].toUpperCase()+x.slice(1)}</span>`).join('')}</div>`:''}
+ <div class="dprice">${p!=null?`${money(p)}<small>/${DS.stay==='sem'?'semester':'year'}</small>`:'<span class="mut" style="font-size:20px">Price on request</span>'}</div>
+ <div class="dcta"><button class="btn wa big" data-a="wa" data-id="${id}">WhatsApp Caretaker</button>
+  <button class="btn line big" data-a="save" data-id="${id}" data-lbl="1" aria-pressed="${SAVED.h.has(h.id)}">${SAVED.h.has(h.id)?'♥ Saved':'♡ Save'}</button>
+  <button class="btn line big" data-a="cmp" data-id="${id}" data-lbl="1" aria-pressed="${CMP.includes(h.id)}">${CMP.includes(h.id)?'✓ In Compare':'⇄ Add to Compare'}</button>
+  <button class="btn line big" data-a="share" data-id="${id}">🔗 Share</button></div>`;
+ $('#stickyCta').innerHTML=`<div><small>${DS.stay==='sem'?'per semester':'per year'}</small><b>${p!=null?money(p):'Ask price'}</b></div><button class="btn wa big" data-a="wa" data-id="${id}">WhatsApp Caretaker</button>`}
+function setGal(i){const h=H.find(x=>x.id===DS.id);if(!h)return;const g=gallery(h),n=g.length||1;DS.gi=((i%n)+n)%n;const im=$('#galImg');if(!im)return;im.classList.remove('ld');im.src=g[DS.gi]||PH;
+ const lab=Array.isArray(h.imageLabels)&&h.imageLabels[DS.gi]?' · '+esc(h.imageLabels[DS.gi]):'';$('#galCt').innerHTML=(DS.gi+1)+'/'+n+lab;$$('.thumbs button').forEach((b,k)=>b.classList.toggle('on',k===DS.gi))}
+function openLb(e){const h=H.find(x=>x.id===DS.id);if(!h)return;const g=gallery(h);const im=$('#lbImg');im.className='';im.src=g[DS.gi]||PH;$('#lb').classList.add('open');document.body.style.overflow='hidden'}
+function closeLb(){$('#lb').classList.remove('open');$('#lbImg').className='';document.body.style.overflow=''}
+$('#lbImg').addEventListener('click',e=>{const im=e.target,r=im.getBoundingClientRect();im.style.transformOrigin=((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';im.classList.toggle('z')});
+$('#lb').addEventListener('click',e=>{if(e.target.id==='lb')closeLb()});
+async function countView(h){const k='mcc_v_'+h.id;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');
+ try{await updateDoc(doc(db,'hostels',h.id),{views:increment(1)});h.views=(Number(h.views)||0)+1;const el=$('#dViews');if(el&&DS.id===h.id)el.textContent=h.views}catch{}}
+function addRecent(id){const a=[id,...LS.get('mcc_recent',[]).filter(x=>x!==id)].slice(0,8);LS.set('mcc_recent',a)}
+async function loadReviews(h){try{const s=await getDocs(query(collection(db,'reviews'),where('hostelId','==',h.id)));REVS[h.id]=s.docs.map(cleanReview).sort((a,b)=>b.createdAt-a.createdAt)}catch{if(!REVS[h.id])REVS[h.id]=null}
+ if(DS.id===h.id){paintReviews(h);renderTop(h)}}
+function paintReviews(h){const box=$('#revBox');if(!box)return;const a=REVS[h.id];
+ if(a===null){box.innerHTML='<p class="mut" style="font-size:13px">Could not load reviews right now.</p>';return}
+ if(!a||!a.length){box.innerHTML='<p class="mut" style="font-size:13px">No reviews yet. Be the first to review this hostel.</p>';return}
+ const r=rate(h.id);box.innerHTML=`<p><span class="stars" style="font-size:18px">★ ${r.avg.toFixed(1)}</span> <span class="mut" style="font-size:13px">from ${r.n} review${r.n===1?'':'s'}</span></p>`+a.map(x=>`<div class="rev"><span class="stars">${'★'.repeat(x.rating)}${'☆'.repeat(5-x.rating)}</span><p>${esc(x.text)}</p><small>${esc(x.name)}${x.createdAt?' · '+ago(x.createdAt):''}</small></div>`).join('')}
+async function submitReview(h,f){const err=$('#rvErr');err.textContent='';const name=f.name.value.trim(),text=f.text.value.trim(),rating=Math.min(5,Math.max(1,+f.rating.value||5));
+ if(name.length<2){err.textContent='Please enter your name.';return}if(text.length<5){err.textContent='Please write a short review.';return}
+ if(LS.get('mcc_rv_'+h.id,false)){err.textContent='You already reviewed this hostel on this device.';return}
+ try{const ref=await addDoc(collection(db,'reviews'),{hostelId:h.id,hostelName:h.name||'',name:name.slice(0,40),rating,text:text.slice(0,300),createdAt:serverTimestamp()});
+  (REVS[h.id]=REVS[h.id]||[]).unshift({id:ref.id,hostelId:h.id,name,rating,text,createdAt:Date.now()});LS.set('mcc_rv_'+h.id,true);f.reset();paintReviews(h);renderTop(h);toast('Review posted ✓')}
+ catch{err.textContent='Could not post your review. Please try again.'}}
+async function share(id){const h=H.find(x=>x.id===id),url=shareUrl(id);
+ if(navigator.share){try{await navigator.share({title:h?h.name:'MyCampusCrib',url});return}catch{}}
+ try{await navigator.clipboard.writeText(url);toast('Link copied ✓')}catch{prompt('Copy this link',url)}}
+/* NEW: contact() now receives the student's phone number (sp) and saves it in the inquiry + includes it in the WhatsApp message */
+function contact(id,sp){const h=H.find(x=>x.id===id);if(!h)return;const phone=normPhone(h.managerPhone);
+ if(!validPhone(phone)){toast('This caretaker has no WhatsApp number yet.');return}
+ const code='MCC-'+(1000+crypto.getRandomValues(new Uint32Array(1))[0]%9000),p=price0(h);
+ addDoc(collection(db,'inquiries'),{code,visitorId:vid(),studentPhone:sp,hostelId:h.id,hostelName:h.name||'',managerEmail:h.managerEmail||'',managerPhone:h.managerPhone||'',status:'new',createdAt:serverTimestamp()}).catch(()=>{});
+ const text=`Hi, I saw *${h.name}* on MyCampusCrib Luxury.\nLocation: ${h.location||''}${p!=null?'\nPrice: '+money(p):''}\n\nMy Inquiry Code: *${code}*\nMy Phone: ${sp}\n${shareUrl(h.id)}\n\nIs it still available?`;
+ window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank','noopener')}
+/* NEW: asks for the student's own phone number BEFORE a code is made or WhatsApp opens */
+function askPhone(id){const h=H.find(x=>x.id===id);if(!h)return;
+ if(!validPhone(normPhone(h.managerPhone))){toast('This caretaker has no WhatsApp number yet.');return}
+ modalOpen('Your phone number',`<form id="spForm" novalidate><label class="fl">Please enter YOUR phone number so the manager and CEO can reach you to confirm:<input class="field" type="tel" name="sp" placeholder="e.g. 0241234567" inputmode="tel" autocomplete="tel" maxlength="20"></label><p class="err" id="spErr" role="alert"></p><button class="btn wa full big" style="margin-top:14px">Get my MCC code</button></form>`);
+ $('#spForm').addEventListener('submit',e=>{e.preventDefault();const raw=e.target.sp.value.trim(),digits=raw.replace(/\D/g,'');
+  if(digits.length<10||digits.length>15){$('#spErr').textContent='Please enter a valid phone number to get your MCC code.';return}
+  closeModal();contact(id,raw.replace(/[^\d+]/g,''))})}
+
+/* ================= MODALS ================= */
+function modalOpen(title,html){lastFocus=document.activeElement;$('#mTitle').textContent=title;$('#modalBody').innerHTML=html;$('#modal').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>{const f=$('#modalBody input,#modalBody select,#modalBody button');f&&f.focus()},60)}
+function closeModal(){$('#modal').classList.remove('open');document.body.style.overflow='';lastFocus&&lastFocus.focus&&lastFocus.focus()}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+function quickView(id){const h=H.find(x=>x.id===id);if(!h)return;const p=price0(h);
+ modalOpen('Quick view',`<img class="fade" src="${esc(gallery(h)[0]||PH)}" alt="${esc(h.name)}" style="width:100%;height:220px;object-fit:cover;border-radius:20px"><h2 class="pf" style="margin-top:14px">${esc(h.name)}</h2><p class="mut" style="font-size:12px">${esc(h.location||'')} ${typeText(h)?'• '+esc(typeText(h)):''}</p><p class="dprice">${p!=null?money(p):''}</p><div class="dcta"><a class="btn dark big" href="#/hostel/${esc(h.id)}" data-a="close">Full details</a><button class="btn wa big" data-a="wa" data-id="${esc(h.id)}">WhatsApp</button></div>`)}
+function reportModal(id){const h=H.find(x=>x.id===id);if(!h)return;
+ modalOpen('Report listing',`<form id="repForm" data-id="${esc(id)}" novalidate><p class="mut" style="font-size:13px">Help keep MyCampusCrib honest. Reports are reviewed by admin.</p>
+ <label class="fl">Reason<select class="field" name="reason"><option>Fake listing</option><option>Wrong price</option><option>Wrong location</option><option>Already taken</option><option>Caretaker not responding</option><option>Other</option></select></label>
+ <label class="fl">Details (optional)<textarea class="field" name="details" rows="3" maxlength="300"></textarea></label><p class="err" id="repErr" role="alert"></p><button class="btn dark full big" style="margin-top:14px">Send report</button></form>`);
+ $('#repForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.target;
+  try{await addDoc(collection(db,'reports'),{hostelId:id,hostelName:h.name||'',reason:f.reason.value,details:f.details.value.trim().slice(0,300),createdAt:serverTimestamp()});closeModal();toast('Report sent. Thank you ✓')}
+  catch{$('#repErr').textContent='Could not send the report. Please try again.'}})}
+
+/* ================= ROOMMATES + I NEED A HOSTEL ================= */
+const ROOMS=['Self-Contain','2-in-Room','4-in-Room'],VIBES=['Quiet','Social','Christian','Muslim','No Smoking'];
+function formModal(kind){
+ const isR=kind==='roommate',today=new Date().toISOString().slice(0,10);
+ const rooms=(isR?[...ROOMS,'Any']:[...ROOMS,'Any']).map(r=>`<option>${r}</option>`).join('');
+ modalOpen(isR?'Post a roommate request':'Post what you need',`<form id="pForm" data-kind="${kind}" novalidate>
+ <label class="fl">${isR?'Name / Nickname':'Name'} *<input class="field" name="name" maxlength="40" autocomplete="nickname"></label>
+ ${isR?`<div class="two"><label class="fl">Gender *<select class="field" name="gender"><option value="">Select</option><option>Male</option><option>Female</option></select></label><label class="fl">Level<select class="field" name="level"><option value="">Select</option><option>100</option><option>200</option><option>300</option><option>400</option><option>Postgraduate</option></select></label></div>`:''}
+ <label class="fl">Program${isR?'':' *'}<input class="field" name="program" maxlength="60"></label>
+ ${isR?`<label class="fl">Hostel name (if you already have a room)<input class="field" name="hostel" maxlength="60"></label>`:''}
+ <label class="fl">${isR?'Location':'Preferred location'} *<input class="field" name="location" list="locList" maxlength="40"></label>
+ <div class="two"><label class="fl">Budget${isR?' per person':''} (GH₵) *<input class="field" type="number" name="budget" min="1" inputmode="numeric"></label><label class="fl">Room type *<select class="field" name="roomType"><option value="">Select</option>${rooms}</select></label></div>
+ ${isR?`<div class="fl"><span>Vibe</span><div class="checks" style="margin-top:8px">${VIBES.map(v=>`<label class="chk"><input type="checkbox" name="vibe" value="${v}"><span>${v}</span></label>`).join('')}</div></div>`:`<label class="fl">Move-in date<input class="field" type="date" name="moveIn" min="${today}"></label>`}
+ <label class="fl">WhatsApp number *<input class="field" type="tel" name="wa" placeholder="0241234567" inputmode="tel" autocomplete="tel"></label>
+ <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+ <p class="note">Your WhatsApp number will be visible to people who open this page.</p><p class="err" id="pErr" role="alert"></p>
+ <button class="btn gold full big" style="margin-top:14px">Post</button></form>`);
+ $('#pForm').addEventListener('submit',submitPost)}
+async function submitPost(e){e.preventDefault();const f=e.target,kind=f.dataset.kind,isR=kind==='roommate',err=m=>{$('#pErr').textContent=m},g=n=>String(f.elements[n]?.value||'').trim();
+ if(g('website'))return closeModal();
+ if(Date.now()-LS.get('mcc_lastpost',0)<45000)return err('Please wait a moment before posting again.');
+ const name=g('name'),loc=g('location'),budget=num(g('budget')),room=g('roomType'),wa=normPhone(g('wa'));
+ if(name.length<2)return err('Please enter your name.');if(isR&&!g('gender'))return err('Please choose your gender.');
+ if(!loc)return err('Please enter a location.');if(!(budget>0))return err('Please enter a budget.');if(!room)return err('Please choose a room type.');if(!validPhone(wa))return err('Please enter a valid WhatsApp number.');
+ if(!isR&&!g('program'))return err('Please enter your program.');
+ const data=isR?{name:name.slice(0,40),gender:g('gender'),level:g('level'),program:g('program').slice(0,60),hostel:g('hostel').slice(0,60),location:loc.slice(0,40),budget,roomType:room,vibes:$$('input[name=vibe]:checked',f).map(i=>i.value),whatsapp:wa}
+  :{name:name.slice(0,40),program:g('program').slice(0,60),location:loc.slice(0,40),budget,roomType:room,moveIn:g('moveIn'),whatsapp:wa};
+ const btn=f.querySelector('button.gold');btn.disabled=true;
+ try{const ref=await addDoc(collection(db,isR?'roommates':'hostelRequests'),{...data,createdAt:serverTimestamp()});
+  LS.set('mcc_lastpost',Date.now());(isR?MINE.r:MINE.n).push(ref.id);LS.set('mcc_mine',MINE);
+  const item={id:ref.id,...data,createdAt:Date.now()};if(isR){ROOM.unshift(item);RL=true;ROOMERR=false;renderRoommates()}else{NEED.unshift(item);NL=true;NEEDERR=false;renderNeeds()}
+  closeModal();toast('Posted ✓')}catch{btn.disabled=false;err('Could not post. Please try again.')}}
+function locOptions(sel,list,key){const v=sel.value,locs=[...new Set(list.map(p=>String(p[key]||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));sel.innerHTML='<option value="">All locations</option>'+locs.map(l=>`<option>${esc(l)}</option>`).join('');sel.value=locs.includes(v)?v:''}
+function roomCard(p){const sv=SAVED.r.has(p.id),mine=MINE.r.includes(p.id),info=[p.gender,p.level?p.level+' Level':'',p.program].filter(Boolean).map(esc).join(' • ');
+ return `<article class="card pc"><div class="pc-h"><div class="av">${esc((p.name||'?').charAt(0).toUpperCase())}</div><div><b>${esc(p.name)}</b><small>${info}</small></div></div>
+ <button class="heart" data-a="rsave" data-id="${esc(p.id)}" aria-pressed="${sv}" aria-label="Save ${esc(p.name)}">♥</button>
+ <p class="ln">📍 ${[p.hostel,p.location].filter(Boolean).map(esc).join(' · ')}</p><p class="ln">💰 <b>${money(num(p.budget)||0)}</b> per person • ${esc(p.roomType||'')}</p>
+ ${Array.isArray(p.vibes)&&p.vibes.length?`<div class="vib">${p.vibes.map(v=>`<span>${esc(v)}</span>`).join('')}</div>`:''}
+ <p class="csub">${ago(p.createdAt)}</p><div class="acts"><button class="btn wa" data-a="wap" data-kind="roommate" data-id="${esc(p.id)}">WhatsApp</button>${mine?`<button class="btn line" data-a="del" data-kind="roommate" data-id="${esc(p.id)}">Delete</button>`:''}</div></article>`}
+function needCard(p){const mine=MINE.n.includes(p.id),d=p.moveIn?new Date(p.moveIn+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+ return `<article class="card pc"><div class="pc-h" style="padding-right:0"><div class="av">${esc((p.name||'?').charAt(0).toUpperCase())}</div><div><b>${esc(p.name)}</b><small>${esc(p.program||'')}</small></div></div>
+ <p class="ln">📍 Wants: ${esc(p.location||'')}</p><p class="ln">💰 Budget <b>${money(num(p.budget)||0)}</b> • ${esc(p.roomType||'')}</p>${d?`<p class="ln">📅 Move-in: ${esc(d)}</p>`:''}
+ <p class="csub">${ago(p.createdAt)}</p><div class="acts"><button class="btn wa" data-a="wap" data-kind="need" data-id="${esc(p.id)}">Reply on WhatsApp</button>${mine?`<button class="btn line" data-a="del" data-kind="need" data-id="${esc(p.id)}">Delete</button>`:''}</div></article>`}
+async function ensureRoommates(){renderRoommates();if(RL)return;const r=await fetchCol('roommates');RL=true;ROOMERR=!r;ROOM=r||[];renderRoommates();if(cur==='saved')renderSaved()}
+async function ensureNeeds(){renderNeeds();if(NL)return;const r=await fetchCol('hostelRequests');NL=true;NEEDERR=!r;NEED=r||[];renderNeeds()}
+function renderRoommates(){const box=$('#rList');if(!RL){box.innerHTML=SK.repeat(3);return}
+ if(ROOMERR){box.innerHTML=emptyHTML('Could not load posts','Check your connection and refresh the page.');return}
+ locOptions($('#rLoc'),ROOM,'location');const loc=$('#rLoc').value,g=$('#rGender').value,mx=num($('#rBudget').value);
+ const L=ROOM.filter(p=>(!loc||norm(p.location)===norm(loc))&&(!g||p.gender===g)&&(mx==null||(num(p.budget)||0)<=mx));$('#rCount').textContent=L.length+' post'+(L.length===1?'':'s');
+ box.innerHTML=!ROOM.length?emptyHTML('No roommate posts yet','Be the first to post.','<button class="btn gold" data-a="openform" data-kind="roommate">+ Post Request</button>'):L.length?L.map(roomCard).join(''):emptyHTML('No posts match your filters','Try changing the location, gender or budget.')}
+function renderNeeds(){const box=$('#nList');if(!NL){box.innerHTML=SK.repeat(3);return}
+ if(NEEDERR){box.innerHTML=emptyHTML('Could not load posts','Check your connection and refresh the page.');return}
+ locOptions($('#nLoc'),NEED,'location');const loc=$('#nLoc').value,rm=$('#nRoom').value,mn=num($('#nBudget').value);
+ const L=NEED.filter(p=>(!loc||norm(p.location)===norm(loc))&&(!rm||p.roomType===rm)&&(mn==null||(num(p.budget)||0)>=mn));$('#nCount').textContent=L.length+' request'+(L.length===1?'':'s');
+ box.innerHTML=!NEED.length?emptyHTML('No requests yet','Students who need a hostel will appear here.','<button class="btn gold" data-a="openform" data-kind="need">+ Post What I Need</button>'):L.length?L.map(needCard).join(''):emptyHTML('No requests match your filters','Try changing the location, room type or budget.')}
+['rLoc','rGender','rBudget'].forEach(i=>$('#'+i).addEventListener('input',renderRoommates));['nLoc','nRoom','nBudget'].forEach(i=>$('#'+i).addEventListener('input',renderNeeds));
+function contactPerson(kind,id){const isR=kind==='roommate',p=(isR?ROOM:NEED).find(x=>x.id===id);if(!p)return;const phone=normPhone(p.whatsapp);if(!validPhone(phone)){toast('No valid WhatsApp number on this post.');return}
+ const text=isR?`Hi ${p.name}, I saw your roommate request on MyCampusCrib. Are you still looking for a roommate?`:`Hi ${p.name}, I saw your request on MyCampusCrib for ${p.roomType} in ${p.location} (budget ${money(num(p.budget)||0)}). I may have a hostel that matches. Are you still looking?`;
+ window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank','noopener')}
+async function delPost(kind,id){if(!confirm('Delete your post?'))return;const isR=kind==='roommate';
+ try{await deleteDoc(doc(db,isR?'roommates':'hostelRequests',id));if(isR){ROOM=ROOM.filter(x=>x.id!==id);MINE.r=MINE.r.filter(x=>x!==id);renderRoommates()}else{NEED=NEED.filter(x=>x.id!==id);MINE.n=MINE.n.filter(x=>x!==id);renderNeeds()}LS.set('mcc_mine',MINE);toast('Post deleted')}catch{toast('Could not delete this post.')}}
+
+/* ================= SAVED + COMPARE ================= */
+function renderSaved(){
+ const bh=$('#savedH'),br=$('#savedR');
+ if(!LOADED)bh.innerHTML=SK.repeat(2);else{const L=H.filter(h=>SAVED.h.has(h.id));bh.innerHTML=L.length?L.map(cardHTML).join(''):emptyHTML('No saved hostels','Tap the ♥ on any hostel to keep it here.','<a class="btn dark" href="#/">Browse hostels</a>')}
+ if(!RL){br.innerHTML=SK.repeat(1);ensureRoommates();return}
+ const R=ROOM.filter(p=>SAVED.r.has(p.id));br.innerHTML=R.length?R.map(roomCard).join(''):emptyHTML('No saved roommates','Tap the ♥ on a roommate post to keep it here.','<a class="btn dark" href="#/roommates">Find roommates</a>')}
+function renderCompare(){const box=$('#cmpBox');if(!LOADED){box.innerHTML=SK;return}
+ const L=CMP.map(id=>H.find(h=>h.id===id)).filter(Boolean);
+ if(!L.length){box.innerHTML=`<div class="grid">${emptyHTML('Nothing to compare yet','Tap the ⇄ button on up to 3 hostels.','<a class="btn dark" href="#/">Browse hostels</a>')}</div>`;return}
+ const row=(l,f)=>`<tr><th scope="row">${l}</th>${L.map(h=>`<td>${f(h)}</td>`).join('')}</tr>`;
+ const yn=(h,k)=>amenInfo(h)?(amen(h).has(k)?'<b class="yes">✓ Yes</b>':'<b class="no">✗ No</b>'):'—';
+ box.innerHTML=`<div class="cmpw"><table class="cmp"><thead><tr><th></th>${L.map(h=>`<td><a href="#/hostel/${esc(h.id)}"><img class="fade" src="${esc(gallery(h)[0]||PH)}" alt="${esc(h.name)}"></a><br><a href="#/hostel/${esc(h.id)}"><b>${esc(h.name)}</b></a><br><button class="btn line" style="margin-top:8px;padding:8px 14px" data-a="cmp" data-id="${esc(h.id)}">Remove</button></td>`).join('')}</tr></thead><tbody>
+ ${row('Price',h=>price0(h)!=null?'<b>'+money(price0(h))+'</b>':'—')}${row('Location',h=>esc(h.location||'—'))}${row('Room type',h=>esc(typeText(h)||'—'))}
+ ${row('WiFi',h=>yn(h,'wifi'))}${row('Water',h=>yn(h,'water'))}${row('Kitchen',h=>yn(h,'kitchen'))}
+ ${row('Gender',h=>genders(h).map(x=>x[0].toUpperCase()+x.slice(1)).join(' / ')||'—')}${row('Rating',h=>rate(h.id)?'★ '+rate(h.id).avg.toFixed(1)+' ('+rate(h.id).n+')':'No reviews yet')}
+ ${row('Distance',h=>esc(h.distance!=null&&h.distance!==''?h.distance:'—'))}${row('Views',h=>String(Number(h.views)||0))}</tbody></table></div>`}
+
+/* ================= CLICK ACTIONS ================= */
+const ACT={
+ save:t=>toggleSave(t.dataset.id,t),rsave:t=>toggleRSave(t.dataset.id,t),cmp:t=>toggleCmp(t.dataset.id),wa:t=>askPhone(t.dataset.id) /* NEW: was contact(t.dataset.id) */,
+ quick:t=>quickView(t.dataset.id),room:t=>{DS.ri=+t.dataset.i;renderTop()},stay:t=>{DS.stay=t.dataset.v;renderTop()},
+ gal:(t,e)=>{e.stopPropagation();setGal(DS.gi+ +t.dataset.d)},thumb:t=>setGal(+t.dataset.i),zoom:()=>{if(!$('#galMain').dataset.sw)openLb()},
+ close:()=>closeModal(),lbclose:()=>closeLb(),share:t=>share(t.dataset.id),report:t=>reportModal(t.dataset.id),
+ back:()=>{navCount>0?history.back():(location.hash='#/')},more:()=>{shown+=12;renderList()},reset:()=>resetFilters(),
+ openform:t=>formModal(t.dataset.kind),map:t=>{loadMap(t.parentElement,t.dataset.place)},ftoggle:()=>$('#filters').classList.toggle('open'),
+ search:()=>{renderList(true);$('#hostels').scrollIntoView({behavior:'smooth',block:'start'})},
+ qc:t=>{const v=t.dataset.v;F.q=v;$$('.q-in').forEach(i=>i.value=v);shown=12;renderList(true);if(v)updateMap(v);$('#hostels').scrollIntoView({behavior:'smooth',block:'start'})},
+ wap:t=>contactPerson(t.dataset.kind,t.dataset.id),del:t=>delPost(t.dataset.kind,t.dataset.id)};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const f=ACT[t.dataset.a];if(f)f(t,e)});
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeLb()}
+ if($('#lb').classList.contains('open')||$('#modal').classList.contains('open'))return;
+ if(cur==='detail'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))setGal(DS.gi+(e.key==='ArrowRight'?1:-1))});
+
+/* ================= INSTALL BUTTON (one place only, hidden if unsupported or already installed) ================= */
+(function(){const ib=$('#installBtn');const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const show=()=>{if(window.__dp&&!standalone())ib.hidden=false};show();window.addEventListener('mcc-install',show);
+ window.addEventListener('appinstalled',()=>{ib.hidden=true;window.__dp=null});
+ ib.addEventListener('click',async()=>{const p=window.__dp;if(!p)return;p.prompt();try{await p.userChoice}catch{}window.__dp=null;ib.hidden=true})})();
+
+/* ================= BOOT ================= */
+route();loadHostels();
 </script>
 
 <script>
-// PWA INSTALL - VERY SEEN LOGIC
-let deferredPrompt;
-const btns = [document.getElementById('installBtn'), document.getElementById('installBtnTop'), document.getElementById('installBtnFloat')];
-
-window.addEventListener('beforeinstallprompt', (e)=>{
-  e.preventDefault(); deferredPrompt=e;
-  btns.forEach(b=>{ if(b) b.classList.add('install-pulse'); });
-});
-
-function triggerInstall(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(choice=>{
-      if(choice.outcome==='accepted'){
-        document.getElementById('floatingInstall').style.display='none';
-        document.getElementById('pwaBanner').innerHTML='<div class="w-full text-center">✅ App Installed! Open from home screen</div>';
-      }
-      deferredPrompt=null;
-    });
-  } else {
-    alert("To install App:\n\nOn Android Chrome: Click ⋮ menu top right → 'Install app' or 'Add to Home Screen'\n\nOn iPhone Safari: Click Share button → 'Add to Home Screen'\n\nThis will install MCC Luxury as real app!");
-  }
-}
-
-btns.forEach(b=>{ if(b) b.addEventListener('click', triggerInstall); });
-
+/* Service worker (kept from your original file) */
 if('serviceWorker' in navigator){
   const swCode=`self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})`;
   const blob=new Blob([swCode],{type:'text/javascript'});
   const swUrl=URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(()=>{});
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
-
-setTimeout(()=>{ const el=document.getElementById('floatingInstall'); if(el) el.style.opacity='0.9'; }, 8000);
 </script>
+<!-- ===== MCC SMART AI HELPER - ENGLISH ONLY ===== -->
+<style>
+#mccBtn{position:fixed;bottom:18px;right:18px;width:62px;height:62px;border-radius:50%;background:#16a34a;color:#fff;border:none;font-size:28px;cursor:pointer;z-index:9999;box-shadow:0 8px 22px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}
+#mccBtn span{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+#mccBox{position:fixed;bottom:90px;right:16px;width:360px;max-width:94vw;height:520px;max-height:78vh;background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.28);display:none;flex-direction:column;overflow:hidden;z-index:9999;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+#mccHead{background:#16a34a;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+#mccHead b{font-size:15px}#mccHead small{display:block;font-weight:400;opacity:.9;font-size:12px}
+#mccHead button{background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px}
+#mccMsgs{flex:1;padding:12px;overflow-y:auto;background:#f1f5f9;display:flex;flex-direction:column;gap:8px}
+.mccMsg{padding:10px 12px;border-radius:14px;max-width:88%;font-size:14px;line-height:1.5;white-space:pre-line}
+.mccBot{background:#fff;border:1px solid #e2e8f0;align-self:flex-start;border-bottom-left-radius:4px}
+.mccUser{background:#16a34a;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.mccTyping{font-size:12px;color:#64748b;padding:0 12px}
+#mccQuick{display:flex;gap:6px;flex-wrap:wrap;padding:8px;background:#fff;border-top:1px solid #eee}
+#mccQuick button{border:1px solid #16a34a;color:#16a34a;background:#f0fdf4;padding:6px 11px;border-radius:20px;font-size:12px;cursor:pointer;font-weight:600}
+#mccRow{display:flex;padding:8px;border-top:1px solid #eee;background:#fff;gap:6px}
+#mccInput{flex:1;padding:10px 12px;border:1px solid #ddd;border-radius:22px;outline:none;font-size:14px}
+#mccSend{background:#16a34a;color:#fff;border:none;padding:10px 16px;border-radius:22px;cursor:pointer;font-weight:700}
+</style>
+
+<button id="mccBtn" onclick="mccToggle()">💬<span id="mccDot">1</span></button>
+<div id="mccBox">
+  <div id="mccHead"><div><b>Hostel Helper</b><small>Online • Replies instantly • MCC</small></div><button onclick="mccToggle()">✕</button></div>
+  <div id="mccMsgs"></div>
+  <div id="mccQuick">
+    <button onclick="mccAsk('How do I find a hostel?')">Find Hostel</button>
+    <button onclick="mccAsk('How do I get an inquiry code?')">Get Code</button>
+    <button onclick="mccAsk('How do I contact the manager?')">Talk to Manager</button>
+    <button onclick="mccAsk('How much is a hostel?')">Prices</button>
+    <button onclick="mccAsk('How do I book?')">How to Book</button>
+  </div>
+  <div id="mccRow"><input id="mccInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')mccSend()"><button id="mccSend" onclick="mccSend()">Send</button></div>
+</div>
+
+<script>
+const mccBox=document.getElementById('mccBox'), mccMsgs=document.getElementById('mccMsgs'), mccInput=document.getElementById('mccInput');
+function mccToggle(){ const open=mccBox.style.display==='flex'; mccBox.style.display=open?'none':'flex'; document.getElementById('mccDot').style.display='none'; }
+function mccAdd(t,who){ const d=document.createElement('div'); d.className='mccMsg '+(who==='user'?'mccUser':'mccBot'); d.innerHTML=t; mccMsgs.appendChild(d); mccMsgs.scrollTop=mccMsgs.scrollHeight; try{localStorage.setItem('mcc_chat',mccMsgs.innerHTML)}catch(e){} }
+function mccTyping(cb){ const p=document.createElement('div'); p.className='mccTyping'; p.textContent='Helper is typing...'; mccMsgs.appendChild(p); mccMsgs.scrollTop=mccMsgs.scrollHeight; setTimeout(()=>{p.remove(); cb()},550); }
+
+const KB=[
+{ k:['find hostel','search hostel','look for hostel','where hostel','hostel near','hostel for','find room','search room','looking for','legon hostel','knust hostel','accra hostel','hostel in'], a:"To find a hostel:\n1. Go to the Home page\n2. Type your area in the search bar - for example Legon, KNUST, or Accra\n3. You will see hostels with prices, pictures, and room types\n4. Tap any hostel to view full details.\n\nWhich area are you looking for?" },
+{ k:['get code','inquiry code','mcc code','mcc-','give me code','need code','code','inquire','inquiry'], a:"To get your Inquiry Code:\n1. Open the hostel you like\n2. Tap INQUIRE / GET CODE\n3. Your code, for example MCC-7302, will appear\n4. Save it or take a screenshot\n\nThe manager will use that code to find your request. When you message the manager, start with: 'Hello, my code is MCC-____'." },
+{ k:['code lost','lost code','forget code','no code','code no show','code not','didnt get code'], a:"If you lost your code:\n- Check your inquiry list or history if you have inquired before\n- If you cannot find it, inquire again for the same hostel - a new code will be generated\n- Or message the manager with your name and hostel name, they can help you find it." },
+{ k:['contact manager','talk to manager','call manager','whatsapp manager','manager number','manager phone','manager contact','chat manager'], a:"To contact the manager:\n1. Get your Inquiry Code first\n2. On the hostel page, you will see WhatsApp and Call buttons\n3. Tap WhatsApp - it will open a chat with the manager's number (for example 0538569085)\n4. Send: 'Hello, my code is MCC-____, I am interested in this hostel. Is a room still available?'\n\nIf WhatsApp does not work, use the Call button." },
+{ k:['manager no reply','manager not reply','no reply','not responding','no answer','manager no pick','not picking','manager offline'], a:"If the manager is not replying:\n1. Please wait a little - managers are sometimes busy. Allow 1-2 hours\n2. Send your message again with your code: 'Hello, my code is MCC-____, is a room still available?'\n3. Try the Call button instead of WhatsApp\n4. If there is still no reply after a day, try another hostel in the same area.\nDo not pay anyone until the manager has confirmed." },
+{ k:['price','cost','much','fee','how much','amount','expensive','cheap'], a:"Prices are different for each hostel and room type:\n- Single Room - most expensive, for one person\n- Double Room - for two people, medium price\n- 4-in-a-room - cheapest, for four people\n\nCheck the hostel page for the price. Some prices are per semester, some are per year. If the price is not shown, ask the manager on WhatsApp for the exact price." },
+{ k:['pay','payment','book','reserve','booking','momo','bank','deposit','pay hostel'], a:"To Book / Pay:\n1. Get your Inquiry Code\n2. Chat with the manager on WhatsApp and confirm a room is available\n3. The manager will tell you how to pay - MoMo or Bank Transfer\n4. Ask for a receipt or proof after payment\n\nSAFETY: Never pay anyone who is not the manager of that hostel. Always confirm with the manager number shown on the site." },
+{ k:['refund','cancel','change mind','money back','return'], a:"For a refund or cancellation:\nPlease contact the manager directly, because the manager handles payments. Tell them your code and your reason. Some hostels offer refunds, some do not after booking. Ask the manager about the refund policy BEFORE you pay." },
+{ k:['room type','single','double','4 in','room','self contain','shared'], a:"Room types:\n- Single - 1 person, more privacy, higher price\n- Double - 2 people, you will have a roommate\n- 4-in-a-room - 4 people, lowest price\n\nOn the hostel page, you will see which room types are available for that hostel." },
+{ k:['amenities','water','light','wifi','kitchen','security','facility','facilities'], a:"Most hostels provide: Water, Electricity, Security, and Kitchen. Some also provide WiFi.\nCheck the hostel page for the amenities list. If you need WiFi or Kitchen, ask the manager on WhatsApp before you book." },
+{ k:['location','where','legon','knust','kumasi','accra','area','near school'], a:"We have hostels in Legon, KNUST (Kumasi), Accra, and other student areas.\nUse the search bar and type your school area. For example, type 'Legon' and all Legon hostels will appear." },
+{ k:['visit','view','see hostel','come see','inspection'], a:"Yes, you can visit before you pay. Message the manager on WhatsApp: 'I would like to come and view the hostel, when can I come?' The manager will give you a time. Please go with a friend for safety." },
+{ k:['available','availability','room dey','still dey','vacant','full'], a:"To know if a room is still available:\nMessage the manager with your code and ask: 'Is a room still available for Single / Double?' The manager will confirm. If it is full, ask if another room type is available, or try another hostel in the same area." },
+{ k:['manager add','add hostel','list hostel','i be manager','manager register','become manager'], a:"If you are a Manager and want to list your hostel:\n1. Register as a Manager\n2. Add your hostel - name, location, price, pictures, and room types\n3. Once added, students will see it and can inquire\n4. You will see all inquiries on your dashboard with their MCC codes." },
+{ k:['ceo','admin','dashboard','ceo see','delete inquiry'], a:"The CEO Dashboard shows everything:\n- All Hostels table\n- All Managers table\n- All Inquiries table - with columns: Code, Hostel Name, Manager Email, Manager Contact (WhatsApp + Call + Phone), Status, Date, Delete\nThe CEO can delete an inquiry if it is fake, and can see the manager phone number quickly." },
+{ k:['status','new','contacted','booked','meaning'], a:"Inquiry Status meanings:\n- NEW - you just inquired, the manager has not replied yet\n- CONTACTED - the manager has spoken to you\n- BOOKED - you have paid and the room is reserved for you\n\nIf your status is still NEW after a long time, message the manager again." },
+{ k:['safe','scam','fraud','trust','real','fake'], a:"Safety tips:\n1. Only pay the manager number shown on the site\n2. Do not pay any WhatsApp number sent to you in a comment section\n3. Always confirm with your MCC code\n4. Visit the hostel before you pay if possible\n5. Keep your receipt or MoMo screenshot" },
+{ k:['hi','hello','hey','morning','afternoon'], a:"Hello! I am the Hostel Helper. I can help you with everything on this site. Ask me:\n- How to find a hostel?\n- How to get a code?\n- How to contact a manager?\n- How much is a hostel?\nWhat do you need help with?" },
+{ k:['thank','thanks','appreciate','nice'], a:"You are welcome! If you have any other questions, just ask me. Good luck with your hostel search!" },
+{ k:['help','dont understand','confused','stuck','dont get','no understand'], a:"No problem, I will help you step by step.\nTell me where you are stuck:\n1. You cannot find a hostel?\n2. You cannot get a code?\n3. You cannot contact the manager?\n4. You cannot pay?\nTell me the number and I will explain it." },
+{ k:['account','sign up','register','login','password','create account'], a:"To create an account:\nTap Sign Up, enter your name, phone number, email, and password. After that you can inquire and save your codes. If you forget your password, tap Forgot Password to reset it." },
+{ k:['roommate'], a:"Roommate issues are common. Try talking to your roommate calmly first. If it does not work, speak to your hostel manager - the manager may help you change rooms if another room is available. For a new hostel, you can choose a Single Room if you prefer no roommate." },
+{ k:['bye','goodbye','see you'], a:"Goodbye! Good luck! If you need hostel help again, just tap me. I am here 24/7." },
+{ k:['when','deadline','semester','start'], a:"Hostels fill up fast before the semester starts. The best time to book is 2-4 weeks before school resumes. If you wait too long, the good hostels may become full. Get your code early." },
+{ k:['document','id','requirement','need to bring'], a:"When you go to book, please bring:\n- Your student ID or admission letter\n- Your MCC code\n- MoMo / money for payment\n- One passport picture (some hostels request it)\nThe manager will tell you if anything else is needed." },
+];
+
+function mccFind(q){
+  q=q.toLowerCase().trim();
+  let best=null, bestScore=0;
+  for(const item of KB){
+    let score=0;
+    for(const kw of item.k){
+      const words=kw.split(' ');
+      if(q.includes(kw)) score+= words.length*3;
+      else { for(const w of words){ if(w.length>2 && q.includes(w)) score+=1; } }
+    }
+    if(score>bestScore){bestScore=score; best=item;}
+  }
+  if(best && bestScore>=2) return best.a;
+  if(q.includes('code')) return KB[1].a;
+  if(q.includes('manager')||q.includes('whatsapp')||q.includes('call')) return KB[3].a;
+  if(q.includes('price')||q.includes('much')) return KB[5].a;
+  if(q.includes('pay')||q.includes('book')) return KB[6].a;
+  if(q.includes('hostel')||q.includes('find')||q.includes('search')) return KB[0].a;
+  return "Good question! For this site:\n- To FIND a hostel - use the search bar, type Legon / KNUST / Accra\n- To GET A CODE - open a hostel, tap Inquire, your MCC code will appear\n- To CONTACT A MANAGER - tap the WhatsApp button and send your code\n- To BOOK - confirm the room, then the manager will tell you how to pay (MoMo / Bank)\n\nTry asking: 'How do I get an inquiry code?' or 'How do I contact the manager?'";
+}
+function mccAsk(t){ mccAdd(t,'user'); mccTyping(()=>mccAdd(mccFind(t),'bot')); }
+function mccSend(){ const v=mccInput.value.trim(); if(!v) return; mccAdd(v,'user'); mccInput.value=''; mccTyping(()=>mccAdd(mccFind(v),'bot')); }
+try{ const saved=localStorage.getItem('mcc_chat'); if(saved) mccMsgs.innerHTML=saved; }catch(e){}
+if(!mccMsgs.innerHTML.trim()){ setTimeout(()=>mccAdd("Hello! I am the Hostel Helper. I know everything about this site. Ask me how to find a hostel, get a code, or contact a manager.",'bot'),600); }
+</script>
+<!-- ===== END MCC SMART AI HELPER ===== -->
 </body>
 </html>

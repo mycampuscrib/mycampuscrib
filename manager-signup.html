@@ -2,69 +2,89 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MCC - Manager Signup</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f172a;--gold:#c9a86a;--cream:#FFFBF5;--sand:#F2E8D5;--mut:#64748b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Poppins,system-ui,sans-serif;background:#f8fafc;color:var(--navy);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.box{background:#fff;width:100%;max-width:440px;border-radius:20px;padding:26px;box-shadow:0 20px 50px rgba(15,23,42,.12)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.brand img,.logo{width:48px;height:48px;border-radius:50%;object-fit:cover;background:var(--navy);flex:none}
+.logo{display:grid;place-items:center;color:var(--gold);font-weight:700;font-size:13px}
+.brand h1{font-family:"Playfair Display",serif;font-size:20px;line-height:1.1}.brand h1 span{color:var(--gold)}
+h2{font-size:18px}.sub{font-size:12px;color:var(--mut);margin:2px 0 14px}
+label{display:block;font-size:12px;font-weight:600;margin-top:12px}
+input{width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:12px;margin-top:6px;font:inherit;font-size:14px;outline:0}
+input:focus{border-color:var(--gold)}
+button{width:100%;margin-top:18px;background:var(--navy);color:#fff;padding:14px;border:0;border-radius:12px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.msg{font-size:13px;text-align:center;margin-top:14px;min-height:20px}
+a{display:block;text-align:center;font-size:12px;margin-top:14px;color:var(--mut);text-decoration:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
 </head>
-<body class="bg-[#f8fafc] font-[Poppins] flex items-center justify-center min-h-screen p-4">
-<div class="bg-white w-full max-w-md rounded-[20px] p-6 shadow-xl">
-<!-- LOGO - DOES NOT CHANGE, KEEP YOUR PATH -->
-<div class="flex items-center gap-3 mb-6">
-<img src="logo.png" alt="MCC Logo" class="w-12 h-12 rounded-full object-cover bg-[#0f172a]" onerror="this.src='https://via.placeholder.com/48?text=MCC'">
-<h1 class="font-[Playfair_Display] font-bold text-xl">MyCampusCrib<span class="text-[#c9a86a]">.Luxury</span></h1>
-</div>
-
-<h2 class="font-bold text-lg mb-1">Manager Signup</h2>
-<p class="text-xs text-slate-500 mb-4">Create account - No Firebase error</p>
-
-<input id="name" placeholder="Full Name" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="email" placeholder="Email" type="email" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="phone" placeholder="WhatsApp Number" class="w-full p-3 border rounded-xl mb-3 text-sm">
-<input id="password" placeholder="Password (min 6)" type="password" class="w-full p-3 border rounded-xl mb-3 text-sm">
-
-<button onclick="signup()" class="w-full bg-[#0f172a] text-white p-3 rounded-xl font-bold text-sm">Create Account</button>
-<p id="msg" class="text-xs text-center mt-3"></p>
-<a href="manager-login.html" class="block text-center text-xs mt-4 text-slate-500">Already have account? Login</a>
+<body>
+<div class="box">
+ <div class="brand">
+  <img src="logo.png" alt="MCC Logo" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo',textContent:'MCC'}))">
+  <h1>MyCampusCrib<span>.Luxury</span></h1>
+ </div>
+ <h2>Manager Signup</h2>
+ <p class="sub">Create your manager account</p>
+ <form id="f" novalidate>
+  <label for="name">Full Name</label><input id="name" autocomplete="name" maxlength="60">
+  <label for="email">Email</label><input id="email" type="email" autocomplete="email" maxlength="120">
+  <label for="phone">WhatsApp Number</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="e.g. 0241234567">
+  <label for="password">Password (min 6)</label><input id="password" type="password" autocomplete="new-password" minlength="6">
+  <button id="btn">Create Account</button>
+ </form>
+ <p class="msg" id="msg" role="status" aria-live="polite"></p>
+ <a href="manager-login.html">Already have account? Login</a>
 </div>
 
 <script type="module">
-import { db } from "./firebase.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { auth, db } from "./firebase.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-window.signup = async function(){
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim().toLowerCase();
-  const phone = document.getElementById('phone').value.trim();
-  const password = document.getElementById('password').value.trim();
-  const msg = document.getElementById('msg');
+const $=s=>document.querySelector(s);
+const say=(t,c)=>{const m=$('#msg');m.textContent=t;m.style.color=c==='red'?'#b91c1c':c==='green'?'#15803d':'inherit'};
+const normPhone=p=>{let s=String(p||'').replace(/\D/g,'');if(s.startsWith('00'))s=s.slice(2);if(s.startsWith('0'))s='233'+s.slice(1);else if(s.length===9)s='233'+s;return s};
+const refCode=name=>{const l=name.replace(/[^a-z]/gi,'').slice(0,4).toUpperCase()||'MGR';return `MCC-${l}-${100+crypto.getRandomValues(new Uint32Array(1))[0]%900}`};
+const ERR={
+ 'auth/email-already-in-use':'This email already has an account. Please login.',
+ 'auth/invalid-email':'Enter a valid email address.',
+ 'auth/weak-password':'Password is too weak. Use at least 6 characters.',
+ 'auth/operation-not-allowed':'Sign-up is not switched on yet. The admin must enable Email/Password in Firebase Console → Authentication → Sign-in method.',
+ 'auth/network-request-failed':'No internet connection. Please try again.',
+ 'auth/too-many-requests':'Too many attempts. Please wait a moment and try again.'
+};
 
-  if(!name || !email || !phone || password.length<6){ msg.style.color="red"; msg.innerText="Fill all fields, password min 6"; return; }
-
-  let managers = JSON.parse(localStorage.getItem('mcc_managers')||'[]');
-  if(managers.find(m=>m.email===email)){ msg.style.color="red"; msg.innerText="Email already exists, login"; return; }
-
-  // Generate referral CODE for this manager - e.g. MCC-KWESI-482
-  const referralCode = `MCC-${name.substring(0,4).toUpperCase()}-${Math.floor(100+Math.random()*900)}`;
-  const manager = { name, email, phone, password, referralCode, referralCount:0, createdAt: new Date().toISOString() };
-  
-  try{
-    managers.push(manager);
-    localStorage.setItem('mcc_managers', JSON.stringify(managers));
-    localStorage.setItem('mcc_current_manager', JSON.stringify(manager));
-    
-    // Also save to Firebase for CEO to see
-    await addDoc(collection(db, "managers"), { ...manager, createdAt: serverTimestamp() });
-    
-    msg.style.color="green"; msg.innerText=`Account created! Your Code: ${referralCode}`;
-    setTimeout(()=> location.href="manager-dashboard.html", 1000);
-  }catch(e){
-    console.error(e);
-    // Even if Firebase fails, local still works
-    msg.style.color="green"; msg.innerText=`Account created locally! Your Code: ${referralCode}`;
-    setTimeout(()=> location.href="manager-dashboard.html", 1000);
-  }
-}
+$('#f').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const name=$('#name').value.trim(),email=$('#email').value.trim().toLowerCase(),phone=$('#phone').value.trim(),password=$('#password').value;
+ if(name.length<2)return say('Enter your full name.','red');
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))return say('Enter a valid email address.','red');
+ if(!/^\d{10,15}$/.test(normPhone(phone)))return say('Enter a valid WhatsApp number.','red');
+ if(password.length<6)return say('Password must be at least 6 characters.','red');
+ const btn=$('#btn');btn.disabled=true;say('Creating your account…');
+ let cred;
+ try{cred=await createUserWithEmailAndPassword(auth,email,password)}
+ catch(ex){console.error(ex);say(ERR[ex.code]||'Could not create the account. Please try again.','red');btn.disabled=false;return}
+ const referralCode=refCode(name);
+ const profile={name,email,phone,referralCode,referralCount:0,status:'active',uid:cred.user.uid};
+ try{await setDoc(doc(db,'managers',cred.user.uid),{...profile,createdAt:serverTimestamp()})}catch(ex){console.error('profile not saved',ex)}
+ /* the dashboard reads this record (never contains the password) */
+ localStorage.setItem('mcc_current_manager',JSON.stringify(profile));
+ say(`Account created! Your code: ${referralCode}`,'green');
+ setTimeout(()=>location.href='manager-dashboard.html',1000);
+});
 </script>
 </body>
 </html>

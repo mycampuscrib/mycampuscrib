@@ -5,7 +5,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-aut
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCY08Uz79Rj01rOV2vuFuWVvPHpp_CkK64",
+  apiKey: "AIzaSyCY08Uz79RjO1rOV2vuFuWVvPHpp_CkK64",
   authDomain: "mcc-crib.firebaseapp.com",
   projectId: "mcc-crib",
   storageBucket: "mcc-crib.firebasestorage.app",
@@ -18,3 +18,15 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+
+// Collection names used across index.html, manager-dashboard.html and admin pages.
+// Firestore creates a collection the first time a document is written to it.
+export const COL = {
+  hostels: "hostels",
+  roommates: "roommates",
+  hostelRequests: "hostelRequests",
+  reviews: "reviews",
+  favourites: "favourites",
+  inquiries: "inquiries",
+  reports: "reports"
+};

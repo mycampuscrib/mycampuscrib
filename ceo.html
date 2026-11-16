@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MCC - CEO Dashboard Luxury - World Best</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f172a;--gold:#c9a86a;--cream:#FFFBF5;--sand:#F2E8D5;--line:#F6F1E8;--mut:#64748b;--sh:0 20px 60px rgba(15,23,42,.06),0 2px 12px rgba(0,0,0,.04)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--navy);line-height:1.5;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
+input{font:inherit;color:inherit}[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.pf{font-family:"Playfair Display",serif}.mut{color:var(--mut)}
+.nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--sand)}
+.who{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.who b{display:block;font-size:15px;line-height:1.1}.who small{display:block;font-size:9px;letter-spacing:.25em;color:#94a3b8}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:99px;font-weight:700;font-size:12px;transition:transform .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.6;cursor:wait;transform:none}.btn.sm{padding:8px 14px;font-size:11px}
+.btn.dark{background:var(--navy);color:#fff}.btn.line{border:1.5px solid var(--sand);background:#fff}.btn.red{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}.btn.green{background:#16a34a;color:#fff}
+.login{max-width:420px;margin:60px auto;padding:0 16px}
+.box{background:#fff;border-radius:24px;padding:22px;box-shadow:var(--sh);border:1px solid var(--line)}
+.field{width:100%;padding:12px 14px;border-radius:14px;border:1.5px solid var(--sand);background:var(--cream);margin-top:6px;outline:0}.field:focus{border-color:var(--gold)}
+label{display:block;font-size:12px;font-weight:600;margin-top:14px}
+.msg{font-size:13px;margin-top:12px;min-height:20px;text-align:center}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 60px;display:grid;gap:20px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.st{background:#fff;border-radius:20px;padding:16px;box-shadow:var(--sh);border:1px solid var(--line)}.st p{font-size:10px;color:var(--mut)}.st b{font-size:26px;display:block;line-height:1.2;font-family:"Playfair Display",serif;font-weight:800}.st small{font-size:10px;color:var(--mut)}
+.st.d{background:var(--navy);color:#fff;border-color:var(--navy)}.st.d p,.st.d small{color:rgba(255,255,255,.6)}.st.g{background:var(--gold);color:#fff;border-color:var(--gold)}.st.g p,.st.g small{color:rgba(255,255,255,.85)}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.ph h3{font-size:18px}.hint{font-size:11px;color:var(--mut);margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:14px}
+.hc{border:1px solid var(--sand);border-radius:18px;overflow:hidden;background:var(--cream);display:flex;flex-direction:column}
+.hc img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--sand)}.hb{padding:12px;display:grid;gap:6px;flex:1}.hb b{font-size:13px}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.sub{font-size:11px;color:var(--mut);word-break:break-word}
+.chip{font-size:9px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}.chip.ok{background:#f0fdf4;color:#15803d;border:1px solid #dcfce7}.chip.wait{background:#fffbeb;color:#b45309;border:1px solid #fef3c7}.chip.n{background:#f1f5f9;color:#475569}.chip.bad{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}.acts .btn{flex:1}
+.list{display:grid;gap:10px;margin-top:14px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--cream);border:1px solid var(--sand);padding:12px 14px;border-radius:16px}.item b{font-size:13px}.item p{font-size:12px;color:#475569}
+.tw{overflow-x:auto;margin-top:14px}table{width:100%;border-collapse:collapse;font-size:12px;min-width:760px}th{text-align:left;color:#94a3b8;font-weight:600;padding:8px 6px;border-bottom:1px solid var(--sand)}td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+.empty{background:var(--cream);border:1px dashed var(--sand);border-radius:16px;padding:24px 14px;text-align:center;font-size:13px;color:var(--mut);grid-column:1/-1}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:200}.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}.nav{padding:12px 32px}.wrap{padding:28px 32px 60px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+ <div class="who"><span class="logo">MCC</span><div><b class="pf">CEO Dashboard — MyCampusCrib</b><small>WORLD BEST • APPROVE &amp; TRACK</small></div></div>
+ <div id="navR" style="display:flex;gap:8px" hidden><a class="btn dark sm" href="index.html">Home — Live Site</a><button class="btn red sm" data-a="logout">Logout</button></div>
+</header>
+
+<!-- LOGIN (only the admin account is accepted) -->
+<div class="login" id="loginBox" hidden>
+ <div class="box">
+  <h2 class="pf">CEO Login</h2><p class="hint">Admin account only.</p>
+  <form id="lf" novalidate>
+   <label for="em">Email</label><input class="field" id="em" type="email" autocomplete="email">
+   <label for="pw">Password</label><input class="field" id="pw" type="password" autocomplete="current-password">
+   <button class="btn dark" id="lb" style="width:100%;margin-top:18px;padding:14px">Login</button>
+  </form>
+  <p class="msg" id="lmsg" role="status" aria-live="polite"></p>
+  <button class="btn sm" id="fg" type="button" style="width:100%;color:var(--mut)">Forgot password?</button>
+ </div>
+</div>
+
+<main class="wrap" id="app" hidden>
+ <div class="stats">
+  <div class="st"><p>Total Hostels (All)</p><b id="sTotal">—</b><small>Only approved show on the homepage</small></div>
+  <div class="st d"><p>Unique Leads (WhatsApp)</p><b id="sLeads">—</b><small>One per visitor per hostel</small></div>
+  <div class="st"><p>Total Managers</p><b id="sMgr">—</b><small>Approve / disapprove anytime</small></div>
+  <div class="st g"><p>Revenue Track</p><b>GH₵ <span id="sRev">—</span></b><small>Sum of approved hostel prices</small></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">Reported Listings</h3><p class="hint">Reports sent by students. Review and act.</p></div><button class="btn line sm" data-a="refresh">Refresh</button></div>
+  <div class="list" id="repBox"></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">All Hostels — LIVE + Pending</h3><p class="hint">Approve, disapprove or delete.</p></div></div>
+  <div class="grid" id="hostBox"></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">All Managers</h3><p class="hint">Disapproving blocks their login and their dashboard. Their hostels stay until you disapprove them separately.</p></div></div>
+  <div class="list" id="mgrBox"></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">Inquiry Codes — Student → Manager</h3><p class="hint">Repeat taps from the same device are merged into one lead. Call the student to confirm what the manager tells you.</p></div></div>
+  <div class="tw"><table><thead><tr><th>CODE</th><th>Hostel</th><th>Manager</th><th>Manager Contact</th><th>Student Phone</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody id="inqBox"></tbody></table></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">Reviews — Moderation</h3><p class="hint">Delete fake or abusive reviews.</p></div></div>
+  <div class="list" id="rvBox"></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">Roommate Posts — Moderation</h3><p class="hint">Students cannot delete their own posts, so remove fake or old ones here.</p></div></div>
+  <div class="list" id="rmBox"></div>
+ </div>
+
+ <div class="box">
+  <div class="ph"><div><h3 class="pf">“I Need a Hostel” Posts — Moderation</h3><p class="hint">Remove fake or old requests here.</p></div></div>
+  <div class="list" id="rqBox"></div>
+ </div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, getDocs, query, limit, doc, deleteDoc, updateDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const ADMIN_EMAIL="theophilusmills543@gmail.com";
+
+/* ---------- helpers ---------- */
+const $=(s,e=document)=>e.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ms=t=>t?(t.toMillis?t.toMillis():t.seconds?t.seconds*1000:typeof t==='number'?t:0):0;
+const dt=m=>m?new Date(m).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+const safeUrl=u=>{u=String(u||'').trim();return /^(https:\/\/|data:image\/)/i.test(u)?u:''};
+const PH='data:image/svg+xml;utf8,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#F2E8D5'/><text x='50%' y='50%' text-anchor='middle' fill='#0f172a' font-family='sans-serif' font-size='22' opacity='.5'>No photo</text></svg>");
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2200)};
+const lsay=(t,c)=>{const m=$('#lmsg');m.textContent=t;m.style.color=c==='red'?'#b91c1c':c==='green'?'#15803d':'inherit'};
+document.addEventListener('error',e=>{const i=e.target;if(i.tagName==='IMG'&&!i.dataset.fb){i.dataset.fb='1';i.src=PH}},true);
+const empty=t=>`<div class="empty">${esc(t)}</div>`;
+
+/* ---------- state ---------- */
+let HOST=[],MGR=[],INQ=[],REP=[],RVW=[],RMP=[],RQP=[];
+const OK={h:false,m:false,i:false,r:false,rv:false,rm:false,rq:false},ER={h:false,m:false,i:false,r:false,rv:false,rm:false,rq:false};
+const getAll=async(name,n)=>(await getDocs(query(collection(db,name),limit(n)))).docs.map(d=>({id:d.id,...d.data()}));
+
+/* ---------- auth gate (UI gate; the database rules are the real lock) ---------- */
+onAuthStateChanged(auth,async user=>{
+ if(user&&String(user.email||'').toLowerCase()===ADMIN_EMAIL){
+  $('#loginBox').hidden=true;$('#app').hidden=false;$('#navR').hidden=false;loadAll();
+ }else{
+  if(user){await signOut(auth);lsay('This account is not the admin account.','red')}
+  $('#app').hidden=true;$('#navR').hidden=true;$('#loginBox').hidden=false;
+ }
+});
+$('#lf').addEventListener('submit',async e=>{
+ e.preventDefault();const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value;
+ if(!em||!pw)return lsay('Enter your email and password.','red');
+ const b=$('#lb');b.disabled=true;lsay('Signing in…');
+ try{await signInWithEmailAndPassword(auth,em,pw);lsay('')}
+ catch(ex){console.error(ex);lsay(['auth/invalid-credential','auth/user-not-found','auth/wrong-password'].includes(ex.code)?'Wrong email or password.':ex.code==='auth/too-many-requests'?'Too many attempts. Wait a few minutes or reset your password.':ex.code==='auth/network-request-failed'?'No internet connection.':'Could not sign in ('+(ex.code||ex.message)+').','red')}
+ b.disabled=false});
+$('#fg').addEventListener('click',async()=>{const em=$('#em').value.trim().toLowerCase();if(!em)return lsay('Type your email above first.','red');try{await sendPasswordResetEmail(auth,em)}catch(ex){console.error(ex)}lsay('If an account exists, a reset link has been sent.','green')});
+
+/* ---------- load + render ---------- */
+async function loadAll(){
+ for(const k of Object.keys(OK)){OK[k]=false;ER[k]=false}
+ const byNew=r=>r.map(x=>({...x,createdAt:ms(x.createdAt)})).sort((a,b)=>b.createdAt-a.createdAt);
+ await Promise.all([
+  getAll('hostels',500).then(r=>{HOST=r.sort((a,b)=>ms(b.createdAt)-ms(a.createdAt))}).catch(()=>{ER.h=true;HOST=[]}).finally(()=>OK.h=true),
+  getAll('managers',500).then(r=>{MGR=r.sort((a,b)=>ms(b.createdAt)-ms(a.createdAt))}).catch(()=>{ER.m=true;MGR=[]}).finally(()=>OK.m=true),
+  getAll('inquiries',1000).then(r=>{INQ=byNew(r)}).catch(()=>{ER.i=true;INQ=[]}).finally(()=>OK.i=true),
+  getAll('reports',200).then(r=>{REP=byNew(r)}).catch(()=>{ER.r=true;REP=[]}).finally(()=>OK.r=true),
+  getAll('reviews',300).then(r=>{RVW=byNew(r)}).catch(()=>{ER.rv=true;RVW=[]}).finally(()=>OK.rv=true),
+  getAll('roommates',200).then(r=>{RMP=byNew(r)}).catch(()=>{ER.rm=true;RMP=[]}).finally(()=>OK.rm=true),
+  getAll('hostelRequests',200).then(r=>{RQP=byNew(r)}).catch(()=>{ER.rq=true;RQP=[]}).finally(()=>OK.rq=true)]);
+ render()}
+const leads=()=>{const m=new Map();INQ.forEach(i=>{const k=i.hostelId+'|'+(i.visitorId||i.id);if(!m.has(k))m.set(k,i)});return[...m.values()]};
+function render(){
+ const ap=HOST.filter(h=>h.status==='approved'),L=leads();
+ $('#sTotal').textContent=ER.h?'—':HOST.length;$('#sMgr').textContent=ER.m?'—':MGR.length;$('#sLeads').textContent=ER.i?'—':L.length;
+ $('#sRev').textContent=ER.h?'—':ap.reduce((t,h)=>t+(Number(h.price)||0),0).toLocaleString();
+ /* reports */
+ $('#repBox').innerHTML=ER.r?empty('Could not load reports.'):REP.length?REP.map(r=>`<div class="item"><div><b>${esc(r.reason||'Report')}</b> <span class="chip n">${esc(r.hostelName||'Hostel')}</span><p>${esc(r.details||'No details given.')}</p><p class="sub">${dt(r.createdAt)}</p></div>
+  <div class="acts" style="margin:0"><a class="btn line sm" href="index.html#/hostel/${encodeURIComponent(r.hostelId||'')}" target="_blank" rel="noopener">View</a><button class="btn dark sm" data-a="disapprove" data-id="${esc(r.hostelId)}">Unapprove hostel</button><button class="btn red sm" data-a="dismiss" data-id="${esc(r.id)}">Dismiss</button></div></div>`).join(''):empty('No reports. Everything looks clean.');
+ /* hostels */
+ $('#hostBox').innerHTML=ER.h?empty('Could not load hostels.'):HOST.length?HOST.map(h=>{const g=Array.isArray(h.images)?h.images.map(safeUrl).filter(Boolean):[],ok=h.status==='approved',v=Number(h.views)||0;
+  return `<article class="hc"><img src="${esc(g[0]||PH)}" alt="${esc(h.name)}" loading="lazy" decoding="async"><div class="hb"><div class="row"><b class="pf">${esc(h.name)}</b><span class="chip ${ok?'ok':'wait'}">${ok?'APPROVED':'PENDING'}</span></div>
+  <p class="sub">${esc(h.location||'')} • GH₵${esc(h.price??'')} • 👁 ${v}</p><p class="sub">${esc(h.managerEmail||'')}</p>
+  <div class="acts"><button class="btn dark sm" data-a="approve" data-id="${esc(h.id)}">Approve</button><button class="btn line sm" data-a="disapprove" data-id="${esc(h.id)}">Disapprove</button><button class="btn red sm" data-a="delhost" data-id="${esc(h.id)}">Delete</button></div></div></article>`}).join(''):empty('No hostels yet.');
+ /* managers */
+ $('#mgrBox').innerHTML=ER.m?empty('Could not load managers.'):MGR.length?MGR.map(m=>{const off=m.status==='disabled',leak=m.password!==undefined;
+  return `<div class="item"><div><b>${esc(m.name||'Manager')}</b> <span class="sub">${esc(m.email||'')}</span><p>Code: ${esc(m.referralCode||'none')} • ${esc(m.phone||'')} • ${off?'<span class="chip bad">Disabled</span>':'<span class="chip ok">Active</span>'}${leak?' <span class="chip bad">⚠ old plain-text password stored</span>':''}</p></div>
+  <div class="acts" style="margin:0">${leak?`<button class="btn red sm" data-a="rmpass" data-id="${esc(m.id)}">Remove password</button>`:''}<button class="btn green sm" data-a="mact" data-id="${esc(m.id)}">Approve</button><button class="btn line sm" data-a="mdis" data-id="${esc(m.id)}">Disapprove</button></div></div>`}).join(''):empty('No managers yet.');
+ /* inquiries */
+ $('#inqBox').innerHTML=ER.i?`<tr><td colspan="8">Could not load inquiries.</td></tr>`:L.length?L.map(i=>{const ph=esc(i.managerPhone||i.phone||'');let wa=ph.replace(/[^0-9]/g,'');if(wa.startsWith('0'))wa='233'+wa.slice(1);const contact=ph?`<a class="btn sm" style="background:#16a34a;color:#fff" href="https://wa.me/${wa}" target="_blank">WhatsApp</a> <a class="btn dark sm" href="tel:${ph}">Call</a><br><span class="sub">${ph}</span>`:'<span class="sub">No phone</span>';
+  /* student phone (saved when the student asked to contact the manager) */
+  const sp=String(i.studentPhone||'').replace(/[^\d+]/g,''),spOk=/^\+?\d{10,15}$/.test(sp);let sw=sp.replace(/\D/g,'');if(sw.startsWith('0'))sw='233'+sw.slice(1);
+  const student=spOk?`<a class="btn sm" style="background:#16a34a;color:#fff" href="https://wa.me/${sw}" target="_blank" rel="noopener">WhatsApp</a> <a class="btn dark sm" href="tel:${esc(sp)}">Call</a><br><span class="sub">${esc(sp)}</span>`:'<span class="sub">No phone</span>';
+  return `<tr><td><b>${esc(i.code||'—')}</b></td><td>${esc(i.hostelName||'')}</td><td class="sub">${esc(i.managerEmail||'')}</td><td>${contact}</td><td>${student}</td><td><span class="chip n">${esc(i.status||'new')}</span></td><td>${dt(i.createdAt)}</td><td><button class="btn red sm" data-a="delinq" data-id="${esc(i.id)}">Delete</button></td></tr>`}).join(''):`<tr><td colspan="8" class="sub" style="padding:18px 6px">No inquiries yet.</td></tr>`;
+ /* reviews moderation */
+ $('#rvBox').innerHTML=ER.rv?empty('Could not load reviews.'):RVW.length?RVW.map(r=>`<div class="item"><div><span style="color:#c9a86a;font-weight:700">${'★'.repeat(Math.max(0,Math.min(5,Number(r.rating)||0)))}</span> <span class="chip n">${esc(r.hostelName||'Hostel')}</span><p>${esc(r.text||'')}</p><p class="sub">${esc(r.name||'')} • ${dt(r.createdAt)}</p></div><button class="btn red sm" data-a="delrv" data-id="${esc(r.id)}">Delete</button></div>`).join(''):empty('No reviews yet.');
+ /* roommate posts moderation */
+ $('#rmBox').innerHTML=ER.rm?empty('Could not load roommate posts.'):RMP.length?RMP.map(p=>`<div class="item"><div><b>${esc(p.name||'')}</b> <span class="sub">${esc(p.gender||'')} ${esc(p.program||'')}</span><p>📍 ${esc(p.location||'')} • GH₵${esc(p.budget??'')} • ${esc(p.roomType||'')}</p><p class="sub">📞 ${esc(p.whatsapp||'')} • ${dt(p.createdAt)}</p></div><button class="btn red sm" data-a="delrm" data-id="${esc(p.id)}">Delete</button></div>`).join(''):empty('No roommate posts.');
+ /* "I need a hostel" posts moderation */
+ $('#rqBox').innerHTML=ER.rq?empty('Could not load requests.'):RQP.length?RQP.map(p=>`<div class="item"><div><b>${esc(p.name||'')}</b> <span class="sub">${esc(p.program||'')}</span><p>📍 ${esc(p.location||'')} • GH₵${esc(p.budget??'')} • ${esc(p.roomType||'')}</p><p class="sub">📞 ${esc(p.whatsapp||'')} • ${dt(p.createdAt)}</p></div><button class="btn red sm" data-a="delrq" data-id="${esc(p.id)}">Delete</button></div>`).join(''):empty('No requests.')}
+
+/* ---------- actions ---------- */
+const run=async(fn,ok)=>{try{await fn();if(ok)toast(ok);await loadAll()}catch(ex){console.error(ex);toast('Failed: '+(ex.code||ex.message))}};
+const ACT={
+ logout:()=>signOut(auth),refresh:()=>loadAll(),
+ approve:t=>run(()=>updateDoc(doc(db,'hostels',t.dataset.id),{status:'approved'}),'Hostel approved ✓'),
+ disapprove:t=>run(()=>updateDoc(doc(db,'hostels',t.dataset.id),{status:'pending'}),'Hostel set to pending'),
+ delhost:t=>{if(confirm('Delete this hostel permanently?'))run(()=>deleteDoc(doc(db,'hostels',t.dataset.id)),'Hostel deleted')},
+ mact:t=>run(()=>updateDoc(doc(db,'managers',t.dataset.id),{status:'active'}),'Manager approved ✓'),
+ mdis:t=>{if(confirm('Disapprove this manager? They will be blocked from logging in. Their hostels stay until you disapprove them separately.'))run(()=>updateDoc(doc(db,'managers',t.dataset.id),{status:'disabled'}),'Manager disabled')},
+ rmpass:t=>run(()=>updateDoc(doc(db,'managers',t.dataset.id),{password:deleteField()}),'Password removed ✓'),
+ delinq:t=>{const i=INQ.find(x=>x.id===t.dataset.id);if(!i||!confirm('Delete this inquiry?'))return;const k=i.hostelId+'|'+(i.visitorId||i.id),ids=INQ.filter(x=>x.hostelId+'|'+(x.visitorId||x.id)===k).map(x=>x.id);run(()=>Promise.all(ids.map(id=>deleteDoc(doc(db,'inquiries',id)))),'Inquiry deleted')},
+ dismiss:t=>run(()=>deleteDoc(doc(db,'reports',t.dataset.id)),'Report dismissed'),
+ delrv:t=>{if(confirm('Delete this review?'))run(()=>deleteDoc(doc(db,'reviews',t.dataset.id)),'Review deleted')},
+ delrm:t=>{if(confirm('Delete this roommate post?'))run(()=>deleteDoc(doc(db,'roommates',t.dataset.id)),'Post deleted')},
+ delrq:t=>{if(confirm('Delete this request?'))run(()=>deleteDoc(doc(db,'hostelRequests',t.dataset.id)),'Request deleted')}};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&ACT[t.dataset.a])ACT[t.dataset.a](t)});
+</script>
+</body>
+</html>
